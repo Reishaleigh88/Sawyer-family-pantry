@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sawyer Family Pantry</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f6f0e5;
+  color: #3e4638;
+}
+
+header {
+  background: #66745a;
+  color: white;
+  padding: 25px 15px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-family: Georgia, serif;
+}
+
+header p {
+  margin: 7px 0 0;
+}
+
+main {
+  max-width: 700px;
+  margin: auto;
+  padding: 18px;
+}
+
+.card {
+  background: #fffdf8;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 3px 10px rgba(0,0,0,.08);
+}
+
+h2 {
+  margin-top: 0;
+  font-family: Georgia, serif;
+  color: #59654e;
+}
+
+.locations {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.location {
+  background: #e8dfcf;
+  padding: 14px 8px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: bold;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.addButton {
+  width: 100%;
+  background: #66745a;
+  color: white;
+  font-weight: bold;
+}
+
+input, select {
+  width: 100%;
+  padding: 11px;
+  margin: 6px 0;
+  border: 1px solid #c9c1b5;
+  border-radius: 9px;
+  font-size: 16px;
+}
+
+.item {
+  background: #f3eee4;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 8px;
+}
+
+.itemButtons {
+  margin-top: 8px;
+}
+
+.itemButtons button {
+  padding: 6px 12px;
+  margin-right: 5px;
+  background: #d9d1c3;
+}
+
+.money {
+  font-size: 26px;
+  font-weight: bold;
+  color: #66745a;
+}
+
+.small {
+  font-size: 13px;
+  color: #777;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🌿 Sawyer Family Pantry</h1>
+  <p>From our farm • To our pantry • To our table</p>
+</header>
+
+<main>
+
+<div class="card">
+<h2>🏡 Our Food Storage</h2>
+
+<div class="locations">
+<div class="location">🥛 Kitchen Fridge</div>
+<div class="location">❄️ Kitchen Freezer</div>
+<div class="location">🥩 Beef Freezer</div>
+<div class="location">🐷 Pork Freezer</div>
+<div class="location">🥤 Second Fridge</div>
+<div class="location">🧊 Second Freezer</div>
+<div class="location">🥫 Big Pantry</div>
+<div class="location">🍎 Fruit & Veggie Shelf</div>
+</div>
+</div>
+
+<div class="card">
+<h2>➕ Add Food</h2>
+
+<input id="food" placeholder="Food name">
+
+<input id="quantity" type="number" min="1" value="1" placeholder="Quantity">
+
+<select id="location">
+<option>Kitchen Fridge</option>
+<option>Kitchen Freezer</option>
+<option>Beef Freezer</option>
+<option>Pork Freezer</option>
+<option>Second Fridge</option>
+<option>Second Freezer</option>
+<option>Big Pantry</option>
+<option>Fruit & Veggie Shelf</option>
+</select>
+
+<input id="price" type="number" step=".01" placeholder="Cost ($)">
+
+<select id="source">
+<option>Walmart</option>
+<option>Farm Raised</option>
+<option>Homemade</option>
+<option>Home Canned</option>
+<option>Other</option>
+</select>
+
+<button class="addButton" onclick="addFood()">Add to Pantry</button>
+</div>
+
+<div class="card">
+<h2>📦 Current Inventory</h2>
+<div id="inventory">
+<p class="small">Your food will appear here.</p>
+</div>
+</div>
+
+<div class="card">
+<h2>🛒 Shopping List</h2>
+<div id="shopping">
+<p class="small">Low-stock foods will show here later.</p>
+</div>
+</div>
+
+<div class="card">
+<h2>💰 Grocery Tracker</h2>
+<p>Total cost of foods entered:</p>
+<div class="money">$<span id="total">0.00</span></div>
+</div>
+
+<div class="card">
+<h2>🌾 Farm & Homemade Savings</h2>
+<p>We'll use this section to track how much your farm-raised, canned and homemade foods save your family.</p>
+</div>
+
+<div class="card">
+<h2>🍽️ Meal Planner</h2>
+<p>Coming next: meals and recipes based on food you already have.</p>
+</div>
+
+</main>
+
+<script>
+
+let pantry = JSON.parse(localStorage.getItem("sawyerPantry")) || [];
+
+function savePantry() {
+  localStorage.setItem("sawyerPantry", JSON.stringify(pantry));
+}
+
+function addFood() {
+
+  const food = document.getElementById("food").value.trim();
+  const quantity = Number(document.getElementById("quantity").value);
+  const location = document.getElementById("location").value;
+  const price = Number(document.getElementById("price").value) || 0;
+  const source = document.getElementById("source").value;
+
+  if (!food) {
+    alert("Please enter a food name.");
+    return;
+  }
+
+  pantry.push({
+    food,
+    quantity,
+    location,
+    price,
+    source
+  });
+
+  savePantry();
+  displayPantry();
+
+  document.getElementById("food").value = "";
+  document.getElementById("quantity").value = 1;
+  document.getElementById("price").value = "";
+}
+
+function changeQuantity(index, amount) {
+
+  pantry[index].quantity += amount;
+
+  if (pantry[index].quantity < 0) {
+    pantry[index].quantity = 0;
+  }
+
+  savePantry();
+  displayPantry();
+}
+
+function removeFood(index) {
+  pantry.splice(index, 1);
+  savePantry();
+  displayPantry();
+}
+
+function displayPantry() {
+
+  const inventory = document.getElementById("inventory");
+
+  if (pantry.length === 0) {
+    inventory.innerHTML =
+      '<p class="small">Your food will appear here.</p>';
+  } else {
+
+    inventory.innerHTML = "";
+
+    pantry.forEach((item, index) => {
+
+      inventory.innerHTML += `
+      <div class="item">
+        <strong>${item.food}</strong><br>
+        Quantity: ${item.quantity}<br>
+        📍 ${item.location}<br>
+        ${item.source} • $${item.price.toFixed(2)}
+
+        <div class="itemButtons">
+          <button onclick="changeQuantity(${index},1)">＋</button>
+          <button onclick="changeQuantity(${index},-1)">−</button>
+          <button onclick="removeFood(${index})">Delete</button>
+        </div>
+      </div>
+      `;
+    });
+  }
+
+  let total = pantry.reduce((sum,item) => sum + item.price,0);
+
+  document.getElementById("total").textContent =
+    total.toFixed(2);
+}
+
+displayPantry();
+
+</script>
+
+</body>
+</html>
