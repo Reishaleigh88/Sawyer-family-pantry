@@ -3,387 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Sawyer Family Pantry</title>
 
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f6f0e5;color:#3e4638}
+header{background:#6c7d60;color:white;padding:28px 14px;text-align:center}
+header h1{margin:0;font-size:30px}
+header p{margin:8px 0 0;font-size:18px}
+.nav{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px;background:#eee4d2}
+.nav-button{border:1px solid #d6d0c5;background:white;color:#50594b;border-radius:18px;padding:14px 6px;font-size:16px;font-weight:bold;min-height:92px}
+.nav-button span{display:block;font-size:30px;margin-bottom:6px}
+.nav-button.active{background:#6c7d60;color:white}
+.container{max-width:850px;margin:auto;padding:14px}
+.page{display:none}
+.page.active{display:block}
+.card{background:white;border-radius:22px;padding:22px;margin-bottom:18px;box-shadow:0 6px 18px rgba(0,0,0,.07)}
+.card h2{margin-top:0}
+label{display:block;font-weight:bold;margin-top:15px;margin-bottom:6px}
+input,select,textarea{width:100%;border:1px solid #c9c4b9;border-radius:14px;padding:14px;font-size:16px;background:white}
+textarea{min-height:120px;resize:vertical}
+.two-column{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.checkbox-row{display:flex;align-items:center;gap:12px;padding:15px;margin-top:15px;border-radius:14px;background:#f2eee5}
+.checkbox-row input{width:28px;height:28px}
+.main-button{width:100%;border:none;border-radius:14px;margin-top:18px;padding:16px;background:#6c7d60;color:white;font-weight:bold;font-size:18px}
+.secondary-button{border:none;border-radius:12px;padding:11px 15px;background:#ddd5c7;color:#3e4638;font-size:15px}
+.barcode-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.scan-button{border:none;border-radius:14px;padding:14px 16px;background:#6c7d60;color:white;font-weight:bold;font-size:16px;white-space:nowrap}
+.scanner-panel{display:none;margin-top:15px;background:#f2eee5;border-radius:16px;padding:14px}
+.scanner-panel.active{display:block}
+#reader{width:100%;overflow:hidden;border-radius:14px;background:white}
+.scan-status{text-align:center;font-weight:bold;margin-top:10px;min-height:24px}
+.lookup-status{margin-top:10px;padding:11px;background:#f7f3eb;border-radius:12px;font-size:14px;display:none}
+.lookup-status.show{display:block}
+.filter-box{background:#eee7da;border-radius:16px;padding:14px;margin-bottom:18px}
+.filter-box input{margin-bottom:10px}
+.inventory-item,.shopping-item,.recipe-item,.money-item{padding:18px 0;border-top:1px solid #e4dfd5}
+.item-name{font-size:20px;font-weight:bold;margin-bottom:8px}
+.item-info{line-height:1.55}
+.controls{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.minus,.plus,.delete{border:none;border-radius:12px;padding:12px 17px;font-size:18px}
+.minus{background:#bb7060;color:white}
+.plus{background:#6c7d60;color:white}
+.delete{background:#ddd5c7;color:#3e4638;margin-left:auto}
+.quantity{font-weight:bold;font-size:18px}
+.low-stock{background:#fff3d6;border-radius:14px;padding:14px}
+.low-label{color:#b05e39;font-size:13px;font-weight:bold}
+.farm-label{color:#647c48;font-size:13px;font-weight:bold}
+.total{background:#eee7da;border-radius:14px;padding:16px;margin-top:15px;font-weight:bold;font-size:18px}
+.empty{text-align:center;color:#777;padding:18px}
+.recipe-box{background:#f7f3eb;border-radius:14px;padding:14px;margin-top:10px;white-space:pre-wrap}
+.week-day{background:#f7f3eb;padding:14px;border-radius:14px;margin-bottom:12px}
+.week-day strong{display:block;margin-bottom:7px}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.summary-box{background:#eee7da;border-radius:14px;padding:16px;text-align:center}
+.summary-box strong{display:block;font-size:22px;margin-top:6px}
+.positive{color:#587543}
+.negative{color:#a65348}
+.small-note{color:#777;font-size:14px}
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f6f0e5;
-  color: #3e4638;
-}
-
-header {
-  background: #6c7d60;
-  color: white;
-  padding: 28px 14px;
-  text-align: center;
-}
-
-header h1 {
-  margin: 0;
-  font-size: 30px;
-}
-
-header p {
-  margin: 8px 0 0;
-  font-size: 18px;
-}
-
-.nav {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  padding: 14px;
-  background: #eee4d2;
-}
-
-.nav-button {
-  border: 1px solid #d6d0c5;
-  background: white;
-  color: #50594b;
-  border-radius: 18px;
-  padding: 14px 6px;
-  font-size: 16px;
-  font-weight: bold;
-  min-height: 92px;
-}
-
-.nav-button span {
-  display: block;
-  font-size: 30px;
-  margin-bottom: 6px;
-}
-
-.nav-button.active {
-  background: #6c7d60;
-  color: white;
-}
-
-.container {
-  max-width: 850px;
-  margin: auto;
-  padding: 14px;
-}
-
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-}
-
-.card {
-  background: white;
-  border-radius: 22px;
-  padding: 22px;
-  margin-bottom: 18px;
-  box-shadow: 0 6px 18px rgba(0,0,0,.07);
-}
-
-.card h2 {
-  margin-top: 0;
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  margin-top: 15px;
-  margin-bottom: 6px;
-}
-
-input,
-select,
-textarea {
-  width: 100%;
-  border: 1px solid #c9c4b9;
-  border-radius: 14px;
-  padding: 14px;
-  font-size: 16px;
-  background: white;
-}
-
-textarea {
-  min-height: 120px;
-  resize: vertical;
-}
-
-.two-column {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.checkbox-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 15px;
-  margin-top: 15px;
-  border-radius: 14px;
-  background: #f2eee5;
-}
-
-.checkbox-row input {
-  width: 28px;
-  height: 28px;
-}
-
-.main-button {
-  width: 100%;
-  border: none;
-  border-radius: 14px;
-  margin-top: 18px;
-  padding: 16px;
-  background: #6c7d60;
-  color: white;
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.secondary-button {
-  border: none;
-  border-radius: 12px;
-  padding: 11px 15px;
-  background: #ddd5c7;
-  color: #3e4638;
-  font-size: 15px;
-}
-
-.barcode-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 10px;
-  align-items: center;
-}
-
-.scan-button {
-  border: none;
-  border-radius: 14px;
-  padding: 14px 16px;
-  background: #6c7d60;
-  color: white;
-  font-weight: bold;
-  font-size: 16px;
-  white-space: nowrap;
-}
-
-.scanner-panel {
-  display: none;
-  margin-top: 15px;
-  background: #f2eee5;
-  border-radius: 16px;
-  padding: 14px;
-}
-
-.scanner-panel.active {
-  display: block;
-}
-
-#reader {
-  width: 100%;
-  overflow: hidden;
-  border-radius: 14px;
-  background: white;
-}
-
-.scan-status {
-  text-align: center;
-  font-weight: bold;
-  margin-top: 10px;
-  min-height: 24px;
-}
-
-.lookup-status {
-  margin-top: 10px;
-  padding: 11px;
-  background: #f7f3eb;
-  border-radius: 12px;
-  font-size: 14px;
-  display: none;
-}
-
-.lookup-status.show {
-  display: block;
-}
-
-.filter-box {
-  background: #eee7da;
-  border-radius: 16px;
-  padding: 14px;
-  margin-bottom: 18px;
-}
-
-.filter-box input {
-  margin-bottom: 10px;
-}
-
-.inventory-item,
-.shopping-item,
-.recipe-item,
-.money-item {
-  padding: 18px 0;
-  border-top: 1px solid #e4dfd5;
-}
-
-.item-name {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-.item-info {
-  line-height: 1.55;
-}
-
-.controls {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-top: 12px;
-  flex-wrap: wrap;
-}
-
-.minus,
-.plus,
-.delete {
-  border: none;
-  border-radius: 12px;
-  padding: 12px 17px;
-  font-size: 18px;
-}
-
-.minus {
-  background: #bb7060;
-  color: white;
-}
-
-.plus {
-  background: #6c7d60;
-  color: white;
-}
-
-.delete {
-  background: #ddd5c7;
-  color: #3e4638;
-  margin-left: auto;
-}
-
-.quantity {
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.low-stock {
-  background: #fff3d6;
-  border-radius: 14px;
-  padding: 14px;
-}
-
-.low-label {
-  color: #b05e39;
-  font-size: 13px;
-  font-weight: bold;
-}
-
-.farm-label {
-  color: #647c48;
-  font-size: 13px;
-  font-weight: bold;
-}
-
-.total {
-  background: #eee7da;
-  border-radius: 14px;
-  padding: 16px;
-  margin-top: 15px;
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.empty {
-  text-align: center;
-  color: #777;
-  padding: 18px;
-}
-
-.recipe-box {
-  background: #f7f3eb;
-  border-radius: 14px;
-  padding: 14px;
-  margin-top: 10px;
-  white-space: pre-wrap;
-}
-
-.week-day {
-  background: #f7f3eb;
-  padding: 14px;
-  border-radius: 14px;
-  margin-bottom: 12px;
-}
-
-.week-day strong {
-  display: block;
-  margin-bottom: 7px;
-}
-
-.summary-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.summary-box {
-  background: #eee7da;
-  border-radius: 14px;
-  padding: 16px;
-  text-align: center;
-}
-
-.summary-box strong {
-  display: block;
-  font-size: 22px;
-  margin-top: 6px;
-}
-
-.positive {
-  color: #587543;
-}
-
-.negative {
-  color: #a65348;
-}
-
-.small-note {
-  color: #777;
-  font-size: 14px;
-}
-
-@media (max-width: 600px) {
-  .two-column,
-  .summary-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .barcode-row {
-    grid-template-columns: 1fr;
-  }
-
-  .scan-button {
-    width: 100%;
-  }
-
-  header h1 {
-    font-size: 27px;
-  }
+@media(max-width:600px){
+  .two-column,.summary-grid,.barcode-row{grid-template-columns:1fr}
+  .scan-button{width:100%}
+  header h1{font-size:27px}
 }
 </style>
 </head>
@@ -391,33 +75,33 @@ textarea {
 <body>
 
 <header>
-  <h1>🌿 Sawyer Family Pantry</h1>
-  <p>From our farm to our table</p>
+<h1>🌿 Sawyer Family Pantry</h1>
+<p>From our farm to our table</p>
 </header>
 
 <div class="nav">
 
-<button class="nav-button active" onclick="showPage('inventory', this)">
+<button class="nav-button active" onclick="showPage('inventory',this)">
 <span>🏡</span>Inventory
 </button>
 
-<button class="nav-button" onclick="showPage('shopping', this)">
+<button class="nav-button" onclick="showPage('shopping',this)">
 <span>🛒</span>Shopping
 </button>
 
-<button class="nav-button" onclick="showPage('recipes', this)">
+<button class="nav-button" onclick="showPage('recipes',this)">
 <span>📖</span>Recipes
 </button>
 
-<button class="nav-button" onclick="showPage('meals', this)">
+<button class="nav-button" onclick="showPage('meals',this)">
 <span>🍽️</span>Meals
 </button>
 
-<button class="nav-button" onclick="showPage('budget', this)">
+<button class="nav-button" onclick="showPage('budget',this)">
 <span>💰</span>Budget
 </button>
 
-<button class="nav-button" onclick="showPage('savings', this)">
+<button class="nav-button" onclick="showPage('savings',this)">
 <span>🌾</span>Savings
 </button>
 
@@ -459,12 +143,12 @@ onclick="startBarcodeScanner()"
 <div id="reader"></div>
 
 <div id="scanStatus" class="scan-status">
-Hold the barcode steady inside the box.
+Point the camera at the barcode.
 </div>
 
 <button
 class="secondary-button"
-style="width:100%; margin-top:12px;"
+style="width:100%;margin-top:12px"
 type="button"
 onclick="stopBarcodeScanner()"
 >
@@ -556,7 +240,7 @@ placeholder="Example: Eggs"
 
 <input id="farmMade" type="checkbox">
 
-<label for="farmMade" style="margin:0;">
+<label for="farmMade" style="margin:0">
 🌾 Farm-raised or homemade
 </label>
 
@@ -567,6 +251,7 @@ Add to Pantry
 </button>
 
 </div>
+
 
 <div class="card">
 
@@ -663,16 +348,25 @@ placeholder="Example: Grandma's Meatloaf"
 </select>
 
 <label>Ingredients</label>
-<textarea id="recipeIngredients" placeholder="Enter ingredients..."></textarea>
+
+<textarea
+id="recipeIngredients"
+placeholder="Enter ingredients..."
+></textarea>
 
 <label>Directions</label>
-<textarea id="recipeDirections" placeholder="Enter directions..."></textarea>
+
+<textarea
+id="recipeDirections"
+placeholder="Enter directions..."
+></textarea>
 
 <button class="main-button" onclick="addRecipe()">
 Save Recipe
 </button>
 
 </div>
+
 
 <div class="card">
 
@@ -704,37 +398,37 @@ Plan dinners or type anything you want for each day.
 
 <div class="week-day">
 <strong>Monday</strong>
-<input id="mealMonday" type="text">
+<input id="mealMonday">
 </div>
 
 <div class="week-day">
 <strong>Tuesday</strong>
-<input id="mealTuesday" type="text">
+<input id="mealTuesday">
 </div>
 
 <div class="week-day">
 <strong>Wednesday</strong>
-<input id="mealWednesday" type="text">
+<input id="mealWednesday">
 </div>
 
 <div class="week-day">
 <strong>Thursday</strong>
-<input id="mealThursday" type="text">
+<input id="mealThursday">
 </div>
 
 <div class="week-day">
 <strong>Friday</strong>
-<input id="mealFriday" type="text">
+<input id="mealFriday">
 </div>
 
 <div class="week-day">
 <strong>Saturday</strong>
-<input id="mealSaturday" type="text">
+<input id="mealSaturday">
 </div>
 
 <div class="week-day">
 <strong>Sunday</strong>
-<input id="mealSunday" type="text">
+<input id="mealSunday">
 </div>
 
 <label>Meal Plan Notes</label>
@@ -775,6 +469,7 @@ Save Monthly Budget
 
 </div>
 
+
 <div class="card">
 
 <h2>🧾 Add Grocery Spending</h2>
@@ -801,6 +496,7 @@ Add Expense
 </button>
 
 </div>
+
 
 <div class="card">
 
@@ -870,6 +566,7 @@ Add Savings
 
 </div>
 
+
 <div class="card">
 
 <h2>🌱 Our Savings</h2>
@@ -899,70 +596,72 @@ let monthlyBudget = 0;
 
 let html5QrCode = null;
 let scannerRunning = false;
-let scannerLocked = false;
+let scanLocked = false;
 
-let recentBarcodeReads = [];
-
-const REQUIRED_MATCHES = 5;
-const MAX_RECENT_READS = 7;
+/*
+First scan is saved here.
+Second matching scan confirms it.
+*/
+let pendingBarcode = "";
 
 
 /* LOAD SAVED DATA */
 
-try {
-  pantry =
-    JSON.parse(
-      localStorage.getItem("sawyerPantry")
-    ) || [];
-} catch (e) {
-  pantry = [];
+function loadJson(key) {
+
+  try {
+
+    return (
+      JSON.parse(
+        localStorage.getItem(key)
+      ) || []
+    );
+
+  } catch (e) {
+
+    return [];
+  }
 }
 
-try {
-  shopping =
-    JSON.parse(
-      localStorage.getItem("sawyerShopping")
-    ) || [];
-} catch (e) {
-  shopping = [];
-}
+pantry =
+  loadJson(
+    "sawyerPantry"
+  );
 
-try {
-  recipes =
-    JSON.parse(
-      localStorage.getItem("sawyerRecipes")
-    ) || [];
-} catch (e) {
-  recipes = [];
-}
+shopping =
+  loadJson(
+    "sawyerShopping"
+  );
 
-try {
-  groceryExpenses =
-    JSON.parse(
-      localStorage.getItem("sawyerExpenses")
-    ) || [];
-} catch (e) {
-  groceryExpenses = [];
-}
+recipes =
+  loadJson(
+    "sawyerRecipes"
+  );
 
-try {
-  savings =
-    JSON.parse(
-      localStorage.getItem("sawyerSavings")
-    ) || [];
-} catch (e) {
-  savings = [];
-}
+groceryExpenses =
+  loadJson(
+    "sawyerExpenses"
+  );
+
+savings =
+  loadJson(
+    "sawyerSavings"
+  );
 
 monthlyBudget =
   Number(
-    localStorage.getItem("sawyerMonthlyBudget")
+    localStorage.getItem(
+      "sawyerMonthlyBudget"
+    )
   ) || 0;
 
 
 /* NAVIGATION */
 
-function showPage(pageName, button) {
+function showPage(
+  name,
+  button
+) {
 
   if (scannerRunning) {
     stopBarcodeScanner();
@@ -970,138 +669,135 @@ function showPage(pageName, button) {
 
   document
     .querySelectorAll(".page")
-    .forEach(function(page) {
-      page.classList.remove("active");
-    });
+    .forEach(
+      function(page) {
+
+        page.classList.remove(
+          "active"
+        );
+
+      }
+    );
 
   document
-    .querySelectorAll(".nav-button")
-    .forEach(function(btn) {
-      btn.classList.remove("active");
-    });
+    .querySelectorAll(
+      ".nav-button"
+    )
+    .forEach(
+      function(btn) {
+
+        btn.classList.remove(
+          "active"
+        );
+
+      }
+    );
 
   document
-    .getElementById(pageName + "-page")
-    .classList.add("active");
+    .getElementById(
+      name + "-page"
+    )
+    .classList.add(
+      "active"
+    );
 
-  button.classList.add("active");
+  button.classList.add(
+    "active"
+  );
 }
 
 
-/* LOOKUP MESSAGES */
+/* LOOKUP MESSAGE */
 
-function showLookupMessage(message) {
+function showLookupMessage(
+  message
+) {
 
   const box =
-    document.getElementById("lookupStatus");
+    document.getElementById(
+      "lookupStatus"
+    );
 
   box.textContent =
     message;
 
-  box.classList.add("show");
+  box.classList.add(
+    "show"
+  );
 }
 
 function hideLookupMessage() {
 
   const box =
-    document.getElementById("lookupStatus");
-
-  box.textContent = "";
-
-  box.classList.remove("show");
-}
-
-
-/* BARCODE CLEANING */
-
-function cleanBarcodeValue(value) {
-
-  return String(value || "")
-    .replace(/\D/g, "");
-}
-
-
-/* UPC/EAN CHECK DIGIT */
-
-function passesBarcodeChecksum(code) {
-
-  const barcode =
-    cleanBarcodeValue(code);
-
-  if (
-    barcode.length !== 8 &&
-    barcode.length !== 12 &&
-    barcode.length !== 13
-  ) {
-    return false;
-  }
-
-  const digits =
-    barcode
-      .split("")
-      .map(Number);
-
-  const checkDigit =
-    digits.pop();
-
-  let sum = 0;
-
-  if (
-    barcode.length === 12
-  ) {
-
-    digits.forEach(function(digit, index) {
-
-      sum +=
-        index % 2 === 0
-          ? digit * 3
-          : digit;
-
-    });
-
-  } else {
-
-    const reversed =
-      digits.slice().reverse();
-
-    reversed.forEach(
-      function(digit, index) {
-
-        sum +=
-          index % 2 === 0
-            ? digit * 3
-            : digit;
-
-      }
+    document.getElementById(
+      "lookupStatus"
     );
-  }
 
-  const calculatedCheck =
-    (10 - (sum % 10)) % 10;
+  box.textContent =
+    "";
 
-  return (
-    calculatedCheck ===
-    checkDigit
+  box.classList.remove(
+    "show"
   );
 }
 
 
-/* OUR SAVED BARCODES */
+/* BARCODE CLEANUP */
 
-function findSavedBarcode(barcode) {
+function cleanBarcode(
+  value
+) {
 
-  return pantry.find(function(item) {
+  return String(
+    value || ""
+  ).replace(
+    /\D/g,
+    ""
+  );
+}
 
-    return (
-      String(item.barcode || "") ===
-      String(barcode)
-    );
+function isGroceryBarcode(
+  value
+) {
 
-  });
+  const length =
+    cleanBarcode(
+      value
+    ).length;
+
+  return (
+    length === 8 ||
+    length === 12 ||
+    length === 13
+  );
 }
 
 
-/* FETCH */
+/* CHECK SAVED PANTRY FIRST */
+
+function findSavedBarcode(
+  barcode
+) {
+
+  return pantry.find(
+    function(item) {
+
+      return (
+        String(
+          item.barcode || ""
+        )
+        ===
+        String(
+          barcode
+        )
+      );
+
+    }
+  );
+}
+
+
+/* FETCH WITH TIMEOUT */
 
 async function fetchWithTimeout(
   url,
@@ -1112,20 +808,29 @@ async function fetchWithTimeout(
     new AbortController();
 
   const timeout =
-    setTimeout(function() {
+    setTimeout(
+      function() {
 
-      controller.abort();
+        controller.abort();
 
-    }, timeoutMs);
+      },
+      timeoutMs
+    );
 
   try {
 
     return await fetch(
       url,
       {
-        method: "GET",
-        mode: "cors",
-        cache: "no-store",
+        method:
+          "GET",
+
+        mode:
+          "cors",
+
+        cache:
+          "no-store",
+
         signal:
           controller.signal
       }
@@ -1133,17 +838,21 @@ async function fetchWithTimeout(
 
   } finally {
 
-    clearTimeout(timeout);
+    clearTimeout(
+      timeout
+    );
   }
 }
 
 
 /* PRODUCT LOOKUP */
 
-async function lookupBarcode(barcode) {
+async function lookupBarcode(
+  barcode
+) {
 
   barcode =
-    cleanBarcodeValue(
+    cleanBarcode(
       barcode
     );
 
@@ -1163,19 +872,26 @@ async function lookupBarcode(barcode) {
   if (savedItem) {
 
     document
-      .getElementById("itemName")
+      .getElementById(
+        "itemName"
+      )
       .value =
         savedItem.name || "";
 
     document
-      .getElementById("category")
+      .getElementById(
+        "category"
+      )
       .value =
         savedItem.category ||
         "Other";
 
     showLookupMessage(
       "✅ I recognize this from your pantry: " +
-      (savedItem.name || "Saved item")
+      (
+        savedItem.name ||
+        "Saved item"
+      )
     );
 
     return;
@@ -1185,7 +901,9 @@ async function lookupBarcode(barcode) {
 
     const url =
       "https://world.openfoodfacts.org/api/v2/product/" +
-      encodeURIComponent(barcode) +
+      encodeURIComponent(
+        barcode
+      ) +
       ".json?fields=product_name,product_name_en,generic_name,categories,categories_tags";
 
     const response =
@@ -1197,7 +915,7 @@ async function lookupBarcode(barcode) {
     if (!response.ok) {
 
       showLookupMessage(
-        "⚠️ Barcode confirmed, but the product database returned an error. You can enter the food name manually."
+        "⚠️ Barcode confirmed, but the product database returned an error. You can still type the name manually."
       );
 
       return;
@@ -1207,7 +925,9 @@ async function lookupBarcode(barcode) {
       await response.json();
 
     if (
-      Number(data.status) === 1 &&
+      Number(
+        data.status
+      ) === 1 &&
       data.product
     ) {
 
@@ -1219,7 +939,9 @@ async function lookupBarcode(barcode) {
     }
 
     if (
-      Number(data.status) === 0
+      Number(
+        data.status
+      ) === 0
     ) {
 
       showLookupMessage(
@@ -1230,7 +952,7 @@ async function lookupBarcode(barcode) {
     }
 
     showLookupMessage(
-      "⚠️ Barcode confirmed. The product database gave an unusual response, so enter the name manually."
+      "⚠️ Barcode confirmed, but the database gave an unusual response. Enter the name manually."
     );
 
   } catch (error) {
@@ -1242,44 +964,53 @@ async function lookupBarcode(barcode) {
 }
 
 
-/* PRODUCT NAME */
+/* FILL PRODUCT NAME */
 
-function fillProductFromLookup(product) {
+function fillProductFromLookup(
+  product
+) {
 
-  const productName =
+  const name =
     product.product_name_en ||
     product.product_name ||
     product.generic_name ||
     "";
 
-  if (!productName) {
+  if (!name) {
 
     showLookupMessage(
-      "⚠️ Barcode confirmed, but the product name is missing. Type the name manually."
+      "⚠️ Barcode confirmed, but the product name is missing. Type it manually."
     );
 
     return;
   }
 
   document
-    .getElementById("itemName")
+    .getElementById(
+      "itemName"
+    )
     .value =
-      productName;
+      name;
 
-  autoSelectCategory(product);
+  autoSelectCategory(
+    product
+  );
 
   showLookupMessage(
     "✅ Found: " +
-    productName
+    name
   );
 }
 
 
-/* CATEGORY GUESS */
+/* CATEGORY GUESSING */
 
-function autoSelectCategory(product) {
+function autoSelectCategory(
+  product
+) {
 
-  let categoryText = "";
+  let tags =
+    "";
 
   if (
     Array.isArray(
@@ -1287,15 +1018,16 @@ function autoSelectCategory(product) {
     )
   ) {
 
-    categoryText =
+    tags =
       product.categories_tags
         .join(" ");
 
   } else {
 
-    categoryText =
+    tags =
       String(
-        product.categories || ""
+        product.categories ||
+        ""
       );
   }
 
@@ -1309,7 +1041,7 @@ function autoSelectCategory(product) {
 
   const text =
     (
-      categoryText +
+      tags +
       " " +
       name
     ).toLowerCase();
@@ -1318,25 +1050,17 @@ function autoSelectCategory(product) {
     "Other";
 
   if (
-    text.includes("beef") ||
-    text.includes("pork") ||
-    text.includes("chicken") ||
-    text.includes("turkey") ||
-    text.includes("meat") ||
-    text.includes("sausage") ||
-    text.includes("ham") ||
-    text.includes("bacon")
+    /beef|pork|chicken|turkey|meat|sausage|ham|bacon/
+      .test(text)
   ) {
 
-    category = "Meat";
+    category =
+      "Meat";
   }
 
   else if (
-    text.includes("milk") ||
-    text.includes("cheese") ||
-    text.includes("yogurt") ||
-    text.includes("egg") ||
-    text.includes("dairy")
+    /milk|cheese|yogurt|egg|dairy/
+      .test(text)
   ) {
 
     category =
@@ -1344,7 +1068,8 @@ function autoSelectCategory(product) {
   }
 
   else if (
-    text.includes("fruit")
+    /fruit/
+      .test(text)
   ) {
 
     category =
@@ -1352,7 +1077,8 @@ function autoSelectCategory(product) {
   }
 
   else if (
-    text.includes("vegetable")
+    /vegetable/
+      .test(text)
   ) {
 
     category =
@@ -1360,11 +1086,8 @@ function autoSelectCategory(product) {
   }
 
   else if (
-    text.includes("bread") ||
-    text.includes("cereal") ||
-    text.includes("grain") ||
-    text.includes("rice") ||
-    text.includes("pasta")
+    /bread|cereal|grain|rice|pasta/
+      .test(text)
   ) {
 
     category =
@@ -1372,9 +1095,8 @@ function autoSelectCategory(product) {
   }
 
   else if (
-    text.includes("flour") ||
-    text.includes("sugar") ||
-    text.includes("baking")
+    /flour|sugar|baking/
+      .test(text)
   ) {
 
     category =
@@ -1382,7 +1104,8 @@ function autoSelectCategory(product) {
   }
 
   else if (
-    text.includes("canned")
+    /canned/
+      .test(text)
   ) {
 
     category =
@@ -1390,12 +1113,8 @@ function autoSelectCategory(product) {
   }
 
   else if (
-    text.includes("snack") ||
-    text.includes("chips") ||
-    text.includes("cracker") ||
-    text.includes("cookie") ||
-    text.includes("popcorn") ||
-    text.includes("candy")
+    /snack|chips|cracker|cookie|popcorn|candy/
+      .test(text)
   ) {
 
     category =
@@ -1403,12 +1122,8 @@ function autoSelectCategory(product) {
   }
 
   else if (
-    text.includes("drink") ||
-    text.includes("beverage") ||
-    text.includes("juice") ||
-    text.includes("soda") ||
-    text.includes("coffee") ||
-    text.includes("tea")
+    /drink|beverage|juice|soda|coffee|tea/
+      .test(text)
   ) {
 
     category =
@@ -1416,12 +1131,8 @@ function autoSelectCategory(product) {
   }
 
   else if (
-    text.includes("sauce") ||
-    text.includes("ketchup") ||
-    text.includes("mustard") ||
-    text.includes("mayonnaise") ||
-    text.includes("dressing") ||
-    text.includes("condiment")
+    /sauce|ketchup|mustard|mayonnaise|dressing|condiment/
+      .test(text)
   ) {
 
     category =
@@ -1429,7 +1140,8 @@ function autoSelectCategory(product) {
   }
 
   else if (
-    text.includes("frozen")
+    /frozen/
+      .test(text)
   ) {
 
     category =
@@ -1437,53 +1149,11 @@ function autoSelectCategory(product) {
   }
 
   document
-    .getElementById("category")
+    .getElementById(
+      "category"
+    )
     .value =
       category;
-}
-
-
-/* FIND MOST COMMON RECENT BARCODE */
-
-function getBarcodeWinner() {
-
-  const counts = {};
-
-  recentBarcodeReads.forEach(
-    function(code) {
-
-      counts[code] =
-        (counts[code] || 0) + 1;
-
-    }
-  );
-
-  let winner = "";
-  let winnerCount = 0;
-
-  Object.keys(counts)
-    .forEach(function(code) {
-
-      if (
-        counts[code] >
-        winnerCount
-      ) {
-
-        winner =
-          code;
-
-        winnerCount =
-          counts[code];
-      }
-
-    });
-
-  return {
-    barcode:
-      winner,
-    count:
-      winnerCount
-  };
 }
 
 
@@ -1492,11 +1162,6 @@ function getBarcodeWinner() {
 async function startBarcodeScanner() {
 
   hideLookupMessage();
-
-  recentBarcodeReads = [];
-
-  scannerLocked =
-    false;
 
   const panel =
     document.getElementById(
@@ -1512,42 +1177,65 @@ async function startBarcodeScanner() {
     "active"
   );
 
-  status.textContent =
-    "Starting camera...";
+  if (
+    pendingBarcode
+  ) {
+
+    status.textContent =
+      "Scan the SAME barcode again to confirm it.";
+
+  } else {
+
+    status.textContent =
+      "Point the camera at the barcode.";
+  }
 
   if (
     typeof Html5Qrcode ===
     "undefined"
   ) {
 
-    alert(
-      "The barcode scanner could not load. You can still type the barcode manually."
-    );
-
     panel.classList.remove(
       "active"
     );
 
+    alert(
+      "The barcode scanner could not load. Please refresh the page and try again."
+    );
+
     return;
   }
 
-  if (scannerRunning) {
+  if (
+    scannerRunning
+  ) {
     return;
   }
+
+  scanLocked =
+    false;
 
   try {
+
+    const scannerConfig = {
+
+      formatsToSupport: [
+
+        Html5QrcodeSupportedFormats.UPC_A,
+
+        Html5QrcodeSupportedFormats.UPC_E,
+
+        Html5QrcodeSupportedFormats.EAN_13,
+
+        Html5QrcodeSupportedFormats.EAN_8
+
+      ]
+    };
 
     html5QrCode =
       new Html5Qrcode(
         "reader",
-        {
-          formatsToSupport: [
-            Html5QrcodeSupportedFormats.UPC_A,
-            Html5QrcodeSupportedFormats.UPC_E,
-            Html5QrcodeSupportedFormats.EAN_13,
-            Html5QrcodeSupportedFormats.EAN_8
-          ]
-        }
+        scannerConfig
       );
 
     scannerRunning =
@@ -1561,122 +1249,156 @@ async function startBarcodeScanner() {
       },
 
       {
-        fps: 15,
+        fps:
+          10,
 
         qrbox:
           function(
-            viewfinderWidth,
-            viewfinderHeight
+            width,
+            height
           ) {
 
             return {
 
               width:
                 Math.min(
-                  340,
+                  330,
                   Math.floor(
-                    viewfinderWidth *
-                    0.92
+                    width *
+                    0.90
                   )
                 ),
 
               height:
                 Math.min(
-                  135,
+                  145,
                   Math.floor(
-                    viewfinderHeight *
-                    0.30
+                    height *
+                    0.35
                   )
                 )
 
             };
           }
+
       },
 
-      function(decodedText) {
+      async function(
+        decodedText
+      ) {
 
-        if (scannerLocked) {
+        if (
+          scanLocked
+        ) {
           return;
         }
 
         const barcode =
-          cleanBarcodeValue(
+          cleanBarcode(
             decodedText
           );
 
         if (
-          !passesBarcodeChecksum(
+          !isGroceryBarcode(
             barcode
           )
         ) {
 
-          status.textContent =
-            "Checking barcode — hold steady...";
-
           return;
         }
 
-        recentBarcodeReads.push(
-          barcode
-        );
-
-        if (
-          recentBarcodeReads.length >
-          MAX_RECENT_READS
-        ) {
-
-          recentBarcodeReads.shift();
-        }
-
-        const winner =
-          getBarcodeWinner();
-
-        status.textContent =
-          "Confirming barcode... " +
-          winner.count +
-          "/" +
-          REQUIRED_MATCHES;
-
-        if (
-          winner.count <
-          REQUIRED_MATCHES
-        ) {
-
-          return;
-        }
-
-        scannerLocked =
+        scanLocked =
           true;
+
+
+        /*
+        FIRST SCAN
+        */
+
+        if (
+          !pendingBarcode
+        ) {
+
+          pendingBarcode =
+            barcode;
+
+          status.textContent =
+            "First read: " +
+            barcode +
+            ". Scan it once more to confirm.";
+
+          await stopBarcodeScanner(
+            true
+          );
+
+          showLookupMessage(
+            "📷 First read saved. Tap Scan Barcode and scan the SAME item once more."
+          );
+
+          return;
+        }
+
+
+        /*
+        SECOND SCAN DOES NOT MATCH
+        */
+
+        if (
+          barcode !==
+          pendingBarcode
+        ) {
+
+          pendingBarcode =
+            barcode;
+
+          status.textContent =
+            "Reads did not match. Scan once more.";
+
+          await stopBarcodeScanner(
+            true
+          );
+
+          showLookupMessage(
+            "⚠️ Those two reads did not match. I kept the newest read. Tap Scan Barcode once more to confirm it."
+          );
+
+          return;
+        }
+
+
+        /*
+        MATCH = CONFIRMED
+        */
 
         document
           .getElementById(
             "barcode"
           )
           .value =
-            winner.barcode;
+            barcode;
+
+        pendingBarcode =
+          "";
 
         status.textContent =
-          "✅ Confirmed: " +
-          winner.barcode;
+          "✅ Barcode confirmed: " +
+          barcode;
 
-        stopBarcodeScanner(
+        await stopBarcodeScanner(
           true
         );
 
         lookupBarcode(
-          winner.barcode
+          barcode
         );
 
       },
 
       function() {
-        /* Ignore normal misses */
+        /* Ignore normal camera misses */
       }
 
     );
-
-    status.textContent =
-      "Hold the whole barcode steady in the box.";
 
   } catch (error) {
 
@@ -1691,13 +1413,13 @@ async function startBarcodeScanner() {
     );
 
     alert(
-      "The camera could not start. Make sure camera permission is allowed."
+      "The camera could not start. Make sure camera permission is allowed, then try again."
     );
   }
 }
 
 
-/* STOP SCANNER */
+/* STOP CAMERA */
 
 async function stopBarcodeScanner(
   keepMessage
@@ -1732,7 +1454,9 @@ async function stopBarcodeScanner(
   html5QrCode =
     null;
 
-  if (!keepMessage) {
+  if (
+    !keepMessage
+  ) {
 
     panel.classList.remove(
       "active"
@@ -1748,29 +1472,36 @@ async function stopBarcodeScanner(
         );
 
       },
-      1400
+      1000
     );
   }
 }
 
 
-/* MANUAL BARCODE */
+/* MANUAL BARCODE ENTRY */
 
 document
-  .getElementById("barcode")
+  .getElementById(
+    "barcode"
+  )
   .addEventListener(
     "change",
     function() {
 
       const barcode =
-        cleanBarcodeValue(
+        cleanBarcode(
           this.value
         );
 
       this.value =
         barcode;
 
-      if (barcode) {
+      pendingBarcode =
+        "";
+
+      if (
+        barcode
+      ) {
 
         lookupBarcode(
           barcode
@@ -1786,7 +1517,9 @@ function savePantry() {
 
   localStorage.setItem(
     "sawyerPantry",
-    JSON.stringify(pantry)
+    JSON.stringify(
+      pantry
+    )
   );
 }
 
@@ -1794,7 +1527,9 @@ function addItem() {
 
   const name =
     document
-      .getElementById("itemName")
+      .getElementById(
+        "itemName"
+      )
       .value
       .trim();
 
@@ -1807,11 +1542,13 @@ function addItem() {
     return;
   }
 
-  const newItem = {
+  pantry.push({
 
     barcode:
       document
-        .getElementById("barcode")
+        .getElementById(
+          "barcode"
+        )
         .value
         .trim(),
 
@@ -1820,76 +1557,95 @@ function addItem() {
 
     location:
       document
-        .getElementById("location")
+        .getElementById(
+          "location"
+        )
         .value,
 
     category:
       document
-        .getElementById("category")
+        .getElementById(
+          "category"
+        )
         .value,
 
     quantity:
       Number(
         document
-          .getElementById("quantity")
+          .getElementById(
+            "quantity"
+          )
           .value
       ) || 0,
 
     unit:
       document
-        .getElementById("unit")
+        .getElementById(
+          "unit"
+        )
         .value,
 
     cost:
       Number(
         document
-          .getElementById("cost")
+          .getElementById(
+            "cost"
+          )
           .value
       ) || 0,
 
     lowStock:
       Number(
         document
-          .getElementById("lowStock")
+          .getElementById(
+            "lowStock"
+          )
           .value
       ) || 0,
 
     farmMade:
       document
-        .getElementById("farmMade")
+        .getElementById(
+          "farmMade"
+        )
         .checked
-  };
 
-  pantry.push(
-    newItem
-  );
+  });
 
   savePantry();
 
   document.getElementById(
     "barcode"
-  ).value = "";
+  ).value =
+    "";
 
   document.getElementById(
     "itemName"
-  ).value = "";
+  ).value =
+    "";
 
   document.getElementById(
     "quantity"
-  ).value = "1";
+  ).value =
+    "1";
 
   document.getElementById(
     "cost"
-  ).value = "0";
+  ).value =
+    "0";
 
   document.getElementById(
     "lowStock"
-  ).value = "1";
+  ).value =
+    "1";
 
   document.getElementById(
     "farmMade"
   ).checked =
     false;
+
+  pendingBarcode =
+    "";
 
   hideLookupMessage();
 
@@ -1921,11 +1677,14 @@ function changeQuantity(
   updateLowStockShopping();
 }
 
-function deleteItem(index) {
+function deleteItem(
+  index
+) {
 
   const itemName =
     String(
-      pantry[index].name || ""
+      pantry[index].name ||
+      ""
     ).toLowerCase();
 
   pantry.splice(
@@ -1962,43 +1721,43 @@ function displayPantry() {
       "inventoryList"
     );
 
-  const searchBox =
-    document.getElementById(
-      "searchInventory"
-    );
-
-  const filterBox =
-    document.getElementById(
-      "filterLocation"
-    );
-
   const search =
-    searchBox
-      ?
-      searchBox.value
-        .toLowerCase()
-      :
-      "";
+    (
+      document
+        .getElementById(
+          "searchInventory"
+        )
+        ?.value ||
+      ""
+    ).toLowerCase();
 
   const locationFilter =
-    filterBox
-      ?
-      filterBox.value
-      :
-      "All";
+    document
+      .getElementById(
+        "filterLocation"
+      )
+      ?.value ||
+    "All";
 
   inventory.innerHTML =
     "";
 
-  let total = 0;
-  let shown = 0;
+  let total =
+    0;
+
+  let shown =
+    0;
 
   pantry.forEach(
-    function(item, index) {
+    function(
+      item,
+      index
+    ) {
 
       const barcode =
         String(
-          item.barcode || ""
+          item.barcode ||
+          ""
         );
 
       const name =
@@ -2077,6 +1836,7 @@ function displayPantry() {
         !matchesSearch ||
         !matchesLocation
       ) {
+
         return;
       }
 
@@ -2101,19 +1861,6 @@ function displayPantry() {
             :
             ""
         );
-
-      let barcodeLine =
-        "";
-
-      if (barcode) {
-
-        barcodeLine =
-          "🏷️ Barcode: " +
-          escapeHtml(
-            barcode
-          ) +
-          "<br>";
-      }
 
       itemDiv.innerHTML =
 
@@ -2143,7 +1890,17 @@ function displayPantry() {
 
         '<div class="item-info">' +
 
-        barcodeLine +
+        (
+          barcode
+            ?
+            '🏷️ Barcode: ' +
+            escapeHtml(
+              barcode
+            ) +
+            '<br>'
+            :
+            ''
+        ) +
 
         '📍 ' +
         escapeHtml(
@@ -2170,7 +1927,7 @@ function displayPantry() {
 
         '<button class="minus" onclick="changeQuantity(' +
         index +
-        ', -1)">−</button>' +
+        ',-1)">−</button>' +
 
         '<span class="quantity">' +
         quantity +
@@ -2182,7 +1939,7 @@ function displayPantry() {
 
         '<button class="plus" onclick="changeQuantity(' +
         index +
-        ', 1)">+</button>' +
+        ',1)">+</button>' +
 
         '<button class="delete" onclick="deleteItem(' +
         index +
@@ -2196,25 +1953,29 @@ function displayPantry() {
     }
   );
 
-  if (shown === 0) {
+  if (
+    !shown
+  ) {
 
     inventory.innerHTML =
-      '<div class="empty">' +
-      'No food found here yet.' +
-      '</div>';
+      '<div class="empty">No food found here yet.</div>';
   }
 
-  document.getElementById(
-    "totalValue"
-  ).textContent =
-    "Total inventory value: $" +
-    total.toFixed(2);
+  document
+    .getElementById(
+      "totalValue"
+    )
+    .textContent =
+      "Total inventory value: $" +
+      total.toFixed(2);
 
-  document.getElementById(
-    "budgetInventoryValue"
-  ).textContent =
-    "$" +
-    total.toFixed(2);
+  document
+    .getElementById(
+      "budgetInventoryValue"
+    )
+    .textContent =
+      "$" +
+      total.toFixed(2);
 }
 
 
@@ -2234,48 +1995,49 @@ function updateLowStockShopping() {
 
   shopping =
     shopping.filter(
-      function(shoppingItem) {
-
-        const shoppingName =
-          String(
-            shoppingItem
-          ).toLowerCase();
+      function(
+        shoppingItem
+      ) {
 
         return !pantry.some(
           function(item) {
 
-            const name =
-              String(
-                item.name || ""
-              ).toLowerCase();
-
-            const quantity =
-              Number(
-                item.quantity
-              ) || 0;
-
-            const lowStock =
-              item.lowStock ===
-              undefined
-                ?
-                1
-                :
-                Number(
-                  item.lowStock
-                ) || 0;
-
             return (
-              name ===
-              shoppingName
+              String(
+                item.name ||
+                ""
+              )
+              .toLowerCase()
+              ===
+              String(
+                shoppingItem
+              )
+              .toLowerCase()
               &&
               (
-                lowStock === 0 ||
-                quantity >
-                lowStock
+                (
+                  Number(
+                    item.lowStock
+                  ) || 0
+                ) === 0
+                ||
+                (
+                  Number(
+                    item.quantity
+                  ) || 0
+                )
+                >
+                (
+                  Number(
+                    item.lowStock
+                  ) || 0
+                )
               )
             );
+
           }
         );
+
       }
     );
 
@@ -2284,7 +2046,8 @@ function updateLowStockShopping() {
 
       const name =
         String(
-          item.name || ""
+          item.name ||
+          ""
         );
 
       const quantity =
@@ -2309,21 +2072,24 @@ function updateLowStockShopping() {
         lowStock
       ) {
 
-        const alreadyThere =
+        const exists =
           shopping.some(
-            function(shoppingItem) {
+            function(item) {
 
               return (
-                String(
-                  shoppingItem
-                ).toLowerCase()
+                String(item)
+                  .toLowerCase()
                 ===
-                name.toLowerCase()
+                name
+                  .toLowerCase()
               );
+
             }
           );
 
-        if (!alreadyThere) {
+        if (
+          !exists
+        ) {
 
           shopping.push(
             name
@@ -2352,7 +2118,7 @@ function addShoppingItem() {
     return;
   }
 
-  const alreadyThere =
+  const exists =
     shopping.some(
       function(item) {
 
@@ -2360,12 +2126,14 @@ function addShoppingItem() {
           String(item)
             .toLowerCase()
           ===
-          name.toLowerCase()
+          name
+            .toLowerCase()
         );
+
       }
     );
 
-  if (!alreadyThere) {
+  if (!exists) {
 
     shopping.push(
       name
@@ -2374,12 +2142,15 @@ function addShoppingItem() {
 
   saveShopping();
 
-  input.value = "";
+  input.value =
+    "";
 
   displayShopping();
 }
 
-function deleteShoppingItem(index) {
+function deleteShoppingItem(
+  index
+) {
 
   shopping.splice(
     index,
@@ -2406,15 +2177,16 @@ function displayShopping() {
   ) {
 
     list.innerHTML =
-      '<div class="empty">' +
-      'Your shopping list is empty.' +
-      '</div>';
+      '<div class="empty">Your shopping list is empty.</div>';
 
     return;
   }
 
   shopping.forEach(
-    function(item, index) {
+    function(
+      item,
+      index
+    ) {
 
       const row =
         document.createElement(
@@ -2463,19 +2235,12 @@ function saveRecipes() {
 function addRecipe() {
 
   const name =
-    document.getElementById(
-      "recipeName"
-    ).value.trim();
-
-  const ingredients =
-    document.getElementById(
-      "recipeIngredients"
-    ).value.trim();
-
-  const directions =
-    document.getElementById(
-      "recipeDirections"
-    ).value.trim();
+    document
+      .getElementById(
+        "recipeName"
+      )
+      .value
+      .trim();
 
   if (!name) {
 
@@ -2492,35 +2257,53 @@ function addRecipe() {
       name,
 
     category:
-      document.getElementById(
-        "recipeCategory"
-      ).value,
+      document
+        .getElementById(
+          "recipeCategory"
+        )
+        .value,
 
     ingredients:
-      ingredients,
+      document
+        .getElementById(
+          "recipeIngredients"
+        )
+        .value
+        .trim(),
 
     directions:
-      directions
+      document
+        .getElementById(
+          "recipeDirections"
+        )
+        .value
+        .trim()
+
   });
 
   saveRecipes();
 
   document.getElementById(
     "recipeName"
-  ).value = "";
+  ).value =
+    "";
 
   document.getElementById(
     "recipeIngredients"
-  ).value = "";
+  ).value =
+    "";
 
   document.getElementById(
     "recipeDirections"
-  ).value = "";
+  ).value =
+    "";
 
   displayRecipes();
 }
 
-function deleteRecipe(index) {
+function deleteRecipe(
+  index
+) {
 
   recipes.splice(
     index,
@@ -2539,36 +2322,32 @@ function displayRecipes() {
       "recipeList"
     );
 
-  const searchInput =
-    document.getElementById(
-      "searchRecipes"
-    );
-
   const search =
-    searchInput
-      ?
-      searchInput.value
-        .toLowerCase()
-      :
-      "";
+    (
+      document
+        .getElementById(
+          "searchRecipes"
+        )
+        ?.value ||
+      ""
+    ).toLowerCase();
 
   list.innerHTML =
     "";
 
-  let shown = 0;
+  let shown =
+    0;
 
   recipes.forEach(
-    function(recipe, index) {
+    function(
+      recipe,
+      index
+    ) {
 
       const name =
         String(
-          recipe.name || ""
-        );
-
-      const category =
-        String(
-          recipe.category ||
-          "Other"
+          recipe.name ||
+          ""
         );
 
       if (
@@ -2578,6 +2357,7 @@ function displayRecipes() {
             search
           )
       ) {
+
         return;
       }
 
@@ -2601,7 +2381,8 @@ function displayRecipes() {
 
         '<div class="small-note">' +
         escapeHtml(
-          category
+          recipe.category ||
+          "Other"
         ) +
         '</div>' +
 
@@ -2635,12 +2416,12 @@ function displayRecipes() {
     }
   );
 
-  if (shown === 0) {
+  if (
+    !shown
+  ) {
 
     list.innerHTML =
-      '<div class="empty">' +
-      'No saved recipes yet.' +
-      '</div>';
+      '<div class="empty">No saved recipes yet.</div>';
   }
 }
 
@@ -2649,53 +2430,70 @@ function displayRecipes() {
 
 function saveMeals() {
 
-  const mealPlan = {
+  const plan = {
 
     Monday:
-      document.getElementById(
-        "mealMonday"
-      ).value,
+      document
+        .getElementById(
+          "mealMonday"
+        )
+        .value,
 
     Tuesday:
-      document.getElementById(
-        "mealTuesday"
-      ).value,
+      document
+        .getElementById(
+          "mealTuesday"
+        )
+        .value,
 
     Wednesday:
-      document.getElementById(
-        "mealWednesday"
-      ).value,
+      document
+        .getElementById(
+          "mealWednesday"
+        )
+        .value,
 
     Thursday:
-      document.getElementById(
-        "mealThursday"
-      ).value,
+      document
+        .getElementById(
+          "mealThursday"
+        )
+        .value,
 
     Friday:
-      document.getElementById(
-        "mealFriday"
-      ).value,
+      document
+        .getElementById(
+          "mealFriday"
+        )
+        .value,
 
     Saturday:
-      document.getElementById(
-        "mealSaturday"
-      ).value,
+      document
+        .getElementById(
+          "mealSaturday"
+        )
+        .value,
 
     Sunday:
-      document.getElementById(
-        "mealSunday"
-      ).value,
+      document
+        .getElementById(
+          "mealSunday"
+        )
+        .value,
 
     notes:
-      document.getElementById(
-        "mealNotes"
-      ).value
+      document
+        .getElementById(
+          "mealNotes"
+        )
+        .value
+
   };
 
   localStorage.setItem(
     "sawyerMeals",
     JSON.stringify(
-      mealPlan
+      plan
     )
   );
 
@@ -2706,7 +2504,8 @@ function saveMeals() {
 
 function loadMeals() {
 
-  let plan = {};
+  let plan =
+    {};
 
   try {
 
@@ -2717,50 +2516,55 @@ function loadMeals() {
         )
       ) || {};
 
-  } catch (e) {
-
-    plan = {};
-  }
+  } catch (e) {}
 
   document.getElementById(
     "mealMonday"
   ).value =
-    plan.Monday || "";
+    plan.Monday ||
+    "";
 
   document.getElementById(
     "mealTuesday"
   ).value =
-    plan.Tuesday || "";
+    plan.Tuesday ||
+    "";
 
   document.getElementById(
     "mealWednesday"
   ).value =
-    plan.Wednesday || "";
+    plan.Wednesday ||
+    "";
 
   document.getElementById(
     "mealThursday"
   ).value =
-    plan.Thursday || "";
+    plan.Thursday ||
+    "";
 
   document.getElementById(
     "mealFriday"
   ).value =
-    plan.Friday || "";
+    plan.Friday ||
+    "";
 
   document.getElementById(
     "mealSaturday"
   ).value =
-    plan.Saturday || "";
+    plan.Saturday ||
+    "";
 
   document.getElementById(
     "mealSunday"
   ).value =
-    plan.Sunday || "";
+    plan.Sunday ||
+    "";
 
   document.getElementById(
     "mealNotes"
   ).value =
-    plan.notes || "";
+    plan.notes ||
+    "";
 }
 
 
@@ -2770,9 +2574,11 @@ function saveBudgetAmount() {
 
   monthlyBudget =
     Number(
-      document.getElementById(
-        "monthlyBudget"
-      ).value
+      document
+        .getElementById(
+          "monthlyBudget"
+        )
+        .value
     ) || 0;
 
   localStorage.setItem(
@@ -2796,15 +2602,20 @@ function saveExpenses() {
 function addExpense() {
 
   const description =
-    document.getElementById(
-      "expenseDescription"
-    ).value.trim();
+    document
+      .getElementById(
+        "expenseDescription"
+      )
+      .value
+      .trim();
 
   const amount =
     Number(
-      document.getElementById(
-        "expenseAmount"
-      ).value
+      document
+        .getElementById(
+          "expenseAmount"
+        )
+        .value
     ) || 0;
 
   if (
@@ -2830,22 +2641,27 @@ function addExpense() {
     date:
       new Date()
         .toLocaleDateString()
+
   });
 
   saveExpenses();
 
   document.getElementById(
     "expenseDescription"
-  ).value = "";
+  ).value =
+    "";
 
   document.getElementById(
     "expenseAmount"
-  ).value = "";
+  ).value =
+    "";
 
   displayBudget();
 }
 
-function deleteExpense(index) {
+function deleteExpense(
+  index
+) {
 
   groceryExpenses.splice(
     index,
@@ -2859,12 +2675,16 @@ function deleteExpense(index) {
 
 function displayBudget() {
 
-  document.getElementById(
-    "monthlyBudget"
-  ).value =
-    monthlyBudget || "";
+  document
+    .getElementById(
+      "monthlyBudget"
+    )
+    .value =
+      monthlyBudget ||
+      "";
 
-  let spent = 0;
+  let spent =
+    0;
 
   groceryExpenses.forEach(
     function(entry) {
@@ -2873,35 +2693,40 @@ function displayBudget() {
         Number(
           entry.amount
         ) || 0;
+
     }
   );
+
+  document
+    .getElementById(
+      "budgetDisplay"
+    )
+    .textContent =
+      "$" +
+      monthlyBudget.toFixed(2);
+
+  document
+    .getElementById(
+      "spentDisplay"
+    )
+    .textContent =
+      "$" +
+      spent.toFixed(2);
 
   const remaining =
     monthlyBudget -
     spent;
 
-  document.getElementById(
-    "budgetDisplay"
-  ).textContent =
-    "$" +
-    monthlyBudget.toFixed(2);
-
-  document.getElementById(
-    "spentDisplay"
-  ).textContent =
-    "$" +
-    spent.toFixed(2);
-
-  const remainingBox =
+  const remainingDisplay =
     document.getElementById(
       "remainingDisplay"
     );
 
-  remainingBox.textContent =
+  remainingDisplay.textContent =
     "$" +
     remaining.toFixed(2);
 
-  remainingBox.className =
+  remainingDisplay.className =
     remaining >= 0
       ?
       "positive"
@@ -2922,15 +2747,16 @@ function displayBudget() {
   ) {
 
     list.innerHTML =
-      '<div class="empty">' +
-      'No grocery spending entered yet.' +
-      '</div>';
+      '<div class="empty">No grocery spending entered yet.</div>';
 
     return;
   }
 
   groceryExpenses.forEach(
-    function(entry, index) {
+    function(
+      entry,
+      index
+    ) {
 
       const row =
         document.createElement(
@@ -2951,12 +2777,13 @@ function displayBudget() {
         '$' +
         Number(
           entry.amount
-        ).toFixed(2) +
+        )
+        .toFixed(2) +
 
         ' • ' +
-
         escapeHtml(
-          entry.date || ""
+          entry.date ||
+          ""
         ) +
 
         '<div class="controls">' +
@@ -2990,15 +2817,20 @@ function saveSavings() {
 function addSaving() {
 
   const description =
-    document.getElementById(
-      "savingDescription"
-    ).value.trim();
+    document
+      .getElementById(
+        "savingDescription"
+      )
+      .value
+      .trim();
 
   const amount =
     Number(
-      document.getElementById(
-        "savingAmount"
-      ).value
+      document
+        .getElementById(
+          "savingAmount"
+        )
+        .value
     ) || 0;
 
   if (
@@ -3024,22 +2856,27 @@ function addSaving() {
     date:
       new Date()
         .toLocaleDateString()
+
   });
 
   saveSavings();
 
   document.getElementById(
     "savingDescription"
-  ).value = "";
+  ).value =
+    "";
 
   document.getElementById(
     "savingAmount"
-  ).value = "";
+  ).value =
+    "";
 
   displaySavings();
 }
 
-function deleteSaving(index) {
+function deleteSaving(
+  index
+) {
 
   savings.splice(
     index,
@@ -3053,12 +2890,8 @@ function deleteSaving(index) {
 
 function displaySavings() {
 
-  const list =
-    document.getElementById(
-      "savingsList"
-    );
-
-  let total = 0;
+  let total =
+    0;
 
   savings.forEach(
     function(entry) {
@@ -3067,32 +2900,42 @@ function displaySavings() {
         Number(
           entry.amount
         ) || 0;
+
     }
   );
 
-  document.getElementById(
-    "totalSavings"
-  ).textContent =
-    "$" +
-    total.toFixed(2);
+  document
+    .getElementById(
+      "totalSavings"
+    )
+    .textContent =
+      "$" +
+      total.toFixed(2);
+
+  const list =
+    document.getElementById(
+      "savingsList"
+    );
 
   list.innerHTML =
     "";
 
   if (
-    savings.length === 0
+    savings.length ===
+    0
   ) {
 
     list.innerHTML =
-      '<div class="empty">' +
-      'No savings recorded yet.' +
-      '</div>';
+      '<div class="empty">No savings recorded yet.</div>';
 
     return;
   }
 
   savings.forEach(
-    function(entry, index) {
+    function(
+      entry,
+      index
+    ) {
 
       const row =
         document.createElement(
@@ -3105,23 +2948,21 @@ function displaySavings() {
       row.innerHTML =
 
         '🌾 <strong>' +
-
         escapeHtml(
           entry.description
         ) +
-
         '</strong><br>' +
 
         'Saved $' +
-
         Number(
           entry.amount
-        ).toFixed(2) +
+        )
+        .toFixed(2) +
 
         ' • ' +
-
         escapeHtml(
-          entry.date || ""
+          entry.date ||
+          ""
         ) +
 
         '<div class="controls">' +
@@ -3142,34 +2983,38 @@ function displaySavings() {
 
 /* SAFETY */
 
-function escapeHtml(text) {
+function escapeHtml(
+  text
+) {
 
-  return String(text)
+  return String(
+    text
+  )
 
-    .replace(
-      /&/g,
-      "&amp;"
-    )
+  .replace(
+    /&/g,
+    "&amp;"
+  )
 
-    .replace(
-      /</g,
-      "&lt;"
-    )
+  .replace(
+    /</g,
+    "&lt;"
+  )
 
-    .replace(
-      />/g,
-      "&gt;"
-    )
+  .replace(
+    />/g,
+    "&gt;"
+  )
 
-    .replace(
-      /"/g,
-      "&quot;"
-    )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
 
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+  .replace(
+    /'/g,
+    "&#039;"
+  );
 }
 
 
@@ -3192,4 +3037,4 @@ displaySavings();
 </script>
 
 </body>
-  </html>
+</html>
