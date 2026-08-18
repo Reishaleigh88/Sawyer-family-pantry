@@ -199,9 +199,9 @@ button {
   padding-left: 10px;
 }
 
-.low-label {
+.low-label,
+.farm-label {
   display: inline-block;
-  background: #c8814a;
   color: white;
   padding: 3px 7px;
   border-radius: 10px;
@@ -209,15 +209,8 @@ button {
   margin-left: 5px;
 }
 
-.farm-label {
-  display: inline-block;
-  background: #788b65;
-  color: white;
-  padding: 3px 7px;
-  border-radius: 10px;
-  font-size: 11px;
-  margin-left: 5px;
-}
+.low-label { background: #c8814a; }
+.farm-label { background: #788b65; }
 
 .filter-box {
   background: #eee6d8;
@@ -234,9 +227,7 @@ button {
 .coming-icon { font-size: 48px; }
 
 @media (max-width: 430px) {
-  .two-column {
-    grid-template-columns: 1fr;
-  }
+  .two-column { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -252,18 +243,23 @@ button {
   <button class="nav-button active" onclick="showPage('inventory', this)">
     <span>🏡</span>Inventory
   </button>
+
   <button class="nav-button" onclick="showPage('shopping', this)">
     <span>🛒</span>Shopping
   </button>
+
   <button class="nav-button" onclick="showPage('recipes', this)">
     <span>📖</span>Recipes
   </button>
+
   <button class="nav-button" onclick="showPage('meals', this)">
     <span>🍽️</span>Meals
   </button>
+
   <button class="nav-button" onclick="showPage('budget', this)">
     <span>💰</span>Budget
   </button>
+
   <button class="nav-button" onclick="showPage('savings', this)">
     <span>🌾</span>Savings
   </button>
@@ -310,7 +306,7 @@ button {
   <div class="two-column">
     <div>
       <label>Quantity</label>
-      <input id="quantity" type="number" min="0" step="1" value="1">
+      <input id="quantity" type="number" min="0" value="1">
     </div>
 
     <div>
@@ -338,7 +334,7 @@ button {
 
     <div>
       <label>Low Stock At</label>
-      <input id="lowStock" type="number" min="0" step="1" value="1">
+      <input id="lowStock" type="number" min="0" value="1">
     </div>
   </div>
 
@@ -349,20 +345,22 @@ button {
     </label>
   </div>
 
-  <button class="main-button" onclick="addItem()">Add to Pantry</button>
+  <button class="main-button" onclick="addItem()">
+    Add to Pantry
+  </button>
 </div>
 
 <div class="card">
   <h2>🏡 My Inventory</h2>
 
   <div class="filter-box">
-    <input id="searchInventory"
-           type="text"
-           placeholder="🔎 Search food..."
-           oninput="displayPantry()">
+    <input
+      id="searchInventory"
+      type="text"
+      placeholder="🔎 Search food..."
+      oninput="displayPantry()">
 
-    <select id="filterLocation"
-            onchange="displayPantry()">
+    <select id="filterLocation" onchange="displayPantry()">
       <option value="All">All Locations</option>
       <option>Kitchen Fridge</option>
       <option>Kitchen Freezer</option>
@@ -434,17 +432,29 @@ button {
 </div>
 
 <script>
-let pantry = JSON.parse(localStorage.getItem("sawyerPantry")) || [];
-let shopping = JSON.parse(localStorage.getItem("sawyerShopping")) || [];
+let pantry = [];
+let shopping = [];
+
+try {
+  pantry = JSON.parse(localStorage.getItem("sawyerPantry")) || [];
+} catch (e) {
+  pantry = [];
+}
+
+try {
+  shopping = JSON.parse(localStorage.getItem("sawyerShopping")) || [];
+} catch (e) {
+  shopping = [];
+}
 
 function showPage(pageName, button) {
-  document.querySelectorAll(".page").forEach(page =>
-    page.classList.remove("active")
-  );
+  document.querySelectorAll(".page").forEach(function(page) {
+    page.classList.remove("active");
+  });
 
-  document.querySelectorAll(".nav-button").forEach(btn =>
-    btn.classList.remove("active")
-  );
+  document.querySelectorAll(".nav-button").forEach(function(btn) {
+    btn.classList.remove("active");
+  });
 
   document.getElementById(pageName + "-page").classList.add("active");
   button.classList.add("active");
@@ -454,150 +464,151 @@ function savePantry() {
   localStorage.setItem("sawyerPantry", JSON.stringify(pantry));
 }
 
+function saveShopping() {
+  localStorage.setItem("sawyerShopping", JSON.stringify(shopping));
+}
+
 function addItem() {
   const name = document.getElementById("itemName").value.trim();
-  const location = document.getElementById("location").value;
-  const category = document.getElementById("category").value;
-  const quantity = Number(document.getElementById("quantity").value) || 0;
-  const unit = document.getElementById("unit").value;
-  const cost = Number(document.getElementById("cost").value) || 0;
-  const lowStock = Number(document.getElementById("lowStock").value) || 0;
-  const farmMade = document.getElementById("farmMade").checked;
 
-  if (!name) {
+  if (name === "") {
     alert("Please enter a food item.");
     return;
   }
 
-  pantry.push({
-    name,
-    location,
-    category,
-    quantity,
-    unit,
-    cost,
-    lowStock,
-    farmMade
-  });
+  const newItem = {
+    name: name,
+    location: document.getElementById("location").value,
+    category: document.getElementById("category").value,
+    quantity: Number(document.getElementById("quantity").value) || 0,
+    unit: document.getElementById("unit").value,
+    cost: Number(document.getElementById("cost").value) || 0,
+    lowStock: Number(document.getElementById("lowStock").value) || 0,
+    farmMade: document.getElementById("farmMade").checked
+  };
+
+  pantry.push(newItem);
 
   savePantry();
 
   document.getElementById("itemName").value = "";
-  document.getElementById("quantity").value = 1;
+  document.getElementById("quantity").value = "1";
   document.getElementById("cost").value = "";
-  document.getElementById("lowStock").value = 1;
+  document.getElementById("lowStock").value = "1";
   document.getElementById("farmMade").checked = false;
 
-  syncLowStock();
   displayPantry();
+  updateLowStockShopping();
 }
 
 function changeQuantity(index, amount) {
-  pantry[index].quantity =
-    Math.max(0, Number(pantry[index].quantity || 0) + amount);
+  const current = Number(pantry[index].quantity) || 0;
+
+  pantry[index].quantity = Math.max(0, current + amount);
 
   savePantry();
-  syncLowStock();
   displayPantry();
+  updateLowStockShopping();
 }
 
 function deleteItem(index) {
   pantry.splice(index, 1);
+
   savePantry();
-  syncLowStock();
   displayPantry();
-}
-
-function syncLowStock() {
-  pantry.forEach(item => {
-    const lowLevel = Number(item.lowStock ?? 0);
-    const qty = Number(item.quantity ?? 0);
-
-    if (lowLevel > 0 && qty <= lowLevel) {
-      const alreadyThere = shopping.some(
-        shoppingItem =>
-          shoppingItem.toLowerCase() === item.name.toLowerCase()
-      );
-
-      if (!alreadyThere) {
-        shopping.push(item.name);
-      }
-    }
-  });
-
-  saveShopping();
-  displayShopping();
 }
 
 function displayPantry() {
   const inventory = document.getElementById("inventoryList");
-  const search =
-    document.getElementById("searchInventory").value.toLowerCase();
 
-  const locationFilter =
-    document.getElementById("filterLocation").value;
+  const searchBox = document.getElementById("searchInventory");
+  const filterBox = document.getElementById("filterLocation");
+
+  const search = searchBox ? searchBox.value.toLowerCase() : "";
+  const locationFilter = filterBox ? filterBox.value : "All";
 
   inventory.innerHTML = "";
 
   let total = 0;
   let shown = 0;
 
-  pantry.forEach((item, index) => {
-    item.category = item.category || "Other";
-    item.unit = item.unit || "items";
-    item.lowStock =
-      item.lowStock === undefined ? 1 : Number(item.lowStock);
-    item.farmMade = Boolean(item.farmMade);
+  pantry.forEach(function(item, index) {
 
-    total += Number(item.cost || 0) * Number(item.quantity || 0);
+    const name = String(item.name || "Unnamed Item");
+    const location = String(item.location || "Pantry");
+    const category = String(item.category || "Other");
+    const unit = String(item.unit || "items");
+
+    const quantity = Number(item.quantity) || 0;
+    const cost = Number(item.cost) || 0;
+
+    const lowStock =
+      item.lowStock === undefined
+        ? 1
+        : Number(item.lowStock) || 0;
+
+    const farmMade = item.farmMade === true;
+
+    total += cost * quantity;
 
     const matchesSearch =
-      item.name.toLowerCase().includes(search);
+      name.toLowerCase().includes(search);
 
     const matchesLocation =
       locationFilter === "All" ||
-      item.location === locationFilter;
+      location === locationFilter;
 
-    if (!matchesSearch || !matchesLocation) return;
+    if (!matchesSearch || !matchesLocation) {
+      return;
+    }
 
     shown++;
 
     const isLow =
-      item.lowStock > 0 &&
-      Number(item.quantity) <= item.lowStock;
+      lowStock > 0 && quantity <= lowStock;
 
     const itemDiv = document.createElement("div");
+
     itemDiv.className =
-      "inventory-item" + (isLow ? " low-stock" : "");
+      "inventory-item" +
+      (isLow ? " low-stock" : "");
 
-    itemDiv.innerHTML = `
-      <div class="item-name">
-        ${item.name}
-        ${isLow ? '<span class="low-label">LOW STOCK</span>' : ''}
-        ${item.farmMade ? '<span class="farm-label">FARM/HOMEMADE</span>' : ''}
-      </div>
+    itemDiv.innerHTML =
+      '<div class="item-name">' +
+        name +
+        (isLow
+          ? ' <span class="low-label">LOW STOCK</span>'
+          : '') +
+        (farmMade
+          ? ' <span class="farm-label">FARM/HOMEMADE</span>'
+          : '') +
+      '</div>' +
 
-      <div class="item-info">
-        📍 ${item.location}<br>
-        🗂️ ${item.category}<br>
-        💵 $${Number(item.cost || 0).toFixed(2)} per ${item.unit}
-      </div>
+      '<div class="item-info">' +
+        '📍 ' + location + '<br>' +
+        '🗂️ ' + category + '<br>' +
+        '💵 $' + cost.toFixed(2) + ' per ' + unit +
+      '</div>' +
 
-      <div class="controls">
-        <button class="minus"
-          onclick="changeQuantity(${index}, -1)">−</button>
+      '<div class="controls">' +
 
-        <span class="quantity">
-          ${item.quantity} ${item.unit}
-        </span>
+        '<button class="minus" onclick="changeQuantity(' +
+        index +
+        ', -1)">−</button>' +
 
-        <button class="plus"
-          onclick="changeQuantity(${index}, 1)">+</button>
+        '<span class="quantity">' +
+        quantity + ' ' + unit +
+        '</span>' +
 
-        <button class="delete"
-          onclick="deleteItem(${index})">Delete</button>
-      </div>
-    `;
+        '<button class="plus" onclick="changeQuantity(' +
+        index +
+        ', 1)">+</button>' +
+
+        '<button class="delete" onclick="deleteItem(' +
+        index +
+        ')">Delete</button>' +
+
+      '</div>';
 
     inventory.appendChild(itemDiv);
   });
@@ -611,8 +622,32 @@ function displayPantry() {
     "Total inventory value: $" + total.toFixed(2);
 }
 
-function saveShopping() {
-  localStorage.setItem("sawyerShopping", JSON.stringify(shopping));
+function updateLowStockShopping() {
+  pantry.forEach(function(item) {
+
+    const name = String(item.name || "");
+    const quantity = Number(item.quantity) || 0;
+
+    const lowStock =
+      item.lowStock === undefined
+        ? 1
+        : Number(item.lowStock) || 0;
+
+    if (name && lowStock > 0 && quantity <= lowStock) {
+
+      const alreadyThere = shopping.some(function(shoppingItem) {
+        return String(shoppingItem).toLowerCase() ===
+               name.toLowerCase();
+      });
+
+      if (!alreadyThere) {
+        shopping.push(name);
+      }
+    }
+  });
+
+  saveShopping();
+  displayShopping();
 }
 
 function addShoppingItem() {
@@ -622,19 +657,26 @@ function addShoppingItem() {
   if (!name) return;
 
   shopping.push(name);
+
   saveShopping();
+
   input.value = "";
+
   displayShopping();
 }
 
 function deleteShoppingItem(index) {
   shopping.splice(index, 1);
+
   saveShopping();
   displayShopping();
 }
 
 function displayShopping() {
   const list = document.getElementById("shoppingList");
+
+  if (!list) return;
+
   list.innerHTML = "";
 
   if (shopping.length === 0) {
@@ -643,26 +685,28 @@ function displayShopping() {
     return;
   }
 
-  shopping.forEach((item, index) => {
+  shopping.forEach(function(item, index) {
+
     const row = document.createElement("div");
+
     row.className = "shopping-item";
 
-    row.innerHTML = `
-      <div class="controls">
-        <span class="item-name">${item}</span>
-        <button class="delete"
-          onclick="deleteShoppingItem(${index})">
-          Remove
-        </button>
-      </div>
-    `;
+    row.innerHTML =
+      '<div class="controls">' +
+        '<span class="item-name">' +
+        String(item) +
+        '</span>' +
+
+        '<button class="delete" onclick="deleteShoppingItem(' +
+        index +
+        ')">Remove</button>' +
+      '</div>';
 
     list.appendChild(row);
   });
 }
 
 displayPantry();
-syncLowStock();
 displayShopping();
 </script>
 
