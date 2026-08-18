@@ -371,6 +371,7 @@ textarea {
 }
 
 @media (max-width: 600px) {
+
   .two-column,
   .summary-grid {
     grid-template-columns: 1fr;
@@ -387,6 +388,7 @@ textarea {
   header h1 {
     font-size: 27px;
   }
+
 }
 </style>
 </head>
@@ -434,6 +436,8 @@ textarea {
 
 <div class="container">
 
+<!-- INVENTORY -->
+
 <section id="inventory-page" class="page active">
 
 <div class="card">
@@ -461,13 +465,22 @@ textarea {
 
 </div>
 
-<div id="lookupStatus" class="lookup-status"></div>
+<div
+  id="lookupStatus"
+  class="lookup-status"
+></div>
 
-<div id="scannerPanel" class="scanner-panel">
+<div
+  id="scannerPanel"
+  class="scanner-panel"
+>
 
 <div id="reader"></div>
 
-<div id="scanStatus" class="scan-status">
+<div
+  id="scanStatus"
+  class="scan-status"
+>
 Point the camera at the barcode
 </div>
 
@@ -483,6 +496,7 @@ Close Camera
 </div>
 
 <label>Food Item</label>
+
 <input
   id="itemName"
   type="text"
@@ -522,11 +536,20 @@ Close Camera
 <div class="two-column">
 
 <div>
+
 <label>Quantity</label>
-<input id="quantity" type="number" min="0" value="1">
+
+<input
+  id="quantity"
+  type="number"
+  min="0"
+  value="1"
+>
+
 </div>
 
 <div>
+
 <label>Unit</label>
 
 <select id="unit">
@@ -549,13 +572,30 @@ Close Camera
 <div class="two-column">
 
 <div>
+
 <label>Cost Per Unit ($)</label>
-<input id="cost" type="number" min="0" step="0.01" value="0">
+
+<input
+  id="cost"
+  type="number"
+  min="0"
+  step="0.01"
+  value="0"
+>
+
 </div>
 
 <div>
+
 <label>Low Stock At</label>
-<input id="lowStock" type="number" min="0" value="1">
+
+<input
+  id="lowStock"
+  type="number"
+  min="0"
+  value="1"
+>
+
 </div>
 
 </div>
@@ -1041,14 +1081,16 @@ function showPage(pageName, button) {
 }
 
 
-/* BARCODE LOOKUP */
+/* LOOKUP MESSAGES */
 
 function showLookupMessage(message) {
 
   const box =
     document.getElementById("lookupStatus");
 
-  box.textContent = message;
+  box.textContent =
+    message;
+
   box.classList.add("show");
 
 }
@@ -1059,9 +1101,13 @@ function hideLookupMessage() {
     document.getElementById("lookupStatus");
 
   box.textContent = "";
+
   box.classList.remove("show");
 
 }
+
+
+/* CHECK OUR OWN SAVED PANTRY FIRST */
 
 function findSavedBarcode(barcode) {
 
@@ -1077,39 +1123,30 @@ function findSavedBarcode(barcode) {
 
 }
 
-async function fetchWithTimeout(
-  url,
-  timeoutMs
-) {
+
+/* FETCH WITH TIMEOUT */
+
+async function fetchWithTimeout(url, timeoutMs) {
 
   const controller =
     new AbortController();
 
   const timeout =
-    setTimeout(
-      function() {
-        controller.abort();
-      },
-      timeoutMs
-    );
+    setTimeout(function() {
+      controller.abort();
+    }, timeoutMs);
 
   try {
 
-    const response =
-      await fetch(
-        url,
-        {
-          method: "GET",
-          mode: "cors",
-          cache: "no-store",
-          signal: controller.signal,
-          headers: {
-            "Accept": "application/json"
-          }
-        }
-      );
-
-    return response;
+    return await fetch(
+      url,
+      {
+        method: "GET",
+        mode: "cors",
+        cache: "no-store",
+        signal: controller.signal
+      }
+    );
 
   } finally {
 
@@ -1119,10 +1156,15 @@ async function fetchWithTimeout(
 
 }
 
+
+/* BARCODE LOOKUP */
+
 async function lookupBarcode(barcode) {
 
   barcode =
-    String(barcode || "").trim();
+    String(barcode || "")
+      .trim()
+      .replace(/\s/g, "");
 
   if (!barcode) {
     return;
@@ -1131,6 +1173,11 @@ async function lookupBarcode(barcode) {
   showLookupMessage(
     "🔎 Looking up product..."
   );
+
+  /*
+    FIRST:
+    See whether YOU have already saved this barcode.
+  */
 
   const savedItem =
     findSavedBarcode(barcode);
@@ -1156,162 +1203,73 @@ async function lookupBarcode(barcode) {
 
   }
 
-  let data = null;
-  let firstError = "";
 
   /*
-    TRY #1:
-    Open Food Facts current V2 barcode endpoint
+    TRY 1:
+    Current Open Food Facts v3.6 production API
   */
+
+  let response = null;
+  let data = null;
+  let v3Error = "";
 
   try {
 
-    const url =
-      "https://world.openfoodfacts.org/api/v2/product/" +
+    const v3Url =
+      "https://world.openfoodfacts.org/api/v3.6/product/" +
       encodeURIComponent(barcode) +
-      "?fields=code,product_name,product_name_en,generic_name,categories_tags,categories_tags_en";
+      ".json?fields=code,product_name,product_name_en,generic_name,categories,categories_tags";
 
-    const response =
+    response =
       await fetchWithTimeout(
-        url,
-        10000
+        v3Url,
+        12000
       );
 
-    if (!response.ok) {
-
-      firstError =
-        "HTTP " +
-        response.status +
-        " from first lookup";
-
-    } else {
+    if (response.ok) {
 
       data =
         await response.json();
+
+    } else {
+
+      v3Error =
+        "v3 returned HTTP " +
+        response.status;
 
     }
 
   } catch (error) {
 
-    firstError =
+    if (
+      error &&
       error.name === "AbortError"
-        ? "first lookup timed out"
-        : "first lookup network error";
+    ) {
 
-  }
-
-
-  /*
-    TRY #2:
-    Legacy JSON endpoint
-  */
-
-  if (!data) {
-
-    try {
-
-      const fallbackUrl =
-        "https://world.openfoodfacts.org/api/v0/product/" +
-        encodeURIComponent(barcode) +
-        ".json";
-
-      const fallbackResponse =
-        await fetchWithTimeout(
-          fallbackUrl,
-          10000
-        );
-
-      if (!fallbackResponse.ok) {
-
-        throw new Error(
-          "HTTP " +
-          fallbackResponse.status
-        );
-
-      }
-
-      data =
-        await fallbackResponse.json();
-
-    } catch (fallbackError) {
-
-      let reason =
-        fallbackError.name === "AbortError"
-          ? "second lookup timed out"
-          : fallbackError.message;
-
-      showLookupMessage(
-        "⚠️ Product lookup failed. " +
-        firstError +
-        "; " +
-        reason +
-        ". You can still type the food name manually."
-      );
-
-      return;
-
-    }
-
-  }
-
-
-  /*
-    PRODUCT FOUND
-  */
-
-  if (
-    data &&
-    Number(data.status) === 1 &&
-    data.product
-  ) {
-
-    const product =
-      data.product;
-
-    const productName =
-      product.product_name_en ||
-      product.product_name ||
-      product.generic_name ||
-      "";
-
-    if (productName) {
-
-      document
-        .getElementById("itemName")
-        .value =
-          productName;
-
-      autoSelectCategory(product);
-
-      showLookupMessage(
-        "✅ Found: " +
-        productName
-      );
+      v3Error =
+        "v3 timed out";
 
     } else {
 
-      showLookupMessage(
-        "⚠️ I found this barcode, but the product name is missing. Type the name manually."
-      );
+      v3Error =
+        "v3 network request failed";
 
     }
-
-    return;
 
   }
 
 
   /*
-    PRODUCT NOT IN DATABASE
+    HANDLE SUCCESS FROM V3
   */
 
   if (
     data &&
-    Number(data.status) === 0
+    data.product
   ) {
 
-    showLookupMessage(
-      "⚠️ This barcode isn't in the product database yet. Type the food name manually and I'll remember it after you save it."
+    fillProductFromLookup(
+      data.product
     );
 
     return;
@@ -1320,11 +1278,141 @@ async function lookupBarcode(barcode) {
 
 
   /*
-    UNEXPECTED RESPONSE
+    TRY 2:
+    Older V2 endpoint as backup
+  */
+
+  let v2Data = null;
+  let v2Error = "";
+
+  try {
+
+    const v2Url =
+      "https://world.openfoodfacts.org/api/v2/product/" +
+      encodeURIComponent(barcode) +
+      "?fields=code,product_name,product_name_en,generic_name,categories,categories_tags";
+
+    const v2Response =
+      await fetchWithTimeout(
+        v2Url,
+        12000
+      );
+
+    if (v2Response.ok) {
+
+      v2Data =
+        await v2Response.json();
+
+    } else {
+
+      v2Error =
+        "v2 returned HTTP " +
+        v2Response.status;
+
+    }
+
+  } catch (error) {
+
+    if (
+      error &&
+      error.name === "AbortError"
+    ) {
+
+      v2Error =
+        "v2 timed out";
+
+    } else {
+
+      v2Error =
+        "v2 network request failed";
+
+    }
+
+  }
+
+
+  /*
+    HANDLE SUCCESS FROM V2
+  */
+
+  if (
+    v2Data &&
+    Number(v2Data.status) === 1 &&
+    v2Data.product
+  ) {
+
+    fillProductFromLookup(
+      v2Data.product
+    );
+
+    return;
+
+  }
+
+
+  /*
+    PRODUCT WAS DEFINITELY NOT FOUND
+  */
+
+  if (
+    v2Data &&
+    Number(v2Data.status) === 0
+  ) {
+
+    showLookupMessage(
+      "⚠️ This barcode is not in the product database yet. Type the food name manually. Once you save it, your pantry will remember this barcode."
+    );
+
+    return;
+
+  }
+
+
+  /*
+    IF BOTH INTERNET REQUESTS FAILED
   */
 
   showLookupMessage(
-    "⚠️ The product database answered, but I couldn't understand the response. You can still enter the name manually."
+    "⚠️ Barcode scanned, but online lookup failed. " +
+    (v3Error || "v3 gave no product") +
+    "; " +
+    (v2Error || "v2 gave no product") +
+    ". You can still enter the item manually."
+  );
+
+}
+
+
+/* FILL NAME + CATEGORY */
+
+function fillProductFromLookup(product) {
+
+  const productName =
+    product.product_name_en ||
+    product.product_name ||
+    product.generic_name ||
+    "";
+
+  if (!productName) {
+
+    showLookupMessage(
+      "⚠️ I found the barcode, but the database does not have a product name for it. Type the name manually."
+    );
+
+    return;
+
+  }
+
+  document
+    .getElementById("itemName")
+    .value =
+      productName;
+
+  autoSelectCategory(product);
+
+  showLookupMessage(
+    "✅ Found: " +
+    productName
   );
 
 }
@@ -1334,24 +1422,26 @@ async function lookupBarcode(barcode) {
 
 function autoSelectCategory(product) {
 
-  const tagsArray =
+  let categoryText = "";
+
+  if (
     Array.isArray(
-      product.categories_tags_en
+      product.categories_tags
     )
-      ? product.categories_tags_en
-      :
-      (
-        Array.isArray(
-          product.categories_tags
-        )
-          ? product.categories_tags
-          : []
+  ) {
+
+    categoryText =
+      product.categories_tags
+        .join(" ");
+
+  } else {
+
+    categoryText =
+      String(
+        product.categories || ""
       );
 
-  const tags =
-    tagsArray
-      .join(" ")
-      .toLowerCase();
+  }
 
   const name =
     String(
@@ -1359,10 +1449,14 @@ function autoSelectCategory(product) {
       product.product_name ||
       product.generic_name ||
       ""
-    ).toLowerCase();
+    );
 
   const text =
-    tags + " " + name;
+    (
+      categoryText +
+      " " +
+      name
+    ).toLowerCase();
 
   let category =
     "Other";
@@ -1378,7 +1472,8 @@ function autoSelectCategory(product) {
     text.includes("bacon")
   ) {
 
-    category = "Meat";
+    category =
+      "Meat";
 
   }
 
@@ -1399,7 +1494,8 @@ function autoSelectCategory(product) {
     text.includes("fruit")
   ) {
 
-    category = "Fruit";
+    category =
+      "Fruit";
 
   }
 
@@ -1533,10 +1629,10 @@ async function startBarcodeScanner() {
   ) {
 
     status.textContent =
-      "Scanner could not load. You can still type the barcode manually.";
+      "Scanner could not load.";
 
     alert(
-      "The barcode scanner could not load. You can still type the barcode number manually."
+      "The barcode scanner could not load. You can still type the barcode manually."
     );
 
     return;
@@ -1554,7 +1650,8 @@ async function startBarcodeScanner() {
         "reader"
       );
 
-    scannerRunning = true;
+    scannerRunning =
+      true;
 
     await html5QrCode.start(
 
@@ -1601,29 +1698,33 @@ async function startBarcodeScanner() {
 
       function(decodedText) {
 
+        const cleanBarcode =
+          String(decodedText)
+            .trim();
+
         document
           .getElementById(
             "barcode"
           )
           .value =
-            decodedText;
+            cleanBarcode;
 
         status.textContent =
           "✅ Barcode captured: " +
-          decodedText;
+          cleanBarcode;
 
         stopBarcodeScanner(
           true
         );
 
         lookupBarcode(
-          decodedText
+          cleanBarcode
         );
 
       },
 
       function() {
-        /* Normal scanning misses */
+        /* Normal scan misses */
       }
 
     );
@@ -1646,12 +1747,15 @@ async function startBarcodeScanner() {
       "Camera could not start.";
 
     alert(
-      "The camera could not start. Make sure camera permission is allowed. You can also type the barcode manually."
+      "The camera could not start. Make sure camera permission is allowed."
     );
 
   }
 
 }
+
+
+/* STOP SCANNER */
 
 async function stopBarcodeScanner(
   keepMessage
@@ -1746,7 +1850,9 @@ function savePantry() {
 
   localStorage.setItem(
     "sawyerPantry",
-    JSON.stringify(pantry)
+    JSON.stringify(
+      pantry
+    )
   );
 
 }
@@ -1880,7 +1986,8 @@ function addItem() {
     .getElementById(
       "farmMade"
     )
-    .checked = false;
+    .checked =
+      false;
 
   hideLookupMessage();
 
@@ -1920,7 +2027,8 @@ function deleteItem(index) {
     String(
       pantry[index].name ||
       ""
-    ).toLowerCase();
+    )
+    .toLowerCase();
 
   pantry.splice(
     index,
@@ -1954,30 +2062,37 @@ function deleteItem(index) {
 function displayPantry() {
 
   const inventory =
-    document.getElementById(
-      "inventoryList"
-    );
+    document
+      .getElementById(
+        "inventoryList"
+      );
 
   const searchBox =
-    document.getElementById(
-      "searchInventory"
-    );
+    document
+      .getElementById(
+        "searchInventory"
+      );
 
   const filterBox =
-    document.getElementById(
-      "filterLocation"
-    );
+    document
+      .getElementById(
+        "filterLocation"
+      );
 
   const search =
     searchBox
-      ? searchBox.value
-          .toLowerCase()
-      : "";
+      ?
+      searchBox.value
+        .toLowerCase()
+      :
+      "";
 
   const locationFilter =
     filterBox
-      ? filterBox.value
-      : "All";
+      ?
+      filterBox.value
+      :
+      "All";
 
   inventory.innerHTML =
     "";
@@ -2034,7 +2149,8 @@ function displayPantry() {
       const lowStock =
         item.lowStock ===
         undefined
-          ? 1
+          ?
+          1
           :
           Number(
             item.lowStock
@@ -2091,8 +2207,10 @@ function displayPantry() {
         "inventory-item" +
         (
           isLow
-            ? " low-stock"
-            : ""
+            ?
+            " low-stock"
+            :
+            ""
         );
 
       let barcodeLine =
@@ -2113,7 +2231,9 @@ function displayPantry() {
 
         '<div class="item-name">' +
 
-        escapeHtml(name) +
+        escapeHtml(
+          name
+        ) +
 
         (
           isLow
@@ -2241,7 +2361,8 @@ function updateLowStockShopping() {
         const shoppingName =
           String(
             shoppingItem
-          ).toLowerCase();
+          )
+          .toLowerCase();
 
         return !pantry.some(
           function(item) {
@@ -2261,7 +2382,8 @@ function updateLowStockShopping() {
             const lowStock =
               item.lowStock ===
               undefined
-                ? 1
+                ?
+                1
                 :
                 Number(
                   item.lowStock
@@ -2303,7 +2425,8 @@ function updateLowStockShopping() {
       const lowStock =
         item.lowStock ===
         undefined
-          ? 1
+          ?
+          1
           :
           Number(
             item.lowStock
@@ -2379,7 +2502,8 @@ function addShoppingItem() {
           String(item)
             .toLowerCase()
           ===
-          name.toLowerCase()
+          name
+            .toLowerCase()
         );
 
       }
