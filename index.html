@@ -10,6 +10,9 @@
 
 <title>Sawyer Family Pantry</title>
 
+<!-- BARCODE SCANNER LIBRARY -->
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
 <style>
 * {
   box-sizing: border-box;
@@ -158,6 +161,49 @@ textarea {
   background: #ddd5c7;
   color: #3e4638;
   font-size: 15px;
+}
+
+.barcode-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.scan-button {
+  border: none;
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: #6c7d60;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.scanner-panel {
+  display: none;
+  margin-top: 15px;
+  background: #f2eee5;
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.scanner-panel.active {
+  display: block;
+}
+
+#reader {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 14px;
+  background: white;
+}
+
+.scan-status {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
 }
 
 .filter-box {
@@ -318,6 +364,14 @@ textarea {
     grid-template-columns: 1fr;
   }
 
+  .barcode-row {
+    grid-template-columns: 1fr;
+  }
+
+  .scan-button {
+    width: 100%;
+  }
+
   header h1 {
     font-size: 27px;
   }
@@ -396,6 +450,52 @@ textarea {
 <div class="card">
 
 <h2>➕ Add Food</h2>
+
+<label>Barcode</label>
+
+<div class="barcode-row">
+
+<input
+  id="barcode"
+  type="text"
+  inputmode="numeric"
+  placeholder="Scan or type barcode"
+>
+
+<button
+  class="scan-button"
+  type="button"
+  onclick="startBarcodeScanner()"
+>
+📷 Scan Barcode
+</button>
+
+</div>
+
+<div
+  id="scannerPanel"
+  class="scanner-panel"
+>
+
+<div id="reader"></div>
+
+<div
+  id="scanStatus"
+  class="scan-status"
+>
+Point the camera at the barcode
+</div>
+
+<button
+  class="secondary-button"
+  style="width:100%; margin-top:12px;"
+  type="button"
+  onclick="stopBarcodeScanner()"
+>
+Close Camera
+</button>
+
+</div>
 
 <label>Food Item</label>
 <input
@@ -518,7 +618,7 @@ Add to Pantry
 <input
   id="searchInventory"
   type="text"
-  placeholder="🔎 Search food..."
+  placeholder="🔎 Search food or barcode..."
   oninput="displayPantry()"
 >
 
@@ -887,6 +987,9 @@ let groceryExpenses = [];
 let savings = [];
 let monthlyBudget = 0;
 
+let html5QrCode = null;
+let scannerRunning = false;
+
 
 /* LOAD SAVED DATA */
 
@@ -945,6 +1048,10 @@ monthlyBudget =
 
 function showPage(pageName, button) {
 
+  if (scannerRunning) {
+    stopBarcodeScanner();
+  }
+
   document
     .querySelectorAll(".page")
     .forEach(function(page) {
@@ -962,6 +1069,169 @@ function showPage(pageName, button) {
     .classList.add("active");
 
   button.classList.add("active");
+
+}
+
+
+/* BARCODE SCANNER */
+
+async function startBarcodeScanner() {
+
+  const panel =
+    document.getElementById("scannerPanel");
+
+  const status =
+    document.getElementById("scanStatus");
+
+  panel.classList.add("active");
+
+  status.textContent =
+    "Starting camera...";
+
+  if (
+    typeof Html5Qrcode === "undefined"
+  ) {
+
+    status.textContent =
+      "Scanner could not load. You can still type the barcode manually.";
+
+    alert(
+      "The barcode scanner could not load. You can still type the barcode number manually."
+    );
+
+    return;
+  }
+
+  if (scannerRunning) {
+    return;
+  }
+
+  try {
+
+    html5QrCode =
+      new Html5Qrcode("reader");
+
+    scannerRunning = true;
+
+    await html5QrCode.start(
+
+      {
+        facingMode: "environment"
+      },
+
+      {
+        fps: 10,
+        qrbox: function(
+          viewfinderWidth,
+          viewfinderHeight
+        ) {
+
+          const width =
+            Math.min(
+              300,
+              Math.floor(
+                viewfinderWidth * 0.85
+              )
+            );
+
+          const height =
+            Math.min(
+              150,
+              Math.floor(
+                viewfinderHeight * 0.35
+              )
+            );
+
+          return {
+            width: width,
+            height: height
+          };
+
+        }
+      },
+
+      function(decodedText) {
+
+        document
+          .getElementById("barcode")
+          .value =
+            decodedText;
+
+        status.textContent =
+          "✅ Barcode captured: " +
+          decodedText;
+
+        stopBarcodeScanner(true);
+
+      },
+
+      function() {
+        /* Ignore normal scanning misses */
+      }
+
+    );
+
+    status.textContent =
+      "Point the camera at the product barcode.";
+
+  } catch (error) {
+
+    scannerRunning = false;
+
+    panel.classList.remove("active");
+
+    status.textContent =
+      "Camera could not start.";
+
+    alert(
+      "The camera could not start. Make sure camera permission is allowed. You can also type the barcode manually."
+    );
+
+  }
+
+}
+
+async function stopBarcodeScanner(
+  keepMessage
+) {
+
+  const panel =
+    document.getElementById("scannerPanel");
+
+  if (
+    html5QrCode &&
+    scannerRunning
+  ) {
+
+    try {
+      await html5QrCode.stop();
+    } catch (e) {
+      /* Camera may already be stopped */
+    }
+
+    try {
+      html5QrCode.clear();
+    } catch (e) {
+      /* Nothing to clear */
+    }
+
+  }
+
+  scannerRunning = false;
+  html5QrCode = null;
+
+  if (!keepMessage) {
+    panel.classList.remove("active");
+  } else {
+
+    setTimeout(
+      function() {
+        panel.classList.remove("active");
+      },
+      900
+    );
+
+  }
 
 }
 
@@ -991,6 +1261,12 @@ function addItem() {
   }
 
   const newItem = {
+
+    barcode:
+      document
+        .getElementById("barcode")
+        .value
+        .trim(),
 
     name: name,
 
@@ -1040,6 +1316,10 @@ function addItem() {
   pantry.push(newItem);
 
   savePantry();
+
+  document
+    .getElementById("barcode")
+    .value = "";
 
   document
     .getElementById("itemName")
@@ -1140,6 +1420,11 @@ function displayPantry() {
   pantry.forEach(
     function(item, index) {
 
+      const barcode =
+        String(
+          item.barcode || ""
+        );
+
       const name =
         String(
           item.name || "Unnamed Item"
@@ -1179,6 +1464,10 @@ function displayPantry() {
       const matchesSearch =
         name
           .toLowerCase()
+          .includes(search)
+        ||
+        barcode
+          .toLowerCase()
           .includes(search);
 
       const matchesLocation =
@@ -1205,10 +1494,21 @@ function displayPantry() {
         "inventory-item" +
         (isLow ? " low-stock" : "");
 
+      let barcodeLine = "";
+
+      if (barcode) {
+
+        barcodeLine =
+          '🏷️ Barcode: ' +
+          escapeHtml(barcode) +
+          '<br>';
+
+      }
+
       itemDiv.innerHTML =
 
         '<div class="item-name">' +
-        name +
+        escapeHtml(name) +
 
         (isLow
           ? ' <span class="low-label">LOW STOCK</span>'
@@ -1221,12 +1521,22 @@ function displayPantry() {
         '</div>' +
 
         '<div class="item-info">' +
-        '📍 ' + location + '<br>' +
-        '🗂️ ' + category + '<br>' +
+
+        barcodeLine +
+
+        '📍 ' +
+        escapeHtml(location) +
+        '<br>' +
+
+        '🗂️ ' +
+        escapeHtml(category) +
+        '<br>' +
+
         '💵 $' +
         cost.toFixed(2) +
         ' per ' +
-        unit +
+        escapeHtml(unit) +
+
         '</div>' +
 
         '<div class="controls">' +
@@ -1238,7 +1548,7 @@ function displayPantry() {
         '<span class="quantity">' +
         quantity +
         ' ' +
-        unit +
+        escapeHtml(unit) +
         '</span>' +
 
         '<button class="plus" onclick="changeQuantity(' +
@@ -1292,11 +1602,6 @@ function saveShopping() {
 
 function updateLowStockShopping() {
 
-  /*
-    First remove pantry items from the
-    shopping list if they have been restocked.
-  */
-
   shopping =
     shopping.filter(
       function(shoppingItem) {
@@ -1334,11 +1639,6 @@ function updateLowStockShopping() {
 
       }
     );
-
-  /*
-    Add any pantry items that are
-    currently low stock.
-  */
 
   pantry.forEach(
     function(item) {
@@ -1467,7 +1767,7 @@ function displayShopping() {
         '<div class="controls">' +
 
         '<span class="item-name">' +
-        String(item) +
+        escapeHtml(String(item)) +
         '</span>' +
 
         '<button class="delete" onclick="deleteShoppingItem(' +
@@ -1610,11 +1910,11 @@ function displayRecipes() {
       item.innerHTML =
 
         '<div class="item-name">' +
-        name +
+        escapeHtml(name) +
         '</div>' +
 
         '<div class="small-note">' +
-        category +
+        escapeHtml(category) +
         '</div>' +
 
         '<div class="recipe-box">' +
