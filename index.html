@@ -22,16 +22,9 @@ header {
   text-align: center;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 28px;
-}
+header h1 { margin: 0; font-size: 28px; }
+header p { margin: 6px 0 0; }
 
-header p {
-  margin: 6px 0 0;
-}
-
-/* TOP BUTTONS */
 .nav {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -51,7 +44,6 @@ header p {
   color: #4d5945;
   font-size: 12px;
   font-weight: bold;
-  cursor: pointer;
 }
 
 .nav button span {
@@ -71,13 +63,8 @@ header p {
   padding: 16px;
 }
 
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-}
+.page { display: none; }
+.page.active { display: block; }
 
 .card {
   background: white;
@@ -98,7 +85,7 @@ label {
   font-weight: bold;
 }
 
-input, select, textarea {
+input, select {
   width: 100%;
   padding: 12px;
   margin-top: 6px;
@@ -123,7 +110,30 @@ button {
   font-weight: bold;
 }
 
-.inventory-item, .shopping-item {
+.two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+  background: #f4efe6;
+  padding: 12px;
+  border-radius: 9px;
+}
+
+.checkbox-row input {
+  width: auto;
+  margin: 0;
+  transform: scale(1.3);
+}
+
+.inventory-item,
+.shopping-item {
   border-top: 1px solid #eee7dc;
   padding: 14px 0;
 }
@@ -137,6 +147,7 @@ button {
   margin: 5px 0 10px;
   color: #6b6b63;
   font-size: 14px;
+  line-height: 1.5;
 }
 
 .controls {
@@ -164,7 +175,7 @@ button {
 
 .quantity {
   font-weight: bold;
-  min-width: 35px;
+  min-width: 45px;
   text-align: center;
 }
 
@@ -182,13 +193,50 @@ button {
   font-weight: bold;
 }
 
+.low-stock {
+  background: #fff1df;
+  border-left: 5px solid #c8814a;
+  padding-left: 10px;
+}
+
+.low-label {
+  display: inline-block;
+  background: #c8814a;
+  color: white;
+  padding: 3px 7px;
+  border-radius: 10px;
+  font-size: 11px;
+  margin-left: 5px;
+}
+
+.farm-label {
+  display: inline-block;
+  background: #788b65;
+  color: white;
+  padding: 3px 7px;
+  border-radius: 10px;
+  font-size: 11px;
+  margin-left: 5px;
+}
+
+.filter-box {
+  background: #eee6d8;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 15px;
+}
+
 .coming {
   text-align: center;
   padding: 35px 10px;
 }
 
-.coming-icon {
-  font-size: 48px;
+.coming-icon { font-size: 48px; }
+
+@media (max-width: 430px) {
+  .two-column {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 </head>
@@ -200,28 +248,22 @@ button {
   <p>From our farm to our table</p>
 </header>
 
-<!-- CLICKABLE TOP NAVIGATION -->
 <div class="nav">
   <button class="nav-button active" onclick="showPage('inventory', this)">
     <span>🏡</span>Inventory
   </button>
-
   <button class="nav-button" onclick="showPage('shopping', this)">
     <span>🛒</span>Shopping
   </button>
-
   <button class="nav-button" onclick="showPage('recipes', this)">
     <span>📖</span>Recipes
   </button>
-
   <button class="nav-button" onclick="showPage('meals', this)">
     <span>🍽️</span>Meals
   </button>
-
   <button class="nav-button" onclick="showPage('budget', this)">
     <span>💰</span>Budget
   </button>
-
   <button class="nav-button" onclick="showPage('savings', this)">
     <span>🌾</span>Savings
   </button>
@@ -229,17 +271,99 @@ button {
 
 <div class="container">
 
-<!-- INVENTORY PAGE -->
 <section id="inventory-page" class="page active">
 
-  <div class="card">
-    <h2>Add Food</h2>
+<div class="card">
+  <h2>➕ Add Food</h2>
 
-    <label>Food Item</label>
-    <input id="itemName" type="text" placeholder="Example: Eggs">
+  <label>Food Item</label>
+  <input id="itemName" type="text" placeholder="Example: Farm Fresh Eggs">
 
-    <label>Where is it?</label>
-    <select id="location">
+  <label>Storage Location</label>
+  <select id="location">
+    <option>Kitchen Fridge</option>
+    <option>Kitchen Freezer</option>
+    <option>Beef Chest Freezer</option>
+    <option>Pork Chest Freezer</option>
+    <option>Second Fridge</option>
+    <option>Second Freezer</option>
+    <option>Pantry</option>
+    <option>Fruit & Vegetable Shelf</option>
+  </select>
+
+  <label>Food Category</label>
+  <select id="category">
+    <option>Meat</option>
+    <option>Eggs & Dairy</option>
+    <option>Fruit</option>
+    <option>Vegetables</option>
+    <option>Grains & Bread</option>
+    <option>Canned & Jarred</option>
+    <option>Baking</option>
+    <option>Snacks</option>
+    <option>Drinks</option>
+    <option>Condiments & Sauces</option>
+    <option>Frozen Foods</option>
+    <option>Other</option>
+  </select>
+
+  <div class="two-column">
+    <div>
+      <label>Quantity</label>
+      <input id="quantity" type="number" min="0" step="1" value="1">
+    </div>
+
+    <div>
+      <label>Unit</label>
+      <select id="unit">
+        <option>items</option>
+        <option>lbs</option>
+        <option>oz</option>
+        <option>dozen</option>
+        <option>packages</option>
+        <option>bags</option>
+        <option>boxes</option>
+        <option>cans</option>
+        <option>jars</option>
+        <option>bottles</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="two-column">
+    <div>
+      <label>Cost Per Unit ($)</label>
+      <input id="cost" type="number" min="0" step="0.01" placeholder="0.00">
+    </div>
+
+    <div>
+      <label>Low Stock At</label>
+      <input id="lowStock" type="number" min="0" step="1" value="1">
+    </div>
+  </div>
+
+  <div class="checkbox-row">
+    <input id="farmMade" type="checkbox">
+    <label for="farmMade" style="margin:0;">
+      🌾 Farm-raised or homemade
+    </label>
+  </div>
+
+  <button class="main-button" onclick="addItem()">Add to Pantry</button>
+</div>
+
+<div class="card">
+  <h2>🏡 My Inventory</h2>
+
+  <div class="filter-box">
+    <input id="searchInventory"
+           type="text"
+           placeholder="🔎 Search food..."
+           oninput="displayPantry()">
+
+    <select id="filterLocation"
+            onchange="displayPantry()">
+      <option value="All">All Locations</option>
       <option>Kitchen Fridge</option>
       <option>Kitchen Freezer</option>
       <option>Beef Chest Freezer</option>
@@ -249,76 +373,62 @@ button {
       <option>Pantry</option>
       <option>Fruit & Vegetable Shelf</option>
     </select>
-
-    <label>Quantity</label>
-    <input id="quantity" type="number" min="1" value="1">
-
-    <label>Cost ($)</label>
-    <input id="cost" type="number" min="0" step="0.01" placeholder="0.00">
-
-    <button class="main-button" onclick="addItem()">Add to Pantry</button>
   </div>
 
-  <div class="card">
-    <h2>My Inventory</h2>
-    <div id="inventoryList"></div>
-    <div class="total" id="totalValue">
-      Total inventory value: $0.00
-    </div>
+  <div id="inventoryList"></div>
+
+  <div class="total" id="totalValue">
+    Total inventory value: $0.00
   </div>
+</div>
 
 </section>
 
-<!-- SHOPPING PAGE -->
 <section id="shopping-page" class="page">
-  <div class="card">
-    <h2>🛒 Shopping List</h2>
+<div class="card">
+  <h2>🛒 Shopping List</h2>
 
-    <label>Add an item</label>
-    <input id="shoppingName" type="text" placeholder="Example: Milk">
+  <label>Add an item</label>
+  <input id="shoppingName" type="text" placeholder="Example: Milk">
 
-    <button class="main-button" onclick="addShoppingItem()">
-      Add to Shopping List
-    </button>
+  <button class="main-button" onclick="addShoppingItem()">
+    Add to Shopping List
+  </button>
 
-    <div id="shoppingList"></div>
-  </div>
+  <div id="shoppingList"></div>
+</div>
 </section>
 
-<!-- RECIPES -->
 <section id="recipes-page" class="page">
-  <div class="card coming">
-    <div class="coming-icon">📖</div>
-    <h2>Recipes</h2>
-    <p>This button works! This is where we'll build your family recipe box.</p>
-  </div>
+<div class="card coming">
+  <div class="coming-icon">📖</div>
+  <h2>Recipes</h2>
+  <p>Your family recipe box will live here.</p>
+</div>
 </section>
 
-<!-- MEALS -->
 <section id="meals-page" class="page">
-  <div class="card coming">
-    <div class="coming-icon">🍽️</div>
-    <h2>Meal Planning</h2>
-    <p>This is where we'll build meal plans using food you already have.</p>
-  </div>
+<div class="card coming">
+  <div class="coming-icon">🍽️</div>
+  <h2>Meal Planning</h2>
+  <p>We'll plan meals using food you already have.</p>
+</div>
 </section>
 
-<!-- BUDGET -->
 <section id="budget-page" class="page">
-  <div class="card coming">
-    <div class="coming-icon">💰</div>
-    <h2>Grocery Budget</h2>
-    <p>This is where we'll track grocery spending and your Walmart budget.</p>
-  </div>
+<div class="card coming">
+  <div class="coming-icon">💰</div>
+  <h2>Grocery Budget</h2>
+  <p>Your grocery spending and budget will live here.</p>
+</div>
 </section>
 
-<!-- SAVINGS -->
 <section id="savings-page" class="page">
-  <div class="card coming">
-    <div class="coming-icon">🌾</div>
-    <h2>Farm & Homemade Savings</h2>
-    <p>This is where we'll track money saved from farm-raised and homemade food.</p>
-  </div>
+<div class="card coming">
+  <div class="coming-icon">🌾</div>
+  <h2>Farm & Homemade Savings</h2>
+  <p>We'll track what your farm and homemade foods save your family.</p>
+</div>
 </section>
 
 </div>
@@ -328,13 +438,13 @@ let pantry = JSON.parse(localStorage.getItem("sawyerPantry")) || [];
 let shopping = JSON.parse(localStorage.getItem("sawyerShopping")) || [];
 
 function showPage(pageName, button) {
-  document.querySelectorAll(".page").forEach(function(page) {
-    page.classList.remove("active");
-  });
+  document.querySelectorAll(".page").forEach(page =>
+    page.classList.remove("active")
+  );
 
-  document.querySelectorAll(".nav-button").forEach(function(btn) {
-    btn.classList.remove("active");
-  });
+  document.querySelectorAll(".nav-button").forEach(btn =>
+    btn.classList.remove("active")
+  );
 
   document.getElementById(pageName + "-page").classList.add("active");
   button.classList.add("active");
@@ -347,8 +457,12 @@ function savePantry() {
 function addItem() {
   const name = document.getElementById("itemName").value.trim();
   const location = document.getElementById("location").value;
-  const quantity = Number(document.getElementById("quantity").value);
+  const category = document.getElementById("category").value;
+  const quantity = Number(document.getElementById("quantity").value) || 0;
+  const unit = document.getElementById("unit").value;
   const cost = Number(document.getElementById("cost").value) || 0;
+  const lowStock = Number(document.getElementById("lowStock").value) || 0;
+  const farmMade = document.getElementById("farmMade").checked;
 
   if (!name) {
     alert("Please enter a food item.");
@@ -356,10 +470,14 @@ function addItem() {
   }
 
   pantry.push({
-    name: name,
-    location: location,
-    quantity: quantity > 0 ? quantity : 1,
-    cost: cost
+    name,
+    location,
+    category,
+    quantity,
+    unit,
+    cost,
+    lowStock,
+    farmMade
   });
 
   savePantry();
@@ -367,60 +485,127 @@ function addItem() {
   document.getElementById("itemName").value = "";
   document.getElementById("quantity").value = 1;
   document.getElementById("cost").value = "";
+  document.getElementById("lowStock").value = 1;
+  document.getElementById("farmMade").checked = false;
 
+  syncLowStock();
   displayPantry();
 }
 
 function changeQuantity(index, amount) {
-  pantry[index].quantity += amount;
-
-  if (pantry[index].quantity < 0) {
-    pantry[index].quantity = 0;
-  }
+  pantry[index].quantity =
+    Math.max(0, Number(pantry[index].quantity || 0) + amount);
 
   savePantry();
+  syncLowStock();
   displayPantry();
 }
 
 function deleteItem(index) {
   pantry.splice(index, 1);
   savePantry();
+  syncLowStock();
   displayPantry();
+}
+
+function syncLowStock() {
+  pantry.forEach(item => {
+    const lowLevel = Number(item.lowStock ?? 0);
+    const qty = Number(item.quantity ?? 0);
+
+    if (lowLevel > 0 && qty <= lowLevel) {
+      const alreadyThere = shopping.some(
+        shoppingItem =>
+          shoppingItem.toLowerCase() === item.name.toLowerCase()
+      );
+
+      if (!alreadyThere) {
+        shopping.push(item.name);
+      }
+    }
+  });
+
+  saveShopping();
+  displayShopping();
 }
 
 function displayPantry() {
   const inventory = document.getElementById("inventoryList");
+  const search =
+    document.getElementById("searchInventory").value.toLowerCase();
+
+  const locationFilter =
+    document.getElementById("filterLocation").value;
+
   inventory.innerHTML = "";
 
-  if (pantry.length === 0) {
-    inventory.innerHTML =
-      '<div class="empty">Your pantry is empty. Add your first item above!</div>';
-  }
-
   let total = 0;
+  let shown = 0;
 
-  pantry.forEach(function(item, index) {
-    total += item.cost * item.quantity;
+  pantry.forEach((item, index) => {
+    item.category = item.category || "Other";
+    item.unit = item.unit || "items";
+    item.lowStock =
+      item.lowStock === undefined ? 1 : Number(item.lowStock);
+    item.farmMade = Boolean(item.farmMade);
+
+    total += Number(item.cost || 0) * Number(item.quantity || 0);
+
+    const matchesSearch =
+      item.name.toLowerCase().includes(search);
+
+    const matchesLocation =
+      locationFilter === "All" ||
+      item.location === locationFilter;
+
+    if (!matchesSearch || !matchesLocation) return;
+
+    shown++;
+
+    const isLow =
+      item.lowStock > 0 &&
+      Number(item.quantity) <= item.lowStock;
 
     const itemDiv = document.createElement("div");
-    itemDiv.className = "inventory-item";
+    itemDiv.className =
+      "inventory-item" + (isLow ? " low-stock" : "");
 
     itemDiv.innerHTML = `
-      <div class="item-name">${item.name}</div>
+      <div class="item-name">
+        ${item.name}
+        ${isLow ? '<span class="low-label">LOW STOCK</span>' : ''}
+        ${item.farmMade ? '<span class="farm-label">FARM/HOMEMADE</span>' : ''}
+      </div>
+
       <div class="item-info">
-        ${item.location} • $${item.cost.toFixed(2)} each
+        📍 ${item.location}<br>
+        🗂️ ${item.category}<br>
+        💵 $${Number(item.cost || 0).toFixed(2)} per ${item.unit}
       </div>
 
       <div class="controls">
-        <button class="minus" onclick="changeQuantity(${index}, -1)">−</button>
-        <span class="quantity">${item.quantity}</span>
-        <button class="plus" onclick="changeQuantity(${index}, 1)">+</button>
-        <button class="delete" onclick="deleteItem(${index})">Delete</button>
+        <button class="minus"
+          onclick="changeQuantity(${index}, -1)">−</button>
+
+        <span class="quantity">
+          ${item.quantity} ${item.unit}
+        </span>
+
+        <button class="plus"
+          onclick="changeQuantity(${index}, 1)">+</button>
+
+        <button class="delete"
+          onclick="deleteItem(${index})">Delete</button>
       </div>
     `;
 
     inventory.appendChild(itemDiv);
   });
+
+  if (shown === 0) {
+    inventory.innerHTML =
+      '<div class="empty">No food found here yet.</div>';
+  }
 
   document.getElementById("totalValue").textContent =
     "Total inventory value: $" + total.toFixed(2);
@@ -458,14 +643,15 @@ function displayShopping() {
     return;
   }
 
-  shopping.forEach(function(item, index) {
+  shopping.forEach((item, index) => {
     const row = document.createElement("div");
     row.className = "shopping-item";
 
     row.innerHTML = `
       <div class="controls">
         <span class="item-name">${item}</span>
-        <button class="delete" onclick="deleteShoppingItem(${index})">
+        <button class="delete"
+          onclick="deleteShoppingItem(${index})">
           Remove
         </button>
       </div>
@@ -476,6 +662,7 @@ function displayShopping() {
 }
 
 displayPantry();
+syncLowStock();
 displayShopping();
 </script>
 
