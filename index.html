@@ -191,6 +191,7 @@ placeholder="Example: Eggs"
 <option>Snacks</option>
 <option>Drinks</option>
 <option>Condiments & Sauces</option>
+<option>Oils, Fats & Vinegars</option>
 <option>Frozen Foods</option>
 <option>Other</option>
 </select>
@@ -657,11 +658,6 @@ function cleanProductName(value) {
     return "";
   }
 
-  /*
-  Remove common nutrition/marketing words that sometimes
-  get accidentally added to the END of a product name.
-  */
-
   const junkEndings = [
     /\s+cholesterol\s*$/i,
     /\s+cholesterol[\s-]*free\s*$/i,
@@ -692,11 +688,6 @@ function cleanProductName(value) {
       .replace(/^[,;:|–—\-\s]+/, "")
       .replace(/[,;:|–—\-\s]+$/, "")
       .trim();
-
-  /*
-  If the database sends the whole thing in lowercase,
-  make it easier to read.
-  */
 
   if (
     name &&
@@ -923,6 +914,12 @@ function autoSelectCategory(product) {
   let category = "Other";
 
   if (
+    /avocado oil|olive oil|vegetable oil|canola oil|coconut oil|cooking oil|sunflower oil|peanut oil|sesame oil|corn oil|grapeseed oil|oil blend|vinegar|apple cider vinegar|white vinegar|balsamic vinegar|red wine vinegar|butter|lard|shortening|ghee|cooking fat/.test(text)
+  ) {
+    category = "Oils, Fats & Vinegars";
+  }
+
+  else if (
     /beef|pork|chicken|turkey|meat|sausage|ham|bacon/.test(text)
   ) {
     category = "Meat";
@@ -1108,10 +1105,6 @@ async function startBarcodeScanner() {
         scanLocked = true;
 
 
-        /*
-        FIRST SCAN
-        */
-
         if (!pendingBarcode) {
 
           pendingBarcode =
@@ -1132,10 +1125,6 @@ async function startBarcodeScanner() {
         }
 
 
-        /*
-        SECOND SCAN DOES NOT MATCH
-        */
-
         if (
           barcode !== pendingBarcode
         ) {
@@ -1155,10 +1144,6 @@ async function startBarcodeScanner() {
           return;
         }
 
-
-        /*
-        MATCH = CONFIRMED
-        */
 
         document.getElementById("barcode").value =
           barcode;
