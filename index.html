@@ -623,18 +623,31 @@ function displayPantry() {
 }
 
 function updateLowStockShopping() {
-  pantry.forEach(function(item) {
+  shopping = shopping.filter(function(shoppingItem) {
+    const shoppingName = String(shoppingItem).toLowerCase();
 
+    return !pantry.some(function(item) {
+      const name = String(item.name || "").toLowerCase();
+      const quantity = Number(item.quantity) || 0;
+      const lowStock =
+        item.lowStock === undefined
+          ? 1
+          : Number(item.lowStock) || 0;
+
+      return name === shoppingName &&
+             (lowStock === 0 || quantity > lowStock);
+    });
+  });
+
+  pantry.forEach(function(item) {
     const name = String(item.name || "");
     const quantity = Number(item.quantity) || 0;
-
     const lowStock =
       item.lowStock === undefined
         ? 1
         : Number(item.lowStock) || 0;
 
     if (name && lowStock > 0 && quantity <= lowStock) {
-
       const alreadyThere = shopping.some(function(shoppingItem) {
         return String(shoppingItem).toLowerCase() ===
                name.toLowerCase();
