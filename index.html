@@ -1,170 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sawyer Family Pantry</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sawyer Family Pantry</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+* { box-sizing: border-box; }
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f6f0e5;
-      color: #3e4638;
-    }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f6f0e5;
+  color: #3e4638;
+}
 
-    header {
-      background: #66745a;
-      color: white;
-      padding: 25px 15px;
-      text-align: center;
-    }
+header {
+  background: #66745a;
+  color: white;
+  padding: 22px 12px;
+  text-align: center;
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 30px;
-    }
+header h1 {
+  margin: 0;
+  font-size: 28px;
+}
 
-    header p {
-      margin: 8px 0 0;
-    }
+header p {
+  margin: 6px 0 0;
+}
 
-    .container {
-      max-width: 700px;
-      margin: auto;
-      padding: 18px;
-    }
+/* TOP BUTTONS */
+.nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 12px;
+  background: #e8dfcf;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
 
-    .card {
-      background: white;
-      border-radius: 15px;
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-    }
+.nav button {
+  background: white;
+  border: 1px solid #d6cbbb;
+  border-radius: 12px;
+  padding: 10px 4px;
+  color: #4d5945;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    h2 {
-      margin-top: 0;
-      color: #66745a;
-    }
+.nav button span {
+  display: block;
+  font-size: 22px;
+  margin-bottom: 3px;
+}
 
-    label {
-      display: block;
-      margin-top: 12px;
-      font-weight: bold;
-    }
+.nav button.active {
+  background: #66745a;
+  color: white;
+}
 
-    input,
-    select {
-      width: 100%;
-      padding: 12px;
-      margin-top: 6px;
-      border: 1px solid #c9c2b6;
-      border-radius: 9px;
-      font-size: 16px;
-    }
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 16px;
+}
 
-    button {
-      border: none;
-      border-radius: 9px;
-      padding: 11px 14px;
-      font-size: 15px;
-      cursor: pointer;
-    }
+.page {
+  display: none;
+}
 
-    .add-button {
-      width: 100%;
-      margin-top: 16px;
-      background: #66745a;
-      color: white;
-      font-weight: bold;
-    }
+.page.active {
+  display: block;
+}
 
-    .inventory-item {
-      border-top: 1px solid #eee7dc;
-      padding: 14px 0;
-    }
+.card {
+  background: white;
+  border-radius: 15px;
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 3px 10px rgba(0,0,0,.08);
+}
 
-    .inventory-item:first-child {
-      border-top: none;
-    }
+h2 {
+  margin-top: 0;
+  color: #66745a;
+}
 
-    .item-name {
-      font-size: 18px;
-      font-weight: bold;
-    }
+label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+}
 
-    .item-info {
-      margin: 5px 0 10px;
-      color: #6b6b63;
-      font-size: 14px;
-    }
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border: 1px solid #c9c2b6;
+  border-radius: 9px;
+  font-size: 16px;
+}
 
-    .controls {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+button {
+  border: none;
+  border-radius: 9px;
+  padding: 11px 14px;
+  font-size: 15px;
+  cursor: pointer;
+}
 
-    .minus {
-      background: #b66b5c;
-      color: white;
-    }
+.main-button {
+  width: 100%;
+  margin-top: 16px;
+  background: #66745a;
+  color: white;
+  font-weight: bold;
+}
 
-    .plus {
-      background: #66745a;
-      color: white;
-    }
+.inventory-item, .shopping-item {
+  border-top: 1px solid #eee7dc;
+  padding: 14px 0;
+}
 
-    .delete {
-      background: #ddd5c8;
-      color: #4b463f;
-      margin-left: auto;
-    }
+.item-name {
+  font-size: 18px;
+  font-weight: bold;
+}
 
-    .quantity {
-      font-weight: bold;
-      min-width: 35px;
-      text-align: center;
-    }
+.item-info {
+  margin: 5px 0 10px;
+  color: #6b6b63;
+  font-size: 14px;
+}
 
-    .empty {
-      text-align: center;
-      color: #888;
-      padding: 15px;
-    }
+.controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
 
-    .total {
-      background: #eee6d8;
-      border-radius: 10px;
-      padding: 12px;
-      margin-top: 12px;
-      font-weight: bold;
-    }
-  </style>
+.minus {
+  background: #b66b5c;
+  color: white;
+}
+
+.plus {
+  background: #66745a;
+  color: white;
+}
+
+.delete {
+  background: #ddd5c8;
+  color: #4b463f;
+  margin-left: auto;
+}
+
+.quantity {
+  font-weight: bold;
+  min-width: 35px;
+  text-align: center;
+}
+
+.empty {
+  text-align: center;
+  color: #888;
+  padding: 15px;
+}
+
+.total {
+  background: #eee6d8;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+.coming {
+  text-align: center;
+  padding: 35px 10px;
+}
+
+.coming-icon {
+  font-size: 48px;
+}
+</style>
 </head>
 
 <body>
 
 <header>
   <h1>🌿 Sawyer Family Pantry</h1>
-  <p>Farmhouse pantry & freezer inventory</p>
+  <p>From our farm to our table</p>
 </header>
 
+<!-- CLICKABLE TOP NAVIGATION -->
+<div class="nav">
+  <button class="nav-button active" onclick="showPage('inventory', this)">
+    <span>🏡</span>Inventory
+  </button>
+
+  <button class="nav-button" onclick="showPage('shopping', this)">
+    <span>🛒</span>Shopping
+  </button>
+
+  <button class="nav-button" onclick="showPage('recipes', this)">
+    <span>📖</span>Recipes
+  </button>
+
+  <button class="nav-button" onclick="showPage('meals', this)">
+    <span>🍽️</span>Meals
+  </button>
+
+  <button class="nav-button" onclick="showPage('budget', this)">
+    <span>💰</span>Budget
+  </button>
+
+  <button class="nav-button" onclick="showPage('savings', this)">
+    <span>🌾</span>Savings
+  </button>
+</div>
+
 <div class="container">
+
+<!-- INVENTORY PAGE -->
+<section id="inventory-page" class="page active">
 
   <div class="card">
     <h2>Add Food</h2>
 
-    <label for="itemName">Food Item</label>
+    <label>Food Item</label>
     <input id="itemName" type="text" placeholder="Example: Eggs">
 
-    <label for="location">Where is it?</label>
+    <label>Where is it?</label>
     <select id="location">
       <option>Kitchen Fridge</option>
       <option>Kitchen Freezer</option>
@@ -176,24 +250,234 @@
       <option>Fruit & Vegetable Shelf</option>
     </select>
 
-    <label for="quantity">Quantity</label>
+    <label>Quantity</label>
     <input id="quantity" type="number" min="1" value="1">
 
-    <label for="cost">Cost ($)</label>
+    <label>Cost ($)</label>
     <input id="cost" type="number" min="0" step="0.01" placeholder="0.00">
 
-    <button class="add-button" onclick="addItem()">Add to Pantry</button>
+    <button class="main-button" onclick="addItem()">Add to Pantry</button>
   </div>
 
   <div class="card">
     <h2>My Inventory</h2>
-    <div id="inventory"></div>
-    <div class="total" id="totalValue">Total inventory value: $0.00</div>
+    <div id="inventoryList"></div>
+    <div class="total" id="totalValue">
+      Total inventory value: $0.00
+    </div>
   </div>
+
+</section>
+
+<!-- SHOPPING PAGE -->
+<section id="shopping-page" class="page">
+  <div class="card">
+    <h2>🛒 Shopping List</h2>
+
+    <label>Add an item</label>
+    <input id="shoppingName" type="text" placeholder="Example: Milk">
+
+    <button class="main-button" onclick="addShoppingItem()">
+      Add to Shopping List
+    </button>
+
+    <div id="shoppingList"></div>
+  </div>
+</section>
+
+<!-- RECIPES -->
+<section id="recipes-page" class="page">
+  <div class="card coming">
+    <div class="coming-icon">📖</div>
+    <h2>Recipes</h2>
+    <p>This button works! This is where we'll build your family recipe box.</p>
+  </div>
+</section>
+
+<!-- MEALS -->
+<section id="meals-page" class="page">
+  <div class="card coming">
+    <div class="coming-icon">🍽️</div>
+    <h2>Meal Planning</h2>
+    <p>This is where we'll build meal plans using food you already have.</p>
+  </div>
+</section>
+
+<!-- BUDGET -->
+<section id="budget-page" class="page">
+  <div class="card coming">
+    <div class="coming-icon">💰</div>
+    <h2>Grocery Budget</h2>
+    <p>This is where we'll track grocery spending and your Walmart budget.</p>
+  </div>
+</section>
+
+<!-- SAVINGS -->
+<section id="savings-page" class="page">
+  <div class="card coming">
+    <div class="coming-icon">🌾</div>
+    <h2>Farm & Homemade Savings</h2>
+    <p>This is where we'll track money saved from farm-raised and homemade food.</p>
+  </div>
+</section>
 
 </div>
 
 <script>
-  let pantry = JSON.parse(localStorage.getItem("sawyerPantry")) || [];
+let pantry = JSON.parse(localStorage.getItem("sawyerPantry")) || [];
+let shopping = JSON.parse(localStorage.getItem("sawyerShopping")) || [];
 
- 
+function showPage(pageName, button) {
+  document.querySelectorAll(".page").forEach(function(page) {
+    page.classList.remove("active");
+  });
+
+  document.querySelectorAll(".nav-button").forEach(function(btn) {
+    btn.classList.remove("active");
+  });
+
+  document.getElementById(pageName + "-page").classList.add("active");
+  button.classList.add("active");
+}
+
+function savePantry() {
+  localStorage.setItem("sawyerPantry", JSON.stringify(pantry));
+}
+
+function addItem() {
+  const name = document.getElementById("itemName").value.trim();
+  const location = document.getElementById("location").value;
+  const quantity = Number(document.getElementById("quantity").value);
+  const cost = Number(document.getElementById("cost").value) || 0;
+
+  if (!name) {
+    alert("Please enter a food item.");
+    return;
+  }
+
+  pantry.push({
+    name: name,
+    location: location,
+    quantity: quantity > 0 ? quantity : 1,
+    cost: cost
+  });
+
+  savePantry();
+
+  document.getElementById("itemName").value = "";
+  document.getElementById("quantity").value = 1;
+  document.getElementById("cost").value = "";
+
+  displayPantry();
+}
+
+function changeQuantity(index, amount) {
+  pantry[index].quantity += amount;
+
+  if (pantry[index].quantity < 0) {
+    pantry[index].quantity = 0;
+  }
+
+  savePantry();
+  displayPantry();
+}
+
+function deleteItem(index) {
+  pantry.splice(index, 1);
+  savePantry();
+  displayPantry();
+}
+
+function displayPantry() {
+  const inventory = document.getElementById("inventoryList");
+  inventory.innerHTML = "";
+
+  if (pantry.length === 0) {
+    inventory.innerHTML =
+      '<div class="empty">Your pantry is empty. Add your first item above!</div>';
+  }
+
+  let total = 0;
+
+  pantry.forEach(function(item, index) {
+    total += item.cost * item.quantity;
+
+    const itemDiv = document.createElement("div");
+    itemDiv.className = "inventory-item";
+
+    itemDiv.innerHTML = `
+      <div class="item-name">${item.name}</div>
+      <div class="item-info">
+        ${item.location} • $${item.cost.toFixed(2)} each
+      </div>
+
+      <div class="controls">
+        <button class="minus" onclick="changeQuantity(${index}, -1)">−</button>
+        <span class="quantity">${item.quantity}</span>
+        <button class="plus" onclick="changeQuantity(${index}, 1)">+</button>
+        <button class="delete" onclick="deleteItem(${index})">Delete</button>
+      </div>
+    `;
+
+    inventory.appendChild(itemDiv);
+  });
+
+  document.getElementById("totalValue").textContent =
+    "Total inventory value: $" + total.toFixed(2);
+}
+
+function saveShopping() {
+  localStorage.setItem("sawyerShopping", JSON.stringify(shopping));
+}
+
+function addShoppingItem() {
+  const input = document.getElementById("shoppingName");
+  const name = input.value.trim();
+
+  if (!name) return;
+
+  shopping.push(name);
+  saveShopping();
+  input.value = "";
+  displayShopping();
+}
+
+function deleteShoppingItem(index) {
+  shopping.splice(index, 1);
+  saveShopping();
+  displayShopping();
+}
+
+function displayShopping() {
+  const list = document.getElementById("shoppingList");
+  list.innerHTML = "";
+
+  if (shopping.length === 0) {
+    list.innerHTML =
+      '<div class="empty">Your shopping list is empty.</div>';
+    return;
+  }
+
+  shopping.forEach(function(item, index) {
+    const row = document.createElement("div");
+    row.className = "shopping-item";
+
+    row.innerHTML = `
+      <div class="controls">
+        <span class="item-name">${item}</span>
+        <button class="delete" onclick="deleteShoppingItem(${index})">
+          Remove
+        </button>
+      </div>
+    `;
+
+    list.appendChild(row);
+  });
+}
+
+displayPantry();
+displayShopping();
+</script>
+
+</body>
+</html>
