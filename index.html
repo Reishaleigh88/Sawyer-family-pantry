@@ -80,93 +80,39 @@ textarea{min-height:120px;resize:vertical}
 </header>
 
 <div class="nav">
-
-<button class="nav-button active" onclick="showPage('inventory',this)">
-<span>🏡</span>Inventory
-</button>
-
-<button class="nav-button" onclick="showPage('shopping',this)">
-<span>🛒</span>Shopping
-</button>
-
-<button class="nav-button" onclick="showPage('recipes',this)">
-<span>📖</span>Recipes
-</button>
-
-<button class="nav-button" onclick="showPage('meals',this)">
-<span>🍽️</span>Meals
-</button>
-
-<button class="nav-button" onclick="showPage('budget',this)">
-<span>💰</span>Budget
-</button>
-
-<button class="nav-button" onclick="showPage('savings',this)">
-<span>🌾</span>Savings
-</button>
-
+<button class="nav-button active" onclick="showPage('inventory',this)"><span>🏡</span>Inventory</button>
+<button class="nav-button" onclick="showPage('shopping',this)"><span>🛒</span>Shopping</button>
+<button class="nav-button" onclick="showPage('recipes',this)"><span>📖</span>Recipes</button>
+<button class="nav-button" onclick="showPage('meals',this)"><span>🍽️</span>Meals</button>
+<button class="nav-button" onclick="showPage('budget',this)"><span>💰</span>Budget</button>
+<button class="nav-button" onclick="showPage('savings',this)"><span>🌾</span>Savings</button>
 </div>
 
 <div class="container">
 
 <section id="inventory-page" class="page active">
-
 <div class="card">
 
 <h2>➕ Add Food</h2>
 
 <label>Barcode</label>
-
 <div class="barcode-row">
-
-<input
-id="barcode"
-type="text"
-inputmode="numeric"
-placeholder="Scan or type barcode"
->
-
-<button
-class="scan-button"
-type="button"
-onclick="startBarcodeScanner()"
->
-📷 Scan Barcode
-</button>
-
+<input id="barcode" type="text" inputmode="numeric" placeholder="Scan or type barcode">
+<button class="scan-button" type="button" onclick="startBarcodeScanner()">📷 Scan Barcode</button>
 </div>
 
 <div id="lookupStatus" class="lookup-status"></div>
 
 <div id="scannerPanel" class="scanner-panel">
-
 <div id="reader"></div>
-
-<div id="scanStatus" class="scan-status">
-Point the camera at the barcode.
-</div>
-
-<button
-class="secondary-button"
-style="width:100%;margin-top:12px"
-type="button"
-onclick="stopBarcodeScanner()"
->
-Close Camera
-</button>
-
+<div id="scanStatus" class="scan-status">Fit the barcode inside the box.</div>
+<button class="secondary-button" style="width:100%;margin-top:12px" type="button" onclick="stopBarcodeScanner()">Close Camera</button>
 </div>
 
 <label>Food Item</label>
-
-<input
-id="itemName"
-type="text"
-placeholder="Example: Eggs"
->
+<input id="itemName" type="text" placeholder="Example: Eggs">
 
 <label>Storage Location</label>
-
 <select id="location">
 <option>Kitchen Fridge</option>
 <option>Kitchen Freezer</option>
@@ -179,7 +125,6 @@ placeholder="Example: Eggs"
 </select>
 
 <label>Food Category</label>
-
 <select id="category">
 <option>Meat</option>
 <option>Eggs & Dairy</option>
@@ -197,15 +142,12 @@ placeholder="Example: Eggs"
 </select>
 
 <div class="two-column">
-
 <div>
 <label>Quantity</label>
 <input id="quantity" type="number" min="0" value="1">
 </div>
-
 <div>
 <label>Unit</label>
-
 <select id="unit">
 <option>items</option>
 <option>lbs</option>
@@ -218,57 +160,34 @@ placeholder="Example: Eggs"
 <option>jars</option>
 <option>bottles</option>
 </select>
-
 </div>
-
 </div>
 
 <div class="two-column">
-
 <div>
 <label>Cost Per Unit ($)</label>
 <input id="cost" type="number" min="0" step="0.01" value="0">
 </div>
-
 <div>
 <label>Low Stock At</label>
 <input id="lowStock" type="number" min="0" value="1">
 </div>
-
 </div>
 
 <div class="checkbox-row">
-
 <input id="farmMade" type="checkbox">
-
-<label for="farmMade" style="margin:0">
-🌾 Farm-raised or homemade
-</label>
-
+<label for="farmMade" style="margin:0">🌾 Farm-raised or homemade</label>
 </div>
 
-<button class="main-button" onclick="addItem()">
-Add to Pantry
-</button>
-
+<button class="main-button" onclick="addItem()">Add to Pantry</button>
 </div>
-
 
 <div class="card">
-
 <h2>🏡 My Inventory</h2>
 
 <div class="filter-box">
-
-<input
-id="searchInventory"
-type="text"
-placeholder="🔎 Search food or barcode..."
-oninput="displayPantry()"
->
-
+<input id="searchInventory" type="text" placeholder="🔎 Search food or barcode..." oninput="displayPantry()">
 <select id="filterLocation" onchange="displayPantry()">
-
 <option value="All">All Locations</option>
 <option>Kitchen Fridge</option>
 <option>Kitchen Freezer</option>
@@ -278,63 +197,31 @@ oninput="displayPantry()"
 <option>Second Freezer</option>
 <option>Pantry</option>
 <option>Fruit & Vegetable Shelf</option>
-
 </select>
-
 </div>
 
 <div id="inventoryList"></div>
-
-<div class="total" id="totalValue">
-Total inventory value: $0.00
+<div class="total" id="totalValue">Total inventory value: $0.00</div>
 </div>
-
-</div>
-
 </section>
-
 
 <section id="shopping-page" class="page">
-
 <div class="card">
-
 <h2>🛒 Shopping List</h2>
-
 <label>Add an Item</label>
-
-<input
-id="shoppingName"
-type="text"
-placeholder="Example: Coffee"
->
-
-<button class="main-button" onclick="addShoppingItem()">
-Add to Shopping List
-</button>
-
+<input id="shoppingName" type="text" placeholder="Example: Coffee">
+<button class="main-button" onclick="addShoppingItem()">Add to Shopping List</button>
 <div id="shoppingList"></div>
-
 </div>
-
 </section>
 
-
 <section id="recipes-page" class="page">
-
 <div class="card">
-
 <h2>📖 My Family Recipes</h2>
-
 <label>Recipe Name</label>
-
-<input
-id="recipeName"
-type="text"
-placeholder="Example: Grandma's Meatloaf"
->
+<input id="recipeName" type="text" placeholder="Example: Grandma's Meatloaf">
 
 <label>Category</label>
-
 <select id="recipeCategory">
 <option>Breakfast</option>
 <option>Lunch</option>
@@ -349,53 +236,25 @@ placeholder="Example: Grandma's Meatloaf"
 </select>
 
 <label>Ingredients</label>
-
-<textarea
-id="recipeIngredients"
-placeholder="Enter ingredients..."
-></textarea>
+<textarea id="recipeIngredients" placeholder="Enter ingredients..."></textarea>
 
 <label>Directions</label>
+<textarea id="recipeDirections" placeholder="Enter directions..."></textarea>
 
-<textarea
-id="recipeDirections"
-placeholder="Enter directions..."
-></textarea>
-
-<button class="main-button" onclick="addRecipe()">
-Save Recipe
-</button>
-
+<button class="main-button" onclick="addRecipe()">Save Recipe</button>
 </div>
-
 
 <div class="card">
-
 <h2>🍴 Saved Recipes</h2>
-
-<input
-id="searchRecipes"
-type="text"
-placeholder="🔎 Search recipes..."
-oninput="displayRecipes()"
->
-
+<input id="searchRecipes" type="text" placeholder="🔎 Search recipes..." oninput="displayRecipes()">
 <div id="recipeList"></div>
-
 </div>
-
 </section>
 
-
 <section id="meals-page" class="page">
-
 <div class="card">
-
 <h2>🍽️ Weekly Meal Plan</h2>
-
-<p class="small-note">
-Plan dinners or type anything you want for each day.
-</p>
+<p class="small-note">Plan dinners or type anything you want for each day.</p>
 
 <div class="week-day"><strong>Monday</strong><input id="mealMonday"></div>
 <div class="week-day"><strong>Tuesday</strong><input id="mealTuesday"></div>
@@ -406,143 +265,59 @@ Plan dinners or type anything you want for each day.
 <div class="week-day"><strong>Sunday</strong><input id="mealSunday"></div>
 
 <label>Meal Plan Notes</label>
-
-<textarea
-id="mealNotes"
-placeholder="Prep notes, school nights, freezer meals..."
-></textarea>
-
-<button class="main-button" onclick="saveMeals()">
-Save Meal Plan
-</button>
-
+<textarea id="mealNotes" placeholder="Prep notes, school nights, freezer meals..."></textarea>
+<button class="main-button" onclick="saveMeals()">Save Meal Plan</button>
 </div>
-
 </section>
 
-
 <section id="budget-page" class="page">
-
 <div class="card">
-
 <h2>💰 Grocery Budget</h2>
-
 <label>Monthly Grocery Budget ($)</label>
-
-<input
-id="monthlyBudget"
-type="number"
-min="0"
-step="0.01"
-placeholder="Example: 800"
->
-
-<button class="main-button" onclick="saveBudgetAmount()">
-Save Monthly Budget
-</button>
-
+<input id="monthlyBudget" type="number" min="0" step="0.01" placeholder="Example: 800">
+<button class="main-button" onclick="saveBudgetAmount()">Save Monthly Budget</button>
 </div>
 
-
 <div class="card">
-
 <h2>🧾 Add Grocery Spending</h2>
-
 <label>Description</label>
-
-<input
-id="expenseDescription"
-type="text"
-placeholder="Example: Walmart groceries"
->
-
+<input id="expenseDescription" type="text" placeholder="Example: Walmart groceries">
 <label>Amount ($)</label>
-
-<input
-id="expenseAmount"
-type="number"
-min="0"
-step="0.01"
->
-
-<button class="main-button" onclick="addExpense()">
-Add Expense
-</button>
-
+<input id="expenseAmount" type="number" min="0" step="0.01">
+<button class="main-button" onclick="addExpense()">Add Expense</button>
 </div>
 
-
 <div class="card">
-
 <h2>📊 Budget Summary</h2>
-
 <div class="summary-grid">
-
 <div class="summary-box">Budget<strong id="budgetDisplay">$0.00</strong></div>
 <div class="summary-box">Spent<strong id="spentDisplay">$0.00</strong></div>
 <div class="summary-box">Remaining<strong id="remainingDisplay">$0.00</strong></div>
 <div class="summary-box">Inventory Value<strong id="budgetInventoryValue">$0.00</strong></div>
-
 </div>
-
 <div id="expenseList"></div>
-
 </div>
-
 </section>
-
 
 <section id="savings-page" class="page">
-
 <div class="card">
-
 <h2>🌾 Farm & Homemade Savings</h2>
-
-<p class="small-note">
-Track what your farm, garden, canning, baking, and homemade foods save your family.
-</p>
-
+<p class="small-note">Track what your farm, garden, canning, baking, and homemade foods save your family.</p>
 <label>Item or Project</label>
-
-<input
-id="savingDescription"
-type="text"
-placeholder="Example: Farm fresh eggs"
->
-
+<input id="savingDescription" type="text" placeholder="Example: Farm fresh eggs">
 <label>Money Saved ($)</label>
-
-<input
-id="savingAmount"
-type="number"
-min="0"
-step="0.01"
->
-
-<button class="main-button" onclick="addSaving()">
-Add Savings
-</button>
-
+<input id="savingAmount" type="number" min="0" step="0.01">
+<button class="main-button" onclick="addSaving()">Add Savings</button>
 </div>
-
 
 <div class="card">
-
 <h2>🌱 Our Savings</h2>
-
-<div class="total">
-Total farm & homemade savings:
-<strong id="totalSavings">$0.00</strong>
-</div>
-
+<div class="total">Total farm & homemade savings: <strong id="totalSavings">$0.00</strong></div>
 <div id="savingsList"></div>
-
 </div>
-
 </section>
 
 </div>
-
 
 <script>
 
@@ -556,10 +331,6 @@ let monthlyBudget = 0;
 let html5QrCode = null;
 let scannerRunning = false;
 let scanLocked = false;
-let pendingBarcode = "";
-let lastScanText = "";
-let sameScanCount = 0;
-let lastScanTime = 0;
 
 
 /* LOAD SAVED DATA */
@@ -578,8 +349,7 @@ recipes = loadJson("sawyerRecipes");
 groceryExpenses = loadJson("sawyerExpenses");
 savings = loadJson("sawyerSavings");
 
-monthlyBudget =
-  Number(localStorage.getItem("sawyerMonthlyBudget")) || 0;
+monthlyBudget = Number(localStorage.getItem("sawyerMonthlyBudget")) || 0;
 
 
 /* NAVIGATION */
@@ -599,7 +369,6 @@ function showPage(name, button) {
   });
 
   document.getElementById(name + "-page").classList.add("active");
-
   button.classList.add("active");
 }
 
@@ -607,43 +376,27 @@ function showPage(name, button) {
 /* LOOKUP MESSAGE */
 
 function showLookupMessage(message) {
-
-  const box =
-    document.getElementById("lookupStatus");
-
+  const box = document.getElementById("lookupStatus");
   box.textContent = message;
-
   box.classList.add("show");
 }
 
 function hideLookupMessage() {
-
-  const box =
-    document.getElementById("lookupStatus");
-
+  const box = document.getElementById("lookupStatus");
   box.textContent = "";
-
   box.classList.remove("show");
 }
 
 
-/* BARCODE CLEANUP */
+/* BARCODE */
 
 function cleanBarcode(value) {
-
   return String(value || "").replace(/\D/g, "");
 }
 
 function isGroceryBarcode(value) {
-
-  const length =
-    cleanBarcode(value).length;
-
-  return (
-    length === 8 ||
-    length === 12 ||
-    length === 13
-  );
+  const length = cleanBarcode(value).length;
+  return length === 8 || length === 12 || length === 13;
 }
 
 
@@ -657,9 +410,7 @@ function cleanProductName(value) {
       .replace(/\s+/g, " ")
       .trim();
 
-  if (!name) {
-    return "";
-  }
+  if (!name) return "";
 
   const junkEndings = [
     /\s+cholesterol\s*$/i,
@@ -676,7 +427,6 @@ function cleanProductName(value) {
   let changed = true;
 
   while (changed) {
-
     const before = name;
 
     junkEndings.forEach(function(pattern) {
@@ -692,64 +442,43 @@ function cleanProductName(value) {
       .replace(/[,;:|–—\-\s]+$/, "")
       .trim();
 
-  if (
-    name &&
-    name === name.toLowerCase()
-  ) {
-
-    name =
-      name.replace(
-        /\b[a-z]/g,
-        function(letter) {
-          return letter.toUpperCase();
-        }
-      );
+  if (name && name === name.toLowerCase()) {
+    name = name.replace(/\b[a-z]/g, function(letter) {
+      return letter.toUpperCase();
+    });
   }
 
   return name;
 }
 
 
-/* CHECK SAVED PANTRY FIRST */
+/* SAVED BARCODE */
 
 function findSavedBarcode(barcode) {
-
   return pantry.find(function(item) {
-
-    return (
-      String(item.barcode || "") ===
-      String(barcode)
-    );
+    return String(item.barcode || "") === String(barcode);
   });
 }
 
 
-/* FETCH WITH TIMEOUT */
+/* FETCH */
 
 async function fetchWithTimeout(url, timeoutMs) {
 
-  const controller =
-    new AbortController();
+  const controller = new AbortController();
 
-  const timeout =
-    setTimeout(function() {
-      controller.abort();
-    }, timeoutMs);
+  const timeout = setTimeout(function() {
+    controller.abort();
+  }, timeoutMs);
 
   try {
-
-    return await fetch(
-      url,
-      {
-        method: "GET",
-        mode: "cors",
-        cache: "no-store",
-        signal: controller.signal
-      }
-    );
-
+    return await fetch(url, {
+      method: "GET",
+      mode: "cors",
+      cache: "no-store",
+      signal: controller.signal
+    });
   } finally {
-
     clearTimeout(timeout);
   }
 }
@@ -759,19 +488,13 @@ async function fetchWithTimeout(url, timeoutMs) {
 
 async function lookupBarcode(barcode) {
 
-  barcode =
-    cleanBarcode(barcode);
+  barcode = cleanBarcode(barcode);
 
-  if (!barcode) {
-    return;
-  }
+  if (!barcode) return;
 
-  showLookupMessage(
-    "🔎 Looking up product..."
-  );
+  showLookupMessage("🔎 Looking up product...");
 
-  const savedItem =
-    findSavedBarcode(barcode);
+  const savedItem = findSavedBarcode(barcode);
 
   if (savedItem) {
 
@@ -797,60 +520,43 @@ async function lookupBarcode(barcode) {
       ".json?fields=product_name,product_name_en,generic_name,categories,categories_tags";
 
     const response =
-      await fetchWithTimeout(
-        url,
-        12000
-      );
+      await fetchWithTimeout(url, 12000);
 
     if (!response.ok) {
-
       showLookupMessage(
-        "⚠️ Barcode confirmed, but the product database returned an error. You can still type the name manually."
+        "⚠️ Barcode scanned, but the product database returned an error. You can still type the name manually."
       );
-
       return;
     }
 
-    const data =
-      await response.json();
+    const data = await response.json();
 
-    if (
-      Number(data.status) === 1 &&
-      data.product
-    ) {
-
-      fillProductFromLookup(
-        data.product
-      );
-
+    if (Number(data.status) === 1 && data.product) {
+      fillProductFromLookup(data.product);
       return;
     }
 
-    if (
-      Number(data.status) === 0
-    ) {
-
+    if (Number(data.status) === 0) {
       showLookupMessage(
-        "⚠️ Barcode confirmed, but this product isn't in the database yet. Type the name manually and I'll remember it after you save it."
+        "⚠️ Barcode scanned, but this product isn't in the database yet. Type the name manually and I'll remember it after you save it."
       );
-
       return;
     }
 
     showLookupMessage(
-      "⚠️ Barcode confirmed, but the database gave an unusual response. Enter the name manually."
+      "⚠️ Barcode scanned, but the database gave an unusual response. Enter the name manually."
     );
 
   } catch (error) {
 
     showLookupMessage(
-      "⚠️ Barcode confirmed, but online lookup could not connect. You can still enter the item manually."
+      "⚠️ Barcode scanned, but online lookup could not connect. You can still enter the item manually."
     );
   }
 }
 
 
-/* FILL PRODUCT NAME */
+/* FILL PRODUCT */
 
 function fillProductFromLookup(product) {
 
@@ -860,47 +566,33 @@ function fillProductFromLookup(product) {
     product.generic_name ||
     "";
 
-  const name =
-    cleanProductName(rawName);
+  const name = cleanProductName(rawName);
 
   if (!name) {
-
     showLookupMessage(
-      "⚠️ Barcode confirmed, but the product name is missing. Type it manually."
+      "⚠️ Barcode scanned, but the product name is missing. Type it manually."
     );
-
     return;
   }
 
-  document.getElementById("itemName").value =
-    name;
+  document.getElementById("itemName").value = name;
 
   autoSelectCategory(product);
 
-  showLookupMessage(
-    "✅ Found: " +
-    name
-  );
+  showLookupMessage("✅ Found: " + name);
 }
 
 
-/* CATEGORY GUESSING */
+/* CATEGORY */
 
 function autoSelectCategory(product) {
 
   let tags = "";
 
-  if (
-    Array.isArray(product.categories_tags)
-  ) {
-
-    tags =
-      product.categories_tags.join(" ");
-
+  if (Array.isArray(product.categories_tags)) {
+    tags = product.categories_tags.join(" ");
   } else {
-
-    tags =
-      String(product.categories || "");
+    tags = String(product.categories || "");
   }
 
   const name =
@@ -911,89 +603,41 @@ function autoSelectCategory(product) {
       ""
     );
 
-  const text =
-    (tags + " " + name).toLowerCase();
+  const text = (tags + " " + name).toLowerCase();
 
   let category = "Other";
 
-  if (
-    /avocado oil|olive oil|vegetable oil|canola oil|coconut oil|cooking oil|sunflower oil|peanut oil|sesame oil|corn oil|grapeseed oil|oil blend|vinegar|apple cider vinegar|white vinegar|balsamic vinegar|red wine vinegar|butter|lard|shortening|ghee|cooking fat/.test(text)
-  ) {
+  if (/avocado oil|olive oil|vegetable oil|canola oil|coconut oil|cooking oil|sunflower oil|peanut oil|sesame oil|corn oil|grapeseed oil|oil blend|vinegar|apple cider vinegar|white vinegar|balsamic vinegar|red wine vinegar|butter|lard|shortening|ghee|cooking fat/.test(text)) {
     category = "Oils, Fats & Vinegars";
-  }
-
-  else if (
-    /beef|pork|chicken|turkey|meat|sausage|ham|bacon/.test(text)
-  ) {
+  } else if (/beef|pork|chicken|turkey|meat|sausage|ham|bacon/.test(text)) {
     category = "Meat";
-  }
-
-  else if (
-    /milk|cheese|yogurt|egg|dairy/.test(text)
-  ) {
+  } else if (/milk|cheese|yogurt|egg|dairy/.test(text)) {
     category = "Eggs & Dairy";
-  }
-
-  else if (
-    /fruit/.test(text)
-  ) {
+  } else if (/fruit/.test(text)) {
     category = "Fruit";
-  }
-
-  else if (
-    /vegetable/.test(text)
-  ) {
+  } else if (/vegetable/.test(text)) {
     category = "Vegetables";
-  }
-
-  else if (
-    /bread|cereal|grain|rice|pasta/.test(text)
-  ) {
+  } else if (/bread|cereal|grain|rice|pasta/.test(text)) {
     category = "Grains & Bread";
-  }
-
-  else if (
-    /flour|sugar|baking/.test(text)
-  ) {
+  } else if (/flour|sugar|baking/.test(text)) {
     category = "Baking";
-  }
-
-  else if (
-    /canned/.test(text)
-  ) {
+  } else if (/canned/.test(text)) {
     category = "Canned Goods";
-  }
-
-  else if (
-    /snack|chips|cracker|cookie|popcorn|candy/.test(text)
-  ) {
+  } else if (/snack|chips|cracker|cookie|popcorn|candy/.test(text)) {
     category = "Snacks";
-  }
-
-  else if (
-    /drink|beverage|juice|soda|coffee|tea/.test(text)
-  ) {
+  } else if (/drink|beverage|juice|soda|coffee|tea/.test(text)) {
     category = "Drinks";
-  }
-
-  else if (
-    /sauce|ketchup|mustard|mayonnaise|dressing|condiment/.test(text)
-  ) {
+  } else if (/sauce|ketchup|mustard|mayonnaise|dressing|condiment/.test(text)) {
     category = "Condiments & Sauces";
-  }
-
-  else if (
-    /frozen/.test(text)
-  ) {
+  } else if (/frozen/.test(text)) {
     category = "Frozen Foods";
   }
 
-  document.getElementById("category").value =
-    category;
+  document.getElementById("category").value = category;
 }
 
 
-/* BARCODE SCANNER */
+/* BARCODE SCANNER - ONE GOOD READ AND DONE */
 
 async function startBarcodeScanner() {
 
@@ -1008,11 +652,9 @@ async function startBarcodeScanner() {
   panel.classList.add("active");
 
   status.textContent =
-    "Fit the whole barcode inside the box and hold still.";
+    "Fit the whole barcode inside the box. Move back a little if it looks blurry.";
 
-  if (
-    typeof Html5Qrcode === "undefined"
-  ) {
+  if (typeof Html5Qrcode === "undefined") {
 
     panel.classList.remove("active");
 
@@ -1028,22 +670,15 @@ async function startBarcodeScanner() {
   }
 
   scanLocked = false;
-  pendingBarcode = "";
-  lastScanText = "";
-  sameScanCount = 0;
-  lastScanTime = 0;
 
   try {
 
     const scannerConfig = {
-
       formatsToSupport: [
-
         Html5QrcodeSupportedFormats.UPC_A,
         Html5QrcodeSupportedFormats.UPC_E,
         Html5QrcodeSupportedFormats.EAN_13,
         Html5QrcodeSupportedFormats.EAN_8
-
       ]
     };
 
@@ -1053,8 +688,6 @@ async function startBarcodeScanner() {
         scannerConfig
       );
 
-    scannerRunning = true;
-
     await html5QrCode.start(
 
       {
@@ -1062,31 +695,25 @@ async function startBarcodeScanner() {
       },
 
       {
-        fps: 12,
+        fps: 15,
 
         qrbox:
           function(width, height) {
 
             return {
-
               width:
                 Math.min(
-                  360,
+                  350,
                   Math.floor(width * 0.92)
                 ),
 
               height:
                 Math.min(
-                  170,
-                  Math.floor(height * 0.38)
+                  130,
+                  Math.floor(height * 0.28)
                 )
-
             };
-          },
-
-        aspectRatio: 1.777778,
-        disableFlip: true
-
+          }
       },
 
       async function(decodedText) {
@@ -1098,66 +725,34 @@ async function startBarcodeScanner() {
         const barcode =
           cleanBarcode(decodedText);
 
-        if (
-          !isGroceryBarcode(barcode)
-        ) {
-          return;
-        }
-
-        const now = Date.now();
-
-        if (
-          barcode === lastScanText &&
-          now - lastScanTime < 1800
-        ) {
-          sameScanCount += 1;
-        } else {
-          lastScanText = barcode;
-          sameScanCount = 1;
-        }
-
-        lastScanTime = now;
-
-        if (sameScanCount < 2) {
-          pendingBarcode = barcode;
-
-          status.textContent =
-            "Reading " +
-            barcode +
-            " — hold the barcode still for confirmation.";
-
+        if (!isGroceryBarcode(barcode)) {
           return;
         }
 
         scanLocked = true;
-        pendingBarcode = "";
 
         document.getElementById("barcode").value =
           barcode;
 
         status.textContent =
-          "✅ Barcode confirmed: " +
-          barcode;
-
-        showLookupMessage(
-          "✅ Barcode confirmed."
-        );
+          "✅ Scanned: " + barcode;
 
         await stopBarcodeScanner(true);
 
         lookupBarcode(barcode);
-
       },
 
       function() {
-        /* Ignore normal camera misses */
+        /* Normal misses are ignored while camera keeps looking */
       }
-
     );
+
+    scannerRunning = true;
 
   } catch (error) {
 
     scannerRunning = false;
+    scanLocked = false;
     html5QrCode = null;
 
     panel.classList.remove("active");
@@ -1176,10 +771,7 @@ async function stopBarcodeScanner(keepMessage) {
   const panel =
     document.getElementById("scannerPanel");
 
-  if (
-    html5QrCode &&
-    scannerRunning
-  ) {
+  if (html5QrCode) {
 
     try {
       await html5QrCode.stop();
@@ -1193,10 +785,6 @@ async function stopBarcodeScanner(keepMessage) {
   scannerRunning = false;
   html5QrCode = null;
   scanLocked = false;
-  pendingBarcode = "";
-  lastScanText = "";
-  sameScanCount = 0;
-  lastScanTime = 0;
 
   if (!keepMessage) {
 
@@ -1206,12 +794,12 @@ async function stopBarcodeScanner(keepMessage) {
 
     setTimeout(function() {
       panel.classList.remove("active");
-    }, 800);
+    }, 600);
   }
 }
 
 
-/* MANUAL BARCODE ENTRY */
+/* MANUAL BARCODE */
 
 document
   .getElementById("barcode")
@@ -1222,10 +810,7 @@ document
       const barcode =
         cleanBarcode(this.value);
 
-      this.value =
-        barcode;
-
-      pendingBarcode = "";
+      this.value = barcode;
 
       if (barcode) {
         lookupBarcode(barcode);
@@ -1237,81 +822,29 @@ document
 /* PANTRY */
 
 function savePantry() {
-
-  localStorage.setItem(
-    "sawyerPantry",
-    JSON.stringify(pantry)
-  );
+  localStorage.setItem("sawyerPantry", JSON.stringify(pantry));
 }
 
 function addItem() {
 
   const name =
-    document
-      .getElementById("itemName")
-      .value
-      .trim();
+    document.getElementById("itemName").value.trim();
 
   if (!name) {
-
-    alert(
-      "Please enter a food item."
-    );
-
+    alert("Please enter a food item.");
     return;
   }
 
   pantry.push({
-
-    barcode:
-      document
-        .getElementById("barcode")
-        .value
-        .trim(),
-
+    barcode: document.getElementById("barcode").value.trim(),
     name: name,
-
-    location:
-      document
-        .getElementById("location")
-        .value,
-
-    category:
-      document
-        .getElementById("category")
-        .value,
-
-    quantity:
-      Number(
-        document
-          .getElementById("quantity")
-          .value
-      ) || 0,
-
-    unit:
-      document
-        .getElementById("unit")
-        .value,
-
-    cost:
-      Number(
-        document
-          .getElementById("cost")
-          .value
-      ) || 0,
-
-    lowStock:
-      Number(
-        document
-          .getElementById("lowStock")
-          .value
-      ) || 0,
-
-    farmMade:
-      document
-        .getElementById("farmMade")
-        .checked
-
+    location: document.getElementById("location").value,
+    category: document.getElementById("category").value,
+    quantity: Number(document.getElementById("quantity").value) || 0,
+    unit: document.getElementById("unit").value,
+    cost: Number(document.getElementById("cost").value) || 0,
+    lowStock: Number(document.getElementById("lowStock").value) || 0,
+    farmMade: document.getElementById("farmMade").checked
   });
 
   savePantry();
@@ -1323,12 +856,9 @@ function addItem() {
   document.getElementById("lowStock").value = "1";
   document.getElementById("farmMade").checked = false;
 
-  pendingBarcode = "";
-
   hideLookupMessage();
 
   displayPantry();
-
   updateLowStockShopping();
 }
 
@@ -1337,41 +867,29 @@ function changeQuantity(index, amount) {
   pantry[index].quantity =
     Math.max(
       0,
-      (Number(pantry[index].quantity) || 0) +
-      amount
+      (Number(pantry[index].quantity) || 0) + amount
     );
 
   savePantry();
-
   displayPantry();
-
   updateLowStockShopping();
 }
 
 function deleteItem(index) {
 
   const itemName =
-    String(
-      pantry[index].name || ""
-    ).toLowerCase();
+    String(pantry[index].name || "").toLowerCase();
 
   pantry.splice(index, 1);
 
   shopping =
     shopping.filter(function(item) {
-
-      return (
-        String(item).toLowerCase() !==
-        itemName
-      );
+      return String(item).toLowerCase() !== itemName;
     });
 
   savePantry();
-
   saveShopping();
-
   displayPantry();
-
   displayShopping();
 }
 
@@ -1381,14 +899,11 @@ function displayPantry() {
     document.getElementById("inventoryList");
 
   const search =
-    (
-      document.getElementById("searchInventory")?.value ||
-      ""
-    ).toLowerCase();
+    (document.getElementById("searchInventory")?.value || "")
+      .toLowerCase();
 
   const locationFilter =
-    document.getElementById("filterLocation")?.value ||
-    "All";
+    document.getElementById("filterLocation")?.value || "All";
 
   inventory.innerHTML = "";
 
@@ -1397,26 +912,13 @@ function displayPantry() {
 
   pantry.forEach(function(item, index) {
 
-    const barcode =
-      String(item.barcode || "");
-
-    const name =
-      String(item.name || "Unnamed Item");
-
-    const location =
-      String(item.location || "Pantry");
-
-    const category =
-      String(item.category || "Other");
-
-    const unit =
-      String(item.unit || "items");
-
-    const quantity =
-      Number(item.quantity) || 0;
-
-    const cost =
-      Number(item.cost) || 0;
+    const barcode = String(item.barcode || "");
+    const name = String(item.name || "Unnamed Item");
+    const location = String(item.location || "Pantry");
+    const category = String(item.category || "Other");
+    const unit = String(item.unit || "items");
+    const quantity = Number(item.quantity) || 0;
+    const cost = Number(item.cost) || 0;
 
     const lowStock =
       item.lowStock === undefined
@@ -1429,19 +931,14 @@ function displayPantry() {
     total += cost * quantity;
 
     const matchesSearch =
-      name.toLowerCase().includes(search)
-      ||
+      name.toLowerCase().includes(search) ||
       barcode.toLowerCase().includes(search);
 
     const matchesLocation =
-      locationFilter === "All"
-      ||
+      locationFilter === "All" ||
       location === locationFilter;
 
-    if (
-      !matchesSearch ||
-      !matchesLocation
-    ) {
+    if (!matchesSearch || !matchesLocation) {
       return;
     }
 
@@ -1464,29 +961,23 @@ function displayPantry() {
 
       escapeHtml(name) +
 
-      (
-        isLow
-          ? ' <span class="low-label">LOW STOCK</span>'
-          : ''
-      ) +
+      (isLow
+        ? ' <span class="low-label">LOW STOCK</span>'
+        : '') +
 
-      (
-        farmMade
-          ? ' <span class="farm-label">🌾 FARM/HOMEMADE</span>'
-          : ''
-      ) +
+      (farmMade
+        ? ' <span class="farm-label">🌾 FARM/HOMEMADE</span>'
+        : '') +
 
       '</div>' +
 
       '<div class="item-info">' +
 
-      (
-        barcode
-          ? '🏷️ Barcode: ' +
-            escapeHtml(barcode) +
-            '<br>'
-          : ''
-      ) +
+      (barcode
+        ? '🏷️ Barcode: ' +
+          escapeHtml(barcode) +
+          '<br>'
+        : '') +
 
       '📍 ' +
       escapeHtml(location) +
@@ -1529,33 +1020,23 @@ function displayPantry() {
   });
 
   if (!shown) {
-
     inventory.innerHTML =
       '<div class="empty">No food found here yet.</div>';
   }
 
-  document
-    .getElementById("totalValue")
-    .textContent =
-      "Total inventory value: $" +
-      total.toFixed(2);
+  document.getElementById("totalValue").textContent =
+    "Total inventory value: $" +
+    total.toFixed(2);
 
-  document
-    .getElementById("budgetInventoryValue")
-    .textContent =
-      "$" +
-      total.toFixed(2);
+  document.getElementById("budgetInventoryValue").textContent =
+    "$" + total.toFixed(2);
 }
 
 
 /* SHOPPING */
 
 function saveShopping() {
-
-  localStorage.setItem(
-    "sawyerShopping",
-    JSON.stringify(shopping)
-  );
+  localStorage.setItem("sawyerShopping", JSON.stringify(shopping));
 }
 
 function updateLowStockShopping() {
@@ -1600,7 +1081,6 @@ function updateLowStockShopping() {
 
       const exists =
         shopping.some(function(item) {
-
           return (
             String(item).toLowerCase() ===
             name.toLowerCase()
@@ -1614,7 +1094,6 @@ function updateLowStockShopping() {
   });
 
   saveShopping();
-
   displayShopping();
 }
 
@@ -1626,13 +1105,10 @@ function addShoppingItem() {
   const name =
     input.value.trim();
 
-  if (!name) {
-    return;
-  }
+  if (!name) return;
 
   const exists =
     shopping.some(function(item) {
-
       return (
         String(item).toLowerCase() ===
         name.toLowerCase()
@@ -1644,18 +1120,13 @@ function addShoppingItem() {
   }
 
   saveShopping();
-
   input.value = "";
-
   displayShopping();
 }
 
 function deleteShoppingItem(index) {
-
   shopping.splice(index, 1);
-
   saveShopping();
-
   displayShopping();
 }
 
@@ -1666,13 +1137,9 @@ function displayShopping() {
 
   list.innerHTML = "";
 
-  if (
-    shopping.length === 0
-  ) {
-
+  if (shopping.length === 0) {
     list.innerHTML =
       '<div class="empty">Your shopping list is empty.</div>';
-
     return;
   }
 
@@ -1681,21 +1148,16 @@ function displayShopping() {
     const row =
       document.createElement("div");
 
-    row.className =
-      "shopping-item";
+    row.className = "shopping-item";
 
     row.innerHTML =
-
       '<div class="controls">' +
-
       '<span class="item-name">' +
       escapeHtml(String(item)) +
       '</span>' +
-
       '<button class="delete" onclick="deleteShoppingItem(' +
       index +
       ')">Remove</button>' +
-
       '</div>';
 
     list.appendChild(row);
@@ -1706,51 +1168,24 @@ function displayShopping() {
 /* RECIPES */
 
 function saveRecipes() {
-
-  localStorage.setItem(
-    "sawyerRecipes",
-    JSON.stringify(recipes)
-  );
+  localStorage.setItem("sawyerRecipes", JSON.stringify(recipes));
 }
 
 function addRecipe() {
 
   const name =
-    document
-      .getElementById("recipeName")
-      .value
-      .trim();
+    document.getElementById("recipeName").value.trim();
 
   if (!name) {
-
-    alert(
-      "Please enter a recipe name."
-    );
-
+    alert("Please enter a recipe name.");
     return;
   }
 
   recipes.push({
-
     name: name,
-
-    category:
-      document
-        .getElementById("recipeCategory")
-        .value,
-
-    ingredients:
-      document
-        .getElementById("recipeIngredients")
-        .value
-        .trim(),
-
-    directions:
-      document
-        .getElementById("recipeDirections")
-        .value
-        .trim()
-
+    category: document.getElementById("recipeCategory").value,
+    ingredients: document.getElementById("recipeIngredients").value.trim(),
+    directions: document.getElementById("recipeDirections").value.trim()
   });
 
   saveRecipes();
@@ -1763,11 +1198,8 @@ function addRecipe() {
 }
 
 function deleteRecipe(index) {
-
   recipes.splice(index, 1);
-
   saveRecipes();
-
   displayRecipes();
 }
 
@@ -1777,10 +1209,8 @@ function displayRecipes() {
     document.getElementById("recipeList");
 
   const search =
-    (
-      document.getElementById("searchRecipes")?.value ||
-      ""
-    ).toLowerCase();
+    (document.getElementById("searchRecipes")?.value || "")
+      .toLowerCase();
 
   list.innerHTML = "";
 
@@ -1791,9 +1221,7 @@ function displayRecipes() {
     const name =
       String(recipe.name || "");
 
-    if (
-      !name.toLowerCase().includes(search)
-    ) {
+    if (!name.toLowerCase().includes(search)) {
       return;
     }
 
@@ -1802,11 +1230,9 @@ function displayRecipes() {
     const item =
       document.createElement("div");
 
-    item.className =
-      "recipe-item";
+    item.className = "recipe-item";
 
     item.innerHTML =
-
       '<div class="item-name">' +
       escapeHtml(name) +
       '</div>' +
@@ -1826,18 +1252,15 @@ function displayRecipes() {
       '</div>' +
 
       '<div class="controls">' +
-
       '<button class="delete" onclick="deleteRecipe(' +
       index +
       ')">Delete Recipe</button>' +
-
       '</div>';
 
     list.appendChild(item);
   });
 
   if (!shown) {
-
     list.innerHTML =
       '<div class="empty">No saved recipes yet.</div>';
   }
@@ -1849,31 +1272,14 @@ function displayRecipes() {
 function saveMeals() {
 
   const plan = {
-
-    Monday:
-      document.getElementById("mealMonday").value,
-
-    Tuesday:
-      document.getElementById("mealTuesday").value,
-
-    Wednesday:
-      document.getElementById("mealWednesday").value,
-
-    Thursday:
-      document.getElementById("mealThursday").value,
-
-    Friday:
-      document.getElementById("mealFriday").value,
-
-    Saturday:
-      document.getElementById("mealSaturday").value,
-
-    Sunday:
-      document.getElementById("mealSunday").value,
-
-    notes:
-      document.getElementById("mealNotes").value
-
+    Monday: document.getElementById("mealMonday").value,
+    Tuesday: document.getElementById("mealTuesday").value,
+    Wednesday: document.getElementById("mealWednesday").value,
+    Thursday: document.getElementById("mealThursday").value,
+    Friday: document.getElementById("mealFriday").value,
+    Saturday: document.getElementById("mealSaturday").value,
+    Sunday: document.getElementById("mealSunday").value,
+    notes: document.getElementById("mealNotes").value
   };
 
   localStorage.setItem(
@@ -1881,9 +1287,7 @@ function saveMeals() {
     JSON.stringify(plan)
   );
 
-  alert(
-    "Meal plan saved!"
-  );
+  alert("Meal plan saved!");
 }
 
 function loadMeals() {
@@ -1891,12 +1295,10 @@ function loadMeals() {
   let plan = {};
 
   try {
-
     plan =
       JSON.parse(
         localStorage.getItem("sawyerMeals")
       ) || {};
-
   } catch (e) {}
 
   document.getElementById("mealMonday").value = plan.Monday || "";
@@ -1928,7 +1330,6 @@ function saveBudgetAmount() {
 }
 
 function saveExpenses() {
-
   localStorage.setItem(
     "sawyerExpenses",
     JSON.stringify(groceryExpenses)
@@ -1938,37 +1339,22 @@ function saveExpenses() {
 function addExpense() {
 
   const description =
-    document
-      .getElementById("expenseDescription")
-      .value
-      .trim();
+    document.getElementById("expenseDescription").value.trim();
 
   const amount =
     Number(
       document.getElementById("expenseAmount").value
     ) || 0;
 
-  if (
-    !description ||
-    amount <= 0
-  ) {
-
-    alert(
-      "Please enter a description and amount."
-    );
-
+  if (!description || amount <= 0) {
+    alert("Please enter a description and amount.");
     return;
   }
 
   groceryExpenses.push({
-
     description: description,
-
     amount: amount,
-
-    date:
-      new Date().toLocaleDateString()
-
+    date: new Date().toLocaleDateString()
   });
 
   saveExpenses();
@@ -1980,11 +1366,8 @@ function addExpense() {
 }
 
 function deleteExpense(index) {
-
   groceryExpenses.splice(index, 1);
-
   saveExpenses();
-
   displayBudget();
 }
 
@@ -2024,13 +1407,9 @@ function displayBudget() {
 
   list.innerHTML = "";
 
-  if (
-    groceryExpenses.length === 0
-  ) {
-
+  if (groceryExpenses.length === 0) {
     list.innerHTML =
       '<div class="empty">No grocery spending entered yet.</div>';
-
     return;
   }
 
@@ -2039,27 +1418,20 @@ function displayBudget() {
     const row =
       document.createElement("div");
 
-    row.className =
-      "money-item";
+    row.className = "money-item";
 
     row.innerHTML =
-
       '<strong>' +
       escapeHtml(entry.description) +
       '</strong><br>' +
-
       '$' +
       Number(entry.amount).toFixed(2) +
-
       ' • ' +
       escapeHtml(entry.date || "") +
-
       '<div class="controls">' +
-
       '<button class="delete" onclick="deleteExpense(' +
       index +
       ')">Delete</button>' +
-
       '</div>';
 
     list.appendChild(row);
@@ -2070,7 +1442,6 @@ function displayBudget() {
 /* SAVINGS */
 
 function saveSavings() {
-
   localStorage.setItem(
     "sawyerSavings",
     JSON.stringify(savings)
@@ -2080,37 +1451,24 @@ function saveSavings() {
 function addSaving() {
 
   const description =
-    document
-      .getElementById("savingDescription")
-      .value
-      .trim();
+    document.getElementById("savingDescription").value.trim();
 
   const amount =
     Number(
       document.getElementById("savingAmount").value
     ) || 0;
 
-  if (
-    !description ||
-    amount <= 0
-  ) {
-
+  if (!description || amount <= 0) {
     alert(
       "Please enter what you saved money on and the amount."
     );
-
     return;
   }
 
   savings.push({
-
     description: description,
-
     amount: amount,
-
-    date:
-      new Date().toLocaleDateString()
-
+    date: new Date().toLocaleDateString()
   });
 
   saveSavings();
@@ -2122,11 +1480,8 @@ function addSaving() {
 }
 
 function deleteSaving(index) {
-
   savings.splice(index, 1);
-
   saveSavings();
-
   displaySavings();
 }
 
@@ -2146,13 +1501,9 @@ function displaySavings() {
 
   list.innerHTML = "";
 
-  if (
-    savings.length === 0
-  ) {
-
+  if (savings.length === 0) {
     list.innerHTML =
       '<div class="empty">No savings recorded yet.</div>';
-
     return;
   }
 
@@ -2161,27 +1512,20 @@ function displaySavings() {
     const row =
       document.createElement("div");
 
-    row.className =
-      "money-item";
+    row.className = "money-item";
 
     row.innerHTML =
-
       '🌾 <strong>' +
       escapeHtml(entry.description) +
       '</strong><br>' +
-
       'Saved $' +
       Number(entry.amount).toFixed(2) +
-
       ' • ' +
       escapeHtml(entry.date || "") +
-
       '<div class="controls">' +
-
       '<button class="delete" onclick="deleteSaving(' +
       index +
       ')">Delete</button>' +
-
       '</div>';
 
     list.appendChild(row);
@@ -2194,15 +1538,10 @@ function displaySavings() {
 function escapeHtml(text) {
 
   return String(text)
-
     .replace(/&/g, "&amp;")
-
     .replace(/</g, "&lt;")
-
     .replace(/>/g, "&gt;")
-
     .replace(/"/g, "&quot;")
-
     .replace(/'/g, "&#039;");
 }
 
@@ -2210,20 +1549,14 @@ function escapeHtml(text) {
 /* START APP */
 
 displayPantry();
-
 updateLowStockShopping();
-
 displayShopping();
-
 displayRecipes();
-
 loadMeals();
-
 displayBudget();
-
 displaySavings();
 
 </script>
 
 </body>
-  </html>
+</html>
