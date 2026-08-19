@@ -557,6 +557,9 @@ let html5QrCode = null;
 let scannerRunning = false;
 let scanLocked = false;
 let pendingBarcode = "";
+let lastScanText = "";
+let sameScanCount = 0;
+let lastScanTime = 0;
 
 
 /* LOAD SAVED DATA */
@@ -1004,16 +1007,8 @@ async function startBarcodeScanner() {
 
   panel.classList.add("active");
 
-  if (pendingBarcode) {
-
-    status.textContent =
-      "Scan the SAME barcode again to confirm it.";
-
-  } else {
-
-    status.textContent =
-      "Point the camera at the barcode.";
-  }
+  status.textContent =
+    "Fit the whole barcode inside the box and hold still.";
 
   if (
     typeof Html5Qrcode === "undefined"
@@ -1033,6 +1028,10 @@ async function startBarcodeScanner() {
   }
 
   scanLocked = false;
+  pendingBarcode = "";
+  lastScanText = "";
+  sameScanCount = 0;
+  lastScanTime = 0;
 
   try {
 
@@ -1063,7 +1062,7 @@ async function startBarcodeScanner() {
       },
 
       {
-        fps: 10,
+        fps: 12,
 
         qrbox:
           function(width, height) {
@@ -1072,18 +1071,21 @@ async function startBarcodeScanner() {
 
               width:
                 Math.min(
-                  330,
-                  Math.floor(width * 0.90)
+                  360,
+                  Math.floor(width * 0.92)
                 ),
 
               height:
                 Math.min(
-                  145,
-                  Math.floor(height * 0.35)
+                  170,
+                  Math.floor(height * 0.38)
                 )
 
             };
-          }
+          },
+
+        aspectRatio: 1.777778,
+        disableFlip: true
 
       },
 
@@ -1102,57 +1104,44 @@ async function startBarcodeScanner() {
           return;
         }
 
-        scanLocked = true;
-
-
-        if (!pendingBarcode) {
-
-          pendingBarcode =
-            barcode;
-
-          status.textContent =
-            "First read: " +
-            barcode +
-            ". Scan it once more to confirm.";
-
-          await stopBarcodeScanner(true);
-
-          showLookupMessage(
-            "📷 First read saved. Tap Scan Barcode and scan the SAME item once more."
-          );
-
-          return;
-        }
-
+        const now = Date.now();
 
         if (
-          barcode !== pendingBarcode
+          barcode === lastScanText &&
+          now - lastScanTime < 1800
         ) {
+          sameScanCount += 1;
+        } else {
+          lastScanText = barcode;
+          sameScanCount = 1;
+        }
 
-          pendingBarcode =
-            barcode;
+        lastScanTime = now;
+
+        if (sameScanCount < 2) {
+          pendingBarcode = barcode;
 
           status.textContent =
-            "Reads did not match. Scan once more.";
-
-          await stopBarcodeScanner(true);
-
-          showLookupMessage(
-            "⚠️ Those two reads did not match. I kept the newest read. Tap Scan Barcode once more to confirm it."
-          );
+            "Reading " +
+            barcode +
+            " — hold the barcode still for confirmation.";
 
           return;
         }
 
+        scanLocked = true;
+        pendingBarcode = "";
 
         document.getElementById("barcode").value =
           barcode;
 
-        pendingBarcode = "";
-
         status.textContent =
           "✅ Barcode confirmed: " +
           barcode;
+
+        showLookupMessage(
+          "✅ Barcode confirmed."
+        );
 
         await stopBarcodeScanner(true);
 
@@ -1203,6 +1192,11 @@ async function stopBarcodeScanner(keepMessage) {
 
   scannerRunning = false;
   html5QrCode = null;
+  scanLocked = false;
+  pendingBarcode = "";
+  lastScanText = "";
+  sameScanCount = 0;
+  lastScanTime = 0;
 
   if (!keepMessage) {
 
@@ -1212,7 +1206,7 @@ async function stopBarcodeScanner(keepMessage) {
 
     setTimeout(function() {
       panel.classList.remove("active");
-    }, 1000);
+    }, 800);
   }
 }
 
