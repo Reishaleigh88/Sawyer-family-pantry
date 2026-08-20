@@ -171,6 +171,15 @@ button{
   font-weight:bold;
 }
 
+.editBtn{
+  padding:8px 11px;
+  border:none;
+  border-radius:8px;
+  background:#8a765d;
+  color:white;
+  font-weight:bold;
+}
+
 .cookBtn{
   padding:8px 11px;
   border:none;
@@ -390,6 +399,10 @@ button{
   font-size:13px;
 }
 
+#cancelEditBtn{
+  display:none;
+}
+
 @media(max-width:600px){
   .row,
   .summary{
@@ -419,8 +432,8 @@ button{
 
 <section id="inventory" class="section active">
 
-<div class="card">
-<h2>Add Food</h2>
+<div class="card" id="inventoryFormCard">
+<h2 id="inventoryFormTitle">Add Food</h2>
 
 <label>Item Name</label>
 <input id="itemName" placeholder="Ground Beef">
@@ -555,7 +568,13 @@ Need just ½? Tap <strong>Clear</strong>, then tap <strong>½</strong>.
 <label for="farmMade" style="margin:0">Farm raised / homemade</label>
 </div>
 
-<button class="primary" onclick="addInventory()">Add to Pantry</button>
+<button id="inventorySaveBtn" class="primary" onclick="addInventory()">
+Add to Pantry
+</button>
+
+<button id="cancelEditBtn" class="fullSecondary" type="button" onclick="cancelInventoryEdit()">
+Cancel Edit
+</button>
 
 </div>
 
@@ -770,6 +789,8 @@ let mealPlan =
 
 let barcodeMemory =
   JSON.parse(localStorage.getItem("sawyerBarcodeMemory") || "{}");
+
+let editingInventoryId = null;
 
 
 function repairPantryIds(){
@@ -1237,6 +1258,80 @@ function addInventory(){
       document.getElementById("lowStock").value
     );
 
+  const barcode =
+    document.getElementById("barcode").value.trim();
+
+  const location =
+    document.getElementById("location").value;
+
+  const category =
+    document.getElementById("category").value;
+
+  const unit =
+    document.getElementById("unit").value;
+
+  const cost =
+    Number(document.getElementById("cost").value) || 0;
+
+  const farmMade =
+    document.getElementById("farmMade").checked;
+
+
+  if(editingInventoryId !== null){
+
+    const item =
+      pantry.find(
+        item =>
+          Number(item.id) ===
+          Number(editingInventoryId)
+      );
+
+    if(!item){
+
+      alert("I couldn't find that pantry item.");
+      cancelInventoryEdit();
+      return;
+
+    }
+
+    item.name = name;
+    item.barcode = barcode;
+    item.location = location;
+    item.category = category;
+    item.quantity = quantity;
+    item.unit = unit;
+    item.cost = cost;
+    item.lowStock = lowStock;
+    item.farmMade = farmMade;
+
+    if(barcode){
+
+      barcodeMemory[barcode] = {
+        name:name,
+        category:category
+      };
+
+      localStorage.setItem(
+        "sawyerBarcodeMemory",
+        JSON.stringify(barcodeMemory)
+      );
+
+    }
+
+    savePantry();
+    addLowStockToShopping();
+
+    cancelInventoryEdit(false);
+
+    renderAll();
+
+    alert("✓ Pantry item updated!");
+
+    return;
+
+  }
+
+
   let newId =
     Date.now() +
     Math.floor(Math.random() * 1000000);
@@ -1250,30 +1345,15 @@ function addInventory(){
   const item = {
 
     id:newId,
-
     name:name,
-
-    barcode:
-      document.getElementById("barcode").value.trim(),
-
-    location:
-      document.getElementById("location").value,
-
-    category:
-      document.getElementById("category").value,
-
+    barcode:barcode,
+    location:location,
+    category:category,
     quantity:quantity,
-
-    unit:
-      document.getElementById("unit").value,
-
-    cost:
-      Number(document.getElementById("cost").value) || 0,
-
+    unit:unit,
+    cost:cost,
     lowStock:lowStock,
-
-    farmMade:
-      document.getElementById("farmMade").checked
+    farmMade:farmMade
 
   };
 
@@ -1297,6 +1377,99 @@ function addInventory(){
   addLowStockToShopping();
   clearInventoryForm();
   renderAll();
+
+}
+
+
+function startInventoryEdit(id){
+
+  const item =
+    pantry.find(
+      item =>
+        Number(item.id) ===
+        Number(id)
+    );
+
+  if(!item){
+
+    alert("I couldn't find that pantry item.");
+    return;
+
+  }
+
+  editingInventoryId =
+    Number(item.id);
+
+  document.getElementById("itemName").value =
+    item.name || "";
+
+  document.getElementById("barcode").value =
+    item.barcode || "";
+
+  setSelectValue(
+    "location",
+    item.location || "Pantry"
+  );
+
+  setSelectValue(
+    "category",
+    item.category || "Other"
+  );
+
+  document.getElementById("quantity").value =
+    formatQuantity(item.quantity);
+
+  setSelectValue(
+    "unit",
+    item.unit || "item"
+  );
+
+  document.getElementById("cost").value =
+    Number(item.cost || 0)
+    ? Number(item.cost).toFixed(2)
+    : "";
+
+  document.getElementById("lowStock").value =
+    formatQuantity(item.lowStock);
+
+  document.getElementById("farmMade").checked =
+    !!item.farmMade;
+
+  document.getElementById("inventoryFormTitle").textContent =
+    "✏️ Edit Food";
+
+  document.getElementById("inventorySaveBtn").textContent =
+    "Save Changes";
+
+  document.getElementById("cancelEditBtn").style.display =
+    "block";
+
+  document.getElementById("inventoryFormCard").scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+
+}
+
+
+function cancelInventoryEdit(clearForm=true){
+
+  editingInventoryId = null;
+
+  document.getElementById("inventoryFormTitle").textContent =
+    "Add Food";
+
+  document.getElementById("inventorySaveBtn").textContent =
+    "Add to Pantry";
+
+  document.getElementById("cancelEditBtn").style.display =
+    "none";
+
+  if(clearForm){
+    clearInventoryForm();
+  }else{
+    clearInventoryForm();
+  }
 
 }
 
@@ -1348,6 +1521,13 @@ function deleteInventory(id){
       i => Number(i.id) !== Number(id)
     );
 
+  if(
+    editingInventoryId !== null &&
+    Number(editingInventoryId) === Number(id)
+  ){
+    cancelInventoryEdit();
+  }
+
   savePantry();
   renderAll();
 
@@ -1369,18 +1549,13 @@ function cleanIngredient(text){
 
   return String(text || "")
     .toLowerCase()
-
     .replace(/\b\d+\s+\d+\/\d+\b/g," ")
-
     .replace(/\b\d+([./]\d+)?\b/g," ")
-
     .replace(/[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]/g," ")
-
     .replace(
       /\b(cups?|cup|tbsp|tablespoons?|tablespoon|tbs|tsp|teaspoons?|teaspoon|lbs?|pounds?|pound|oz|ounces?|ounce|fluid ounces?|fl oz|pints?|pt|quarts?|qt|gallons?|gal|cans?|packages?|packs?|bags?|boxes?|jars?|bottles?|dozens?|items?|pieces?|cloves?|slices?)\b/g,
       " "
     )
-
     .replace(/[^\w\s]/g," ")
     .replace(/\s+/g," ")
     .trim();
@@ -1425,7 +1600,6 @@ function addItemToShopping(name,auto=false){
       Math.floor(Math.random() * 100000),
 
     name:cleanName,
-
     auto:auto
 
   });
@@ -1452,9 +1626,7 @@ function addLowStockToShopping(){
           true
         )
       ){
-
         changed = true;
-
       }
 
     }
@@ -1574,6 +1746,12 @@ function renderInventory(){
             class="smallBtn plus"
             onclick="changeQuantity(${Number(item.id)},1)">
             +
+          </button>
+
+          <button
+            class="editBtn"
+            onclick="startInventoryEdit(${Number(item.id)})">
+            ✏️ Edit
           </button>
 
           <button
@@ -3284,10 +3462,6 @@ async function onScanSuccess(decodedText){
 
   const now = Date.now();
 
-  /*
-    If we go too long without another matching read,
-    start the confirmation over.
-  */
   if(
     lastScanTime &&
     now - lastScanTime > 1800
