@@ -429,39 +429,29 @@ button{
 <input id="barcode" inputmode="numeric" placeholder="Scan or type barcode">
 
 <button class="primary" type="button" onclick="startScanner('normal')">
-  📷 Scan Barcode
+📷 Scan Barcode
 </button>
 
 <button class="hardScan" type="button" onclick="startScanner('hard')">
-  🧴 Hard-to-Scan Bottle / Curved Barcode
+🧴 Hard-to-Scan Bottle / Curved Barcode
 </button>
 
 <button class="fullSecondary" type="button" onclick="lookupTypedBarcode()">
-  🔢 Look Up Typed Barcode
+🔢 Look Up Typed Barcode
 </button>
 
 <div id="scannerBox" class="scannerBox">
-
   <div id="reader"></div>
-
   <div id="scanStatus" class="scanStatus"></div>
-
   <div id="scanTip" class="scanTip"></div>
 
-  <button
-    class="fullSecondary"
-    type="button"
-    onclick="switchScannerMode()">
-    🔄 Switch Scan Mode
+  <button class="fullSecondary" type="button" onclick="switchScannerMode()">
+  🔄 Switch Scan Mode
   </button>
 
-  <button
-    class="fullSecondary"
-    type="button"
-    onclick="closeScanner()">
-    Close Camera
+  <button class="fullSecondary" type="button" onclick="closeScanner()">
+  Close Camera
   </button>
-
 </div>
 
 <label>Storage Location</label>
@@ -494,17 +484,10 @@ button{
 </select>
 
 <div class="row">
-
 <div>
 
 <label>Quantity</label>
-
-<input
-  id="quantity"
-  type="text"
-  inputmode="decimal"
-  value="1"
-  placeholder="1 or 1/2">
+<input id="quantity" type="text" inputmode="decimal" value="1" placeholder="1 or 1/2">
 
 <div class="fractionButtons">
   <button type="button" onclick="addFractionToField('quantity',0.25)">¼</button>
@@ -518,9 +501,7 @@ button{
 </div>
 
 <div>
-
 <label>Unit</label>
-
 <select id="unit">
   <option>item</option>
   <option>pack</option>
@@ -540,42 +521,23 @@ button{
   <option>bottle</option>
   <option>dozen</option>
 </select>
-
 </div>
-
 </div>
 
 <div class="measureHelp">
-  💡 Need 1½? Leave <strong>1</strong> in the box and tap
-  <strong>½</strong>. Need just ½? Tap <strong>Clear</strong>,
-  then tap <strong>½</strong>.
+💡 Need 1½? Leave <strong>1</strong> in the box and tap <strong>½</strong>.
+Need just ½? Tap <strong>Clear</strong>, then tap <strong>½</strong>.
 </div>
 
 <div class="row">
-
 <div>
-
 <label>Cost Per Unit</label>
-
-<input
-  id="cost"
-  type="number"
-  min="0"
-  step="0.01"
-  placeholder="0.00">
-
+<input id="cost" type="number" min="0" step="0.01" placeholder="0.00">
 </div>
 
 <div>
-
 <label>Low Stock At</label>
-
-<input
-  id="lowStock"
-  type="text"
-  inputmode="decimal"
-  value="1"
-  placeholder="1 or 1/2">
+<input id="lowStock" type="text" inputmode="decimal" value="1" placeholder="1 or 1/2">
 
 <div class="fractionButtons">
   <button type="button" onclick="addFractionToField('lowStock',0.25)">¼</button>
@@ -585,9 +547,7 @@ button{
   <button type="button" onclick="addFractionToField('lowStock',0.75)">¾</button>
   <button class="clearFraction" type="button" onclick="clearAmountField('lowStock')">Clear</button>
 </div>
-
 </div>
-
 </div>
 
 <div class="checkboxLine">
@@ -599,22 +559,13 @@ button{
 
 </div>
 
-
 <div class="card">
-
 <h2>Your Food</h2>
 
-<input
-  id="inventorySearch"
-  placeholder="Search inventory..."
-  oninput="renderInventory()">
+<input id="inventorySearch" placeholder="Search inventory..." oninput="renderInventory()">
 
 <label>Filter Location</label>
-
-<select
-  id="inventoryLocationFilter"
-  onchange="renderInventory()">
-
+<select id="inventoryLocationFilter" onchange="renderInventory()">
 <option value="">All Locations</option>
 <option>Kitchen Fridge</option>
 <option>Kitchen Freezer</option>
@@ -624,58 +575,37 @@ button{
 <option>Second Freezer</option>
 <option>Pantry</option>
 <option>Fruit & Vegetable Shelf</option>
-
 </select>
 
 <div id="inventoryList"></div>
-
 </div>
 
 </section>
-
 
 <section id="shopping" class="section">
 
 <div class="card">
-
 <h2>Shopping List</h2>
 
 <div class="row">
-
-<input
-  id="shoppingItem"
-  placeholder="Add an item">
-
-<button
-  class="primary"
-  style="margin-top:0"
-  onclick="addShopping()">
-  Add
-</button>
-
+<input id="shoppingItem" placeholder="Add an item">
+<button class="primary" style="margin-top:0" onclick="addShopping()">Add</button>
 </div>
 
 <div id="shoppingList"></div>
-
 </div>
 
 </section>
 
-
 <section id="recipes" class="section">
 
 <div class="card">
-
 <h2>Add Recipe</h2>
 
 <label>Recipe Name</label>
-
-<input
-  id="recipeName"
-  placeholder="Beef Tacos">
+<input id="recipeName" placeholder="Beef Tacos">
 
 <label>Category</label>
-
 <select id="recipeCategory">
 <option>Breakfast</option>
 <option>Lunch</option>
@@ -686,251 +616,129 @@ button{
 </select>
 
 <label>Ingredients</label>
-
-<textarea
-  id="recipeIngredients"
-  placeholder="Enter one ingredient per line:
+<textarea id="recipeIngredients"
+placeholder="Enter one ingredient per line:
 1 lb ground beef
 8 tortillas
 1 cup cheese
 1/2 cup lettuce"></textarea>
 
 <div class="measureHelp">
-  💡 You can use recipe measurements like
-  <strong>1/2 cup</strong>,
-  <strong>1 1/2 cups</strong>,
-  <strong>2 tbsp</strong>,
-  <strong>1 tsp</strong>,
-  <strong>8 oz</strong>,
-  or <strong>2 eggs</strong>.
+💡 You can use recipe measurements like
+<strong>1/2 cup</strong>,
+<strong>1 1/2 cups</strong>,
+<strong>2 tbsp</strong>,
+<strong>1 tsp</strong>,
+<strong>8 oz</strong>,
+or <strong>2 eggs</strong>.
 </div>
 
 <label>Directions</label>
+<textarea id="recipeDirections" placeholder="How do you make it?"></textarea>
 
-<textarea
-  id="recipeDirections"
-  placeholder="How do you make it?"></textarea>
-
-<button
-  class="primary"
-  onclick="saveRecipe()">
-  Save Recipe
-</button>
-
+<button class="primary" onclick="saveRecipe()">Save Recipe</button>
 </div>
 
-
 <div class="card">
-
 <h2>Saved Recipes</h2>
 
-<input
-  id="recipeSearch"
-  placeholder="Search recipes..."
-  oninput="renderRecipes()">
+<input id="recipeSearch" placeholder="Search recipes..." oninput="renderRecipes()">
 
 <div id="recipeList"></div>
-
 </div>
 
 </section>
 
-
 <section id="meals" class="section">
 
 <div class="card">
-
 <h2>🍽️ What Can I Make?</h2>
 
 <p class="muted">
 This compares your saved recipes with what is currently in your pantry, fridge and freezers.
 </p>
 
-<button
-  class="primary"
-  onclick="renderMealSuggestions()">
-  ✨ Find Meals From My Food
+<button class="primary" onclick="renderMealSuggestions()">
+✨ Find Meals From My Food
 </button>
 
 <div id="mealSuggestions"></div>
-
 </div>
-
 
 <div class="card">
-
 <h2>Weekly Meal Plan</h2>
 
-<div class="day">
-<label>Monday</label>
-<input id="mealMonday">
-</div>
-
-<div class="day">
-<label>Tuesday</label>
-<input id="mealTuesday">
-</div>
-
-<div class="day">
-<label>Wednesday</label>
-<input id="mealWednesday">
-</div>
-
-<div class="day">
-<label>Thursday</label>
-<input id="mealThursday">
-</div>
-
-<div class="day">
-<label>Friday</label>
-<input id="mealFriday">
-</div>
-
-<div class="day">
-<label>Saturday</label>
-<input id="mealSaturday">
-</div>
-
-<div class="day">
-<label>Sunday</label>
-<input id="mealSunday">
-</div>
+<div class="day"><label>Monday</label><input id="mealMonday"></div>
+<div class="day"><label>Tuesday</label><input id="mealTuesday"></div>
+<div class="day"><label>Wednesday</label><input id="mealWednesday"></div>
+<div class="day"><label>Thursday</label><input id="mealThursday"></div>
+<div class="day"><label>Friday</label><input id="mealFriday"></div>
+<div class="day"><label>Saturday</label><input id="mealSaturday"></div>
+<div class="day"><label>Sunday</label><input id="mealSunday"></div>
 
 <label>Notes</label>
-
 <textarea id="mealNotes"></textarea>
 
-<button
-  class="primary"
-  onclick="saveMeals()">
-  Save Meal Plan
-</button>
+<button class="primary" onclick="saveMeals()">Save Meal Plan</button>
 
-<div
-  id="mealSaveMessage"
-  class="scanStatus">
-</div>
-
+<div id="mealSaveMessage" class="scanStatus"></div>
 </div>
 
 </section>
 
-
 <section id="budget" class="section">
 
 <div class="card">
-
 <h2>Monthly Grocery Budget</h2>
 
 <label>Monthly Budget</label>
+<input id="monthlyBudget" type="number" min="0" step="0.01">
 
-<input
-  id="monthlyBudget"
-  type="number"
-  min="0"
-  step="0.01">
-
-<button
-  class="primary"
-  onclick="saveBudget()">
-  Save Budget
-</button>
-
+<button class="primary" onclick="saveBudget()">Save Budget</button>
 </div>
 
-
 <div class="card">
-
 <h2>Add Grocery Expense</h2>
 
 <label>Description</label>
-
-<input
-  id="expenseName"
-  placeholder="Walmart groceries">
+<input id="expenseName" placeholder="Walmart groceries">
 
 <label>Amount</label>
+<input id="expenseAmount" type="number" min="0" step="0.01">
 
-<input
-  id="expenseAmount"
-  type="number"
-  min="0"
-  step="0.01">
-
-<button
-  class="primary"
-  onclick="addExpense()">
-  Add Expense
-</button>
-
+<button class="primary" onclick="addExpense()">Add Expense</button>
 </div>
 
-
 <div class="card">
-
 <h2>Budget Summary</h2>
 
 <div class="summary">
-
-<div class="summaryBox">
-Budget
-<strong id="budgetDisplay">$0.00</strong>
-</div>
-
-<div class="summaryBox">
-Spent
-<strong id="spentDisplay">$0.00</strong>
-</div>
-
-<div class="summaryBox">
-Remaining
-<strong id="remainingDisplay">$0.00</strong>
-</div>
-
-<div class="summaryBox">
-Inventory Value
-<strong id="inventoryValueDisplay">$0.00</strong>
-</div>
-
+<div class="summaryBox">Budget<strong id="budgetDisplay">$0.00</strong></div>
+<div class="summaryBox">Spent<strong id="spentDisplay">$0.00</strong></div>
+<div class="summaryBox">Remaining<strong id="remainingDisplay">$0.00</strong></div>
+<div class="summaryBox">Inventory Value<strong id="inventoryValueDisplay">$0.00</strong></div>
 </div>
 
 <h3 style="margin-top:18px">Expenses</h3>
-
 <div id="expenseList"></div>
 
 </div>
 
 </section>
 
-
 <section id="savings" class="section">
 
 <div class="card">
-
 <h2>Farm & Homemade Savings</h2>
 
 <label>Item</label>
-
-<input
-  id="savingName"
-  placeholder="Farm fresh eggs">
+<input id="savingName" placeholder="Farm fresh eggs">
 
 <label>Estimated Money Saved</label>
+<input id="savingAmount" type="number" min="0" step="0.01">
 
-<input
-  id="savingAmount"
-  type="number"
-  min="0"
-  step="0.01">
-
-<button
-  class="primary"
-  onclick="addSaving()">
-  Add Savings
-</button>
-
+<button class="primary" onclick="addSaving()">Add Savings</button>
 </div>
-
 
 <div class="card">
 
@@ -940,67 +748,38 @@ Total Farm & Homemade Savings
 </div>
 
 <div id="savingsList"></div>
-
 </div>
 
 </section>
 
 </main>
 
-
 <script>
 
-let pantry =
-  JSON.parse(
-    localStorage.getItem("sawyerPantry") || "[]"
-  );
-
-let shopping =
-  JSON.parse(
-    localStorage.getItem("sawyerShopping") || "[]"
-  );
-
-let recipes =
-  JSON.parse(
-    localStorage.getItem("sawyerRecipes") || "[]"
-  );
-
-let expenses =
-  JSON.parse(
-    localStorage.getItem("sawyerExpenses") || "[]"
-  );
-
-let savings =
-  JSON.parse(
-    localStorage.getItem("sawyerSavings") || "[]"
-  );
+let pantry = JSON.parse(localStorage.getItem("sawyerPantry") || "[]");
+let shopping = JSON.parse(localStorage.getItem("sawyerShopping") || "[]");
+let recipes = JSON.parse(localStorage.getItem("sawyerRecipes") || "[]");
+let expenses = JSON.parse(localStorage.getItem("sawyerExpenses") || "[]");
+let savings = JSON.parse(localStorage.getItem("sawyerSavings") || "[]");
 
 let monthlyBudget =
-  Number(
-    localStorage.getItem("sawyerMonthlyBudget")
-  ) || 0;
+  Number(localStorage.getItem("sawyerMonthlyBudget")) || 0;
 
 let mealPlan =
-  JSON.parse(
-    localStorage.getItem("sawyerMealPlan") || "{}"
-  );
+  JSON.parse(localStorage.getItem("sawyerMealPlan") || "{}");
 
 let barcodeMemory =
-  JSON.parse(
-    localStorage.getItem("sawyerBarcodeMemory") || "{}"
-  );
+  JSON.parse(localStorage.getItem("sawyerBarcodeMemory") || "{}");
 
 
 function repairPantryIds(){
 
   const usedIds = new Set();
-
   let changed = false;
 
   pantry.forEach((item,index) => {
 
-    let currentId =
-      Number(item.id);
+    let currentId = Number(item.id);
 
     if(
       !Number.isFinite(currentId) ||
@@ -1011,16 +790,13 @@ function repairPantryIds(){
       currentId =
         Date.now() +
         index +
-        Math.floor(
-          Math.random() * 1000000
-        );
+        Math.floor(Math.random() * 1000000);
 
       while(usedIds.has(currentId)){
         currentId++;
       }
 
       item.id = currentId;
-
       changed = true;
 
     }
@@ -1040,27 +816,18 @@ function repairPantryIds(){
 
 }
 
-
 repairPantryIds();
 
 
 function showSection(id,button){
 
-  document
-    .querySelectorAll(".section")
-    .forEach(section =>
-      section.classList.remove("active")
-    );
+  document.querySelectorAll(".section")
+    .forEach(section => section.classList.remove("active"));
 
-  document
-    .querySelectorAll(".nav button")
-    .forEach(btn =>
-      btn.classList.remove("active")
-    );
+  document.querySelectorAll(".nav button")
+    .forEach(btn => btn.classList.remove("active"));
 
-  document
-    .getElementById(id)
-    .classList.add("active");
+  document.getElementById(id).classList.add("active");
 
   if(button){
     button.classList.add("active");
@@ -1077,15 +844,9 @@ function openShoppingTab(){
 
   const shoppingButton =
     [...document.querySelectorAll(".nav button")]
-      .find(button =>
-        button.textContent.includes("Shopping")
-      );
+      .find(button => button.textContent.includes("Shopping"));
 
-  showSection(
-    "shopping",
-    shoppingButton
-  );
-
+  showSection("shopping",shoppingButton);
   renderShopping();
 
   window.scrollTo({
@@ -1097,52 +858,23 @@ function openShoppingTab(){
 
 
 function savePantry(){
-
-  localStorage.setItem(
-    "sawyerPantry",
-    JSON.stringify(pantry)
-  );
-
+  localStorage.setItem("sawyerPantry",JSON.stringify(pantry));
 }
-
 
 function saveShopping(){
-
-  localStorage.setItem(
-    "sawyerShopping",
-    JSON.stringify(shopping)
-  );
-
+  localStorage.setItem("sawyerShopping",JSON.stringify(shopping));
 }
-
 
 function saveRecipes(){
-
-  localStorage.setItem(
-    "sawyerRecipes",
-    JSON.stringify(recipes)
-  );
-
+  localStorage.setItem("sawyerRecipes",JSON.stringify(recipes));
 }
-
 
 function saveExpenses(){
-
-  localStorage.setItem(
-    "sawyerExpenses",
-    JSON.stringify(expenses)
-  );
-
+  localStorage.setItem("sawyerExpenses",JSON.stringify(expenses));
 }
 
-
 function saveSavings(){
-
-  localStorage.setItem(
-    "sawyerSavings",
-    JSON.stringify(savings)
-  );
-
+  localStorage.setItem("sawyerSavings",JSON.stringify(savings));
 }
 
 
@@ -1151,17 +883,13 @@ function parseAmount(value){
   let text =
     String(value ?? "")
       .trim()
-      .replace(
-        /(\d)-(\d)/g,
-        "$1 $2"
-      );
+      .replace(/(\d)-(\d)/g,"$1 $2");
 
   if(!text){
     return 0;
   }
 
   const unicodeFractions = {
-
     "½":1/2,
     "⅓":1/3,
     "⅔":2/3,
@@ -1177,7 +905,6 @@ function parseAmount(value){
     "⅜":3/8,
     "⅝":5/8,
     "⅞":7/8
-
   };
 
   for(const symbol in unicodeFractions){
@@ -1185,95 +912,54 @@ function parseAmount(value){
     if(text.includes(symbol)){
 
       const wholeText =
-        text
-          .replace(symbol,"")
-          .trim();
+        text.replace(symbol,"").trim();
 
       const whole =
-        wholeText
-          ? Number(wholeText) || 0
-          : 0;
+        wholeText ? Number(wholeText) || 0 : 0;
 
-      return (
-        whole +
-        unicodeFractions[symbol]
-      );
+      return whole + unicodeFractions[symbol];
 
     }
 
   }
 
-  if(
-    /^\d+\s+\d+\/\d+$/.test(text)
-  ){
+  if(/^\d+\s+\d+\/\d+$/.test(text)){
 
-    const parts =
-      text.split(/\s+/);
+    const parts = text.split(/\s+/);
+    const whole = Number(parts[0]) || 0;
+    const fraction = parts[1].split("/");
+    const top = Number(fraction[0]) || 0;
+    const bottom = Number(fraction[1]) || 1;
 
-    const whole =
-      Number(parts[0]) || 0;
-
-    const fraction =
-      parts[1].split("/");
-
-    const top =
-      Number(fraction[0]) || 0;
-
-    const bottom =
-      Number(fraction[1]) || 1;
-
-    return (
-      whole +
-      top / bottom
-    );
+    return whole + top / bottom;
 
   }
 
-  if(
-    /^\d+\/\d+$/.test(text)
-  ){
+  if(/^\d+\/\d+$/.test(text)){
 
-    const parts =
-      text.split("/");
-
-    const top =
-      Number(parts[0]) || 0;
-
-    const bottom =
-      Number(parts[1]) || 1;
+    const parts = text.split("/");
+    const top = Number(parts[0]) || 0;
+    const bottom = Number(parts[1]) || 1;
 
     return top / bottom;
 
   }
 
-  const number =
-    Number(text);
+  const number = Number(text);
 
-  return Number.isFinite(number)
-    ? number
-    : 0;
+  return Number.isFinite(number) ? number : 0;
 
 }
 
 
 function formatQuantity(number){
 
-  const value =
-    Number(number || 0);
-
-  const rounded =
-    Math.round(
-      value * 1000
-    ) / 1000;
-
-  const whole =
-    Math.floor(rounded);
-
-  const fraction =
-    rounded - whole;
+  const value = Number(number || 0);
+  const rounded = Math.round(value * 1000) / 1000;
+  const whole = Math.floor(rounded);
+  const fraction = rounded - whole;
 
   const fractions = [
-
     [0.125,"1/8"],
     [0.25,"1/4"],
     [0.333,"1/3"],
@@ -1283,22 +969,14 @@ function formatQuantity(number){
     [0.667,"2/3"],
     [0.75,"3/4"],
     [0.875,"7/8"]
-
   ];
 
   let closest = null;
 
   fractions.forEach(entry => {
 
-    if(
-      Math.abs(
-        fraction - entry[0]
-      ) < 0.02
-    ){
-
-      closest =
-        entry[1];
-
+    if(Math.abs(fraction - entry[0]) < 0.02){
+      closest = entry[1];
     }
 
   });
@@ -1306,13 +984,7 @@ function formatQuantity(number){
   if(closest){
 
     if(whole > 0){
-
-      return (
-        whole +
-        " " +
-        closest
-      );
-
+      return whole + " " + closest;
     }
 
     return closest;
@@ -1326,27 +998,22 @@ function formatQuantity(number){
 
 function addFractionToField(id,fraction){
 
-  const input =
-    document.getElementById(id);
+  const input = document.getElementById(id);
 
   if(!input){
     return;
   }
 
-  const raw =
-    String(input.value || "")
-      .trim();
+  const raw = String(input.value || "").trim();
 
   let current = 0;
 
   if(raw){
-    current =
-      parseAmount(raw);
+    current = parseAmount(raw);
   }
 
   const newAmount =
-    current +
-    Number(fraction || 0);
+    current + Number(fraction || 0);
 
   input.value =
     formatQuantity(newAmount);
@@ -1452,8 +1119,7 @@ function normalizeUnit(unit){
 
 function unitInfo(unit){
 
-  const u =
-    normalizeUnit(unit);
+  const u = normalizeUnit(unit);
 
   const info = {
 
@@ -1519,43 +1185,28 @@ function unitInfo(unit){
 }
 
 
-function convertAmount(
-  amount,
-  fromUnit,
-  toUnit
-){
+function convertAmount(amount,fromUnit,toUnit){
 
-  const from =
-    normalizeUnit(fromUnit);
-
-  const to =
-    normalizeUnit(toUnit);
+  const from = normalizeUnit(fromUnit);
+  const to = normalizeUnit(toUnit);
 
   if(from === to){
     return amount;
   }
 
-  const fromInfo =
-    unitInfo(from);
-
-  const toInfo =
-    unitInfo(to);
+  const fromInfo = unitInfo(from);
+  const toInfo = unitInfo(to);
 
   if(
     fromInfo &&
     toInfo &&
-    fromInfo.dimension ===
-      toInfo.dimension
+    fromInfo.dimension === toInfo.dimension
   ){
 
     const base =
-      amount *
-      fromInfo.factor;
+      amount * fromInfo.factor;
 
-    return (
-      base /
-      toInfo.factor
-    );
+    return base / toInfo.factor;
 
   }
 
@@ -1567,46 +1218,31 @@ function convertAmount(
 function addInventory(){
 
   const name =
-    document
-      .getElementById("itemName")
-      .value
-      .trim();
+    document.getElementById("itemName").value.trim();
 
   if(!name){
 
-    alert(
-      "Please enter an item name."
-    );
-
+    alert("Please enter an item name.");
     return;
 
   }
 
   const quantity =
     parseAmount(
-      document
-        .getElementById("quantity")
-        .value
+      document.getElementById("quantity").value
     );
 
   const lowStock =
     parseAmount(
-      document
-        .getElementById("lowStock")
-        .value
+      document.getElementById("lowStock").value
     );
 
   let newId =
     Date.now() +
-    Math.floor(
-      Math.random() * 1000000
-    );
+    Math.floor(Math.random() * 1000000);
 
   while(
-    pantry.some(
-      item =>
-        Number(item.id) === newId
-    )
+    pantry.some(item => Number(item.id) === newId)
   ){
     newId++;
   }
@@ -1618,41 +1254,26 @@ function addInventory(){
     name:name,
 
     barcode:
-      document
-        .getElementById("barcode")
-        .value
-        .trim(),
+      document.getElementById("barcode").value.trim(),
 
     location:
-      document
-        .getElementById("location")
-        .value,
+      document.getElementById("location").value,
 
     category:
-      document
-        .getElementById("category")
-        .value,
+      document.getElementById("category").value,
 
     quantity:quantity,
 
     unit:
-      document
-        .getElementById("unit")
-        .value,
+      document.getElementById("unit").value,
 
     cost:
-      Number(
-        document
-          .getElementById("cost")
-          .value
-      ) || 0,
+      Number(document.getElementById("cost").value) || 0,
 
     lowStock:lowStock,
 
     farmMade:
-      document
-        .getElementById("farmMade")
-        .checked
+      document.getElementById("farmMade").checked
 
   };
 
@@ -1661,10 +1282,8 @@ function addInventory(){
   if(item.barcode){
 
     barcodeMemory[item.barcode] = {
-
       name:item.name,
       category:item.category
-
     };
 
     localStorage.setItem(
@@ -1675,11 +1294,8 @@ function addInventory(){
   }
 
   savePantry();
-
   addLowStockToShopping();
-
   clearInventoryForm();
-
   renderAll();
 
 }
@@ -1687,29 +1303,12 @@ function addInventory(){
 
 function clearInventoryForm(){
 
-  document
-    .getElementById("itemName")
-    .value="";
-
-  document
-    .getElementById("barcode")
-    .value="";
-
-  document
-    .getElementById("quantity")
-    .value=1;
-
-  document
-    .getElementById("cost")
-    .value="";
-
-  document
-    .getElementById("lowStock")
-    .value=1;
-
-  document
-    .getElementById("farmMade")
-    .checked=false;
+  document.getElementById("itemName").value="";
+  document.getElementById("barcode").value="";
+  document.getElementById("quantity").value=1;
+  document.getElementById("cost").value="";
+  document.getElementById("lowStock").value=1;
+  document.getElementById("farmMade").checked=false;
 
 }
 
@@ -1718,9 +1317,7 @@ function changeQuantity(id,amount){
 
   const item =
     pantry.find(
-      i =>
-        Number(i.id) ===
-        Number(id)
+      i => Number(i.id) === Number(id)
     );
 
   if(!item){
@@ -1730,16 +1327,11 @@ function changeQuantity(id,amount){
   item.quantity =
     Math.max(
       0,
-      Number(
-        item.quantity || 0
-      ) +
-      amount
+      Number(item.quantity || 0) + amount
     );
 
   savePantry();
-
   addLowStockToShopping();
-
   renderAll();
 
 }
@@ -1747,23 +1339,16 @@ function changeQuantity(id,amount){
 
 function deleteInventory(id){
 
-  if(
-    !confirm(
-      "Delete this item?"
-    )
-  ){
+  if(!confirm("Delete this item?")){
     return;
   }
 
   pantry =
     pantry.filter(
-      i =>
-        Number(i.id) !==
-        Number(id)
+      i => Number(i.id) !== Number(id)
     );
 
   savePantry();
-
   renderAll();
 
 }
@@ -1771,15 +1356,11 @@ function deleteInventory(id){
 
 function shoppingName(item){
 
-  if(
-    typeof item === "string"
-  ){
+  if(typeof item === "string"){
     return item;
   }
 
-  return String(
-    item?.name || ""
-  );
+  return String(item?.name || "");
 
 }
 
@@ -1789,36 +1370,19 @@ function cleanIngredient(text){
   return String(text || "")
     .toLowerCase()
 
-    .replace(
-      /\b\d+\s+\d+\/\d+\b/g,
-      " "
-    )
+    .replace(/\b\d+\s+\d+\/\d+\b/g," ")
 
-    .replace(
-      /\b\d+([./]\d+)?\b/g,
-      " "
-    )
+    .replace(/\b\d+([./]\d+)?\b/g," ")
 
-    .replace(
-      /[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]/g,
-      " "
-    )
+    .replace(/[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]/g," ")
 
     .replace(
       /\b(cups?|cup|tbsp|tablespoons?|tablespoon|tbs|tsp|teaspoons?|teaspoon|lbs?|pounds?|pound|oz|ounces?|ounce|fluid ounces?|fl oz|pints?|pt|quarts?|qt|gallons?|gal|cans?|packages?|packs?|bags?|boxes?|jars?|bottles?|dozens?|items?|pieces?|cloves?|slices?)\b/g,
       " "
     )
 
-    .replace(
-      /[^\w\s]/g,
-      " "
-    )
-
-    .replace(
-      /\s+/g,
-      " "
-    )
-
+    .replace(/[^\w\s]/g," ")
+    .replace(/\s+/g," ")
     .trim();
 
 }
@@ -1835,32 +1399,22 @@ function shoppingAlreadyHas(name){
 
   return shopping.some(
     item =>
-      cleanIngredient(
-        shoppingName(item)
-      ) === cleaned
+      cleanIngredient(shoppingName(item)) === cleaned
   );
 
 }
 
 
-function addItemToShopping(
-  name,
-  auto=false
-){
+function addItemToShopping(name,auto=false){
 
   const cleanName =
-    String(name || "")
-      .trim();
+    String(name || "").trim();
 
   if(!cleanName){
     return false;
   }
 
-  if(
-    shoppingAlreadyHas(
-      cleanName
-    )
-  ){
+  if(shoppingAlreadyHas(cleanName)){
     return false;
   }
 
@@ -1868,9 +1422,7 @@ function addItemToShopping(
 
     id:
       Date.now() +
-      Math.floor(
-        Math.random() * 100000
-      ),
+      Math.floor(Math.random() * 100000),
 
     name:cleanName,
 
@@ -1919,35 +1471,24 @@ function addLowStockToShopping(){
 function renderInventory(){
 
   const holder =
-    document
-      .getElementById(
-        "inventoryList"
-      );
+    document.getElementById("inventoryList");
 
   const search =
-    document
-      .getElementById(
-        "inventorySearch"
-      )
+    document.getElementById("inventorySearch")
       .value
       .toLowerCase();
 
   const location =
-    document
-      .getElementById(
-        "inventoryLocationFilter"
-      )
+    document.getElementById("inventoryLocationFilter")
       .value;
 
   let items =
     pantry.filter(item => {
 
       const matchesSearch =
-        String(
-          item.name || ""
-        )
-        .toLowerCase()
-        .includes(search);
+        String(item.name || "")
+          .toLowerCase()
+          .includes(search);
 
       const matchesLocation =
         !location ||
@@ -1970,86 +1511,84 @@ function renderInventory(){
   }
 
   holder.innerHTML =
-    items
-      .map(item => {
+    items.map(item => {
 
-        const isLow =
-          Number(item.quantity) <=
-          Number(item.lowStock);
+      const isLow =
+        Number(item.quantity) <=
+        Number(item.lowStock);
 
-        return `
+      return `
 
-        <div class="item">
+      <div class="item">
 
-          <div class="itemTop">
+        <div class="itemTop">
 
-            <div>
+          <div>
 
-              <div class="itemName">
-                ${escapeHTML(item.name)}
-              </div>
-
-              <div class="muted">
-                ${escapeHTML(item.location || "")}
-                •
-                ${escapeHTML(item.category || "")}
-              </div>
-
-              <span class="badge">
-                ${formatQuantity(item.quantity)}
-                ${escapeHTML(item.unit || "item")}
-              </span>
-
-              ${
-                isLow
-                ? '<span class="badge low">Low Stock</span>'
-                : ''
-              }
-
-              ${
-                item.farmMade
-                ? '<span class="badge farm">🌾 Farm / Homemade</span>'
-                : ''
-              }
-
-              ${
-                item.cost
-                ? `<div class="muted">Cost: $${Number(item.cost).toFixed(2)} each</div>`
-                : ''
-              }
-
+            <div class="itemName">
+              ${escapeHTML(item.name)}
             </div>
 
-          </div>
+            <div class="muted">
+              ${escapeHTML(item.location || "")}
+              •
+              ${escapeHTML(item.category || "")}
+            </div>
 
-          <div class="actions">
+            <span class="badge">
+              ${formatQuantity(item.quantity)}
+              ${escapeHTML(item.unit || "item")}
+            </span>
 
-            <button
-              class="smallBtn minus"
-              onclick="changeQuantity(${Number(item.id)},-1)">
-              −
-            </button>
+            ${
+              isLow
+              ? '<span class="badge low">Low Stock</span>'
+              : ''
+            }
 
-            <button
-              class="smallBtn plus"
-              onclick="changeQuantity(${Number(item.id)},1)">
-              +
-            </button>
+            ${
+              item.farmMade
+              ? '<span class="badge farm">🌾 Farm / Homemade</span>'
+              : ''
+            }
 
-            <button
-              class="danger"
-              onclick="deleteInventory(${Number(item.id)})">
-              Delete
-            </button>
+            ${
+              item.cost
+              ? `<div class="muted">Cost: $${Number(item.cost).toFixed(2)} each</div>`
+              : ''
+            }
 
           </div>
 
         </div>
 
-        `;
+        <div class="actions">
 
-      })
-      .join("");
+          <button
+            class="smallBtn minus"
+            onclick="changeQuantity(${Number(item.id)},-1)">
+            −
+          </button>
+
+          <button
+            class="smallBtn plus"
+            onclick="changeQuantity(${Number(item.id)},1)">
+            +
+          </button>
+
+          <button
+            class="danger"
+            onclick="deleteInventory(${Number(item.id)})">
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+      `;
+
+    }).join("");
 
 }
 
@@ -2057,10 +1596,7 @@ function renderInventory(){
 function addShopping(){
 
   const input =
-    document
-      .getElementById(
-        "shoppingItem"
-      );
+    document.getElementById("shoppingItem");
 
   const name =
     input.value.trim();
@@ -2070,10 +1606,7 @@ function addShopping(){
   }
 
   const added =
-    addItemToShopping(
-      name,
-      false
-    );
+    addItemToShopping(name,false);
 
   input.value="";
 
@@ -2090,13 +1623,10 @@ function deleteShopping(id){
 
   shopping =
     shopping.filter(
-      item =>
-        Number(item.id) !==
-        Number(id)
+      item => Number(item.id) !== Number(id)
     );
 
   saveShopping();
-
   renderShopping();
 
 }
@@ -2105,10 +1635,7 @@ function deleteShopping(id){
 function renderShopping(){
 
   const holder =
-    document
-      .getElementById(
-        "shoppingList"
-      );
+    document.getElementById("shoppingList");
 
   if(!shopping.length){
 
@@ -2120,46 +1647,44 @@ function renderShopping(){
   }
 
   holder.innerHTML =
-    shopping
-      .map(item => {
+    shopping.map(item => {
 
-        const name =
-          shoppingName(item);
+      const name =
+        shoppingName(item);
 
-        return `
+      return `
 
-        <div class="item">
+      <div class="item">
 
-          <div class="itemTop">
+        <div class="itemTop">
 
-            <div>
+          <div>
 
-              <div class="itemName">
-                ${escapeHTML(name)}
-              </div>
-
-              ${
-                item.auto
-                ? '<span class="badge low">Added from low stock</span>'
-                : ''
-              }
-
+            <div class="itemName">
+              ${escapeHTML(name)}
             </div>
 
-            <button
-              class="danger"
-              onclick="deleteShopping(${Number(item.id)})">
-              ✓
-            </button>
+            ${
+              item.auto
+              ? '<span class="badge low">Added from low stock</span>'
+              : ''
+            }
 
           </div>
 
+          <button
+            class="danger"
+            onclick="deleteShopping(${Number(item.id)})">
+            ✓
+          </button>
+
         </div>
 
-        `;
+      </div>
 
-      })
-      .join("");
+      `;
+
+    }).join("");
 
 }
 
@@ -2167,30 +1692,18 @@ function renderShopping(){
 function saveRecipe(){
 
   const name =
-    document
-      .getElementById(
-        "recipeName"
-      )
+    document.getElementById("recipeName")
       .value
       .trim();
 
   const ingredients =
-    document
-      .getElementById(
-        "recipeIngredients"
-      )
+    document.getElementById("recipeIngredients")
       .value
       .trim();
 
-  if(
-    !name ||
-    !ingredients
-  ){
+  if(!name || !ingredients){
 
-    alert(
-      "Add a recipe name and ingredients."
-    );
-
+    alert("Add a recipe name and ingredients.");
     return;
 
   }
@@ -2202,19 +1715,12 @@ function saveRecipe(){
     name:name,
 
     category:
-      document
-        .getElementById(
-          "recipeCategory"
-        )
-        .value,
+      document.getElementById("recipeCategory").value,
 
     ingredients:ingredients,
 
     directions:
-      document
-        .getElementById(
-          "recipeDirections"
-        )
+      document.getElementById("recipeDirections")
         .value
         .trim()
 
@@ -2222,26 +1728,11 @@ function saveRecipe(){
 
   saveRecipes();
 
-  document
-    .getElementById(
-      "recipeName"
-    )
-    .value="";
-
-  document
-    .getElementById(
-      "recipeIngredients"
-    )
-    .value="";
-
-  document
-    .getElementById(
-      "recipeDirections"
-    )
-    .value="";
+  document.getElementById("recipeName").value="";
+  document.getElementById("recipeIngredients").value="";
+  document.getElementById("recipeDirections").value="";
 
   renderRecipes();
-
   renderMealSuggestions();
 
 }
@@ -2249,25 +1740,17 @@ function saveRecipe(){
 
 function deleteRecipe(id){
 
-  if(
-    !confirm(
-      "Delete this recipe?"
-    )
-  ){
+  if(!confirm("Delete this recipe?")){
     return;
   }
 
   recipes =
     recipes.filter(
-      recipe =>
-        Number(recipe.id) !==
-        Number(id)
+      recipe => Number(recipe.id) !== Number(id)
     );
 
   saveRecipes();
-
   renderRecipes();
-
   renderMealSuggestions();
 
 }
@@ -2275,25 +1758,18 @@ function deleteRecipe(id){
 
 function ingredientLines(recipe){
 
-  return recipe
-    .ingredients
+  return recipe.ingredients
     .split(/\n|,/)
-    .map(x =>
-      x.trim()
-    )
+    .map(x => x.trim())
     .filter(Boolean);
 
 }
 
 
-function pantryMatchesIngredient(
-  ingredient
-){
+function pantryMatchesIngredient(ingredient){
 
   const cleaned =
-    cleanIngredient(
-      ingredient
-    );
+    cleanIngredient(ingredient);
 
   if(!cleaned){
     return [];
@@ -2302,23 +1778,16 @@ function pantryMatchesIngredient(
   const words =
     cleaned
       .split(" ")
-      .filter(
-        word =>
-          word.length > 2
-      );
+      .filter(word => word.length > 2);
 
   return pantry.filter(item => {
 
-    if(
-      Number(item.quantity) <= 0
-    ){
+    if(Number(item.quantity) <= 0){
       return false;
     }
 
     const itemName =
-      cleanIngredient(
-        item.name
-      );
+      cleanIngredient(item.name);
 
     if(!itemName){
       return false;
@@ -2337,16 +1806,12 @@ function pantryMatchesIngredient(
 
     const matches =
       words.filter(
-        word =>
-          itemName.includes(word)
+        word => itemName.includes(word)
       ).length;
 
     return (
       matches >=
-      Math.min(
-        2,
-        words.length
-      )
+      Math.min(2,words.length)
     );
 
   });
@@ -2354,14 +1819,10 @@ function pantryMatchesIngredient(
 }
 
 
-function pantryHasIngredient(
-  ingredient
-){
+function pantryHasIngredient(ingredient){
 
   return (
-    pantryMatchesIngredient(
-      ingredient
-    ).length > 0
+    pantryMatchesIngredient(ingredient).length > 0
   );
 
 }
@@ -2373,61 +1834,41 @@ function recipeMatch(recipe){
     ingredientLines(recipe);
 
   const have = [];
-
   const missing = [];
 
-  ingredients.forEach(
-    ingredient => {
+  ingredients.forEach(ingredient => {
 
-      if(
-        pantryHasIngredient(
-          ingredient
-        )
-      ){
-
-        have.push(
-          ingredient
-        );
-
-      }else{
-
-        missing.push(
-          ingredient
-        );
-
-      }
-
+    if(pantryHasIngredient(ingredient)){
+      have.push(ingredient);
+    }else{
+      missing.push(ingredient);
     }
-  );
+
+  });
 
   const percent =
     ingredients.length
-      ? Math.round(
-          have.length /
-          ingredients.length *
-          100
-        )
-      : 0;
+    ? Math.round(
+        have.length /
+        ingredients.length *
+        100
+      )
+    : 0;
 
   return {
-
     ingredients,
     have,
     missing,
     percent
-
   };
 
 }
 
 
-function parseRecipeIngredient(
-  line
-){
+function parseRecipeIngredient(line){
 
   const original =
-    String(line || "")
-      .trim();
+    String(line || "").trim();
 
   let text =
     original.trim();
@@ -2445,7 +1886,6 @@ function parseRecipeIngredient(
     );
 
   let hasAmount = false;
-
   let amount = null;
 
   if(amountMatch){
@@ -2453,21 +1893,14 @@ function parseRecipeIngredient(
     hasAmount = true;
 
     amount =
-      parseAmount(
-        amountMatch[1]
-      );
+      parseAmount(amountMatch[1]);
 
     text =
-      text
-        .slice(
-          amountMatch[0].length
-        )
-        .trim();
+      text.slice(amountMatch[0].length).trim();
 
   }
 
   const unitOptions = [
-
     "fluid ounces",
     "fluid ounce",
     "tablespoons",
@@ -2516,15 +1949,11 @@ function parseRecipeIngredient(
     "pt",
     "qt",
     "gal"
-
   ];
 
   let unit = "";
 
-  for(
-    const option
-    of unitOptions
-  ){
+  for(const option of unitOptions){
 
     const regex =
       new RegExp(
@@ -2537,20 +1966,13 @@ function parseRecipeIngredient(
         "i"
       );
 
-    if(
-      regex.test(text)
-    ){
+    if(regex.test(text)){
 
       unit =
         normalizeUnit(option);
 
       text =
-        text
-          .replace(
-            regex,
-            ""
-          )
-          .trim();
+        text.replace(regex,"").trim();
 
       break;
 
@@ -2558,15 +1980,11 @@ function parseRecipeIngredient(
 
   }
 
-  if(
-    hasAmount &&
-    !unit
-  ){
+  if(hasAmount && !unit){
     unit="item";
   }
 
   return {
-
     original:original,
     amount:amount,
     unit:unit,
@@ -2574,60 +1992,46 @@ function parseRecipeIngredient(
       text ||
       cleanIngredient(original),
     hasAmount:hasAmount
-
   };
 
 }
 
 
-function buildCookPlan(
-  recipe
-){
+function buildCookPlan(recipe){
 
   const lines =
     ingredientLines(recipe);
 
   const deductions = [];
-
   const problems = [];
 
   lines.forEach(line => {
 
     const parsed =
-      parseRecipeIngredient(
-        line
-      );
+      parseRecipeIngredient(line);
 
     const matches =
-      pantryMatchesIngredient(
-        parsed.name
-      );
+      pantryMatchesIngredient(parsed.name);
 
     if(!matches.length){
 
       problems.push(
-        "Missing: " +
-        line
+        "Missing: " + line
       );
 
       return;
 
     }
 
-    if(
-      !parsed.hasAmount
-    ){
+    if(!parsed.hasAmount){
 
       const item =
         matches[0];
 
-      if(
-        Number(item.quantity) < 1
-      ){
+      if(Number(item.quantity) < 1){
 
         problems.push(
-          "Not enough " +
-          item.name
+          "Not enough " + item.name
         );
 
         return;
@@ -2635,11 +2039,9 @@ function buildCookPlan(
       }
 
       deductions.push({
-
         item:item,
         amount:1,
         recipeLine:line
-
       });
 
       return;
@@ -2647,24 +2049,15 @@ function buildCookPlan(
     }
 
     let amountStillNeeded =
-      Number(
-        parsed.amount || 0
-      );
+      Number(parsed.amount || 0);
 
-    if(
-      amountStillNeeded <= 0
-    ){
+    if(amountStillNeeded <= 0){
       return;
     }
 
-    for(
-      const item
-      of matches
-    ){
+    for(const item of matches){
 
-      if(
-        amountStillNeeded <= 0
-      ){
+      if(amountStillNeeded <= 0){
         break;
       }
 
@@ -2680,16 +2073,12 @@ function buildCookPlan(
 
       const recipeAmountAvailable =
         convertAmount(
-          Number(
-            item.quantity || 0
-          ),
+          Number(item.quantity || 0),
           pantryUnit,
           recipeUnit
         );
 
-      if(
-        recipeAmountAvailable === null
-      ){
+      if(recipeAmountAvailable === null){
         continue;
       }
 
@@ -2714,11 +2103,9 @@ function buildCookPlan(
       }
 
       deductions.push({
-
         item:item,
         amount:pantryAmountToUse,
         recipeLine:line
-
       });
 
       amountStillNeeded -=
@@ -2726,68 +2113,45 @@ function buildCookPlan(
 
     }
 
-    if(
-      amountStillNeeded > 0.0001
-    ){
+    if(amountStillNeeded > 0.0001){
 
       const matchingUnits =
         matches
           .map(
-            item =>
-              item.unit || "item"
+            item => item.unit || "item"
           )
           .join(", ");
 
-      if(matches.length){
-
-        problems.push(
-          "Can't safely subtract " +
-          line +
-          ". Your matching pantry item is tracked as " +
-          matchingUnits +
-          "."
-        );
-
-      }else{
-
-        problems.push(
-          "Not enough: " +
-          line
-        );
-
-      }
+      problems.push(
+        "Can't safely subtract " +
+        line +
+        ". Your matching pantry item is tracked as " +
+        matchingUnits +
+        "."
+      );
 
     }
 
   });
 
   return {
-
     deductions:deductions,
     problems:problems
-
   };
 
 }
 
 
-function cookRecipe(
-  recipeId
-){
+function cookRecipe(recipeId){
 
   const recipe =
     recipes.find(
-      r =>
-        Number(r.id) ===
-        Number(recipeId)
+      r => Number(r.id) === Number(recipeId)
     );
 
   if(!recipe){
 
-    alert(
-      "I couldn't find that recipe."
-    );
-
+    alert("I couldn't find that recipe.");
     return;
 
   }
@@ -2795,9 +2159,7 @@ function cookRecipe(
   const match =
     recipeMatch(recipe);
 
-  if(
-    match.missing.length
-  ){
+  if(match.missing.length){
 
     alert(
       "You are still missing:\n\n" +
@@ -2811,9 +2173,7 @@ function cookRecipe(
   const plan =
     buildCookPlan(recipe);
 
-  if(
-    plan.problems.length
-  ){
+  if(plan.problems.length){
 
     alert(
       "I found the food, but I don't want to subtract the wrong amount.\n\n" +
@@ -2827,50 +2187,34 @@ function cookRecipe(
 
   const previewMap = {};
 
-  plan.deductions.forEach(
-    entry => {
+  plan.deductions.forEach(entry => {
 
-      const key =
-        String(
-          entry.item.id
-        );
+    const key =
+      String(entry.item.id);
 
-      if(
-        !previewMap[key]
-      ){
+    if(!previewMap[key]){
 
-        previewMap[key] = {
-
-          name:
-            entry.item.name,
-
-          amount:0,
-
-          unit:
-            entry.item.unit ||
-            "item"
-
-        };
-
-      }
-
-      previewMap[key].amount +=
-        Number(
-          entry.amount || 0
-        );
+      previewMap[key] = {
+        name:entry.item.name,
+        amount:0,
+        unit:
+          entry.item.unit ||
+          "item"
+      };
 
     }
-  );
+
+    previewMap[key].amount +=
+      Number(entry.amount || 0);
+
+  });
 
   const preview =
-    Object
-      .values(previewMap)
+    Object.values(previewMap)
       .map(
         entry =>
           "• " +
-          formatQuantity(
-            entry.amount
-          ) +
+          formatQuantity(entry.amount) +
           " " +
           entry.unit +
           " " +
@@ -2891,29 +2235,19 @@ function cookRecipe(
     return;
   }
 
-  plan.deductions.forEach(
-    entry => {
+  plan.deductions.forEach(entry => {
 
-      entry.item.quantity =
-        Math.max(
-          0,
-          Number(
-            entry.item.quantity ||
-            0
-          ) -
-          Number(
-            entry.amount ||
-            0
-          )
-        );
+    entry.item.quantity =
+      Math.max(
+        0,
+        Number(entry.item.quantity || 0) -
+        Number(entry.amount || 0)
+      );
 
-    }
-  );
+  });
 
   savePantry();
-
   addLowStockToShopping();
-
   renderAll();
 
   alert(
@@ -2928,33 +2262,21 @@ function cookRecipe(
 function renderRecipes(){
 
   const holder =
-    document
-      .getElementById(
-        "recipeList"
-      );
+    document.getElementById("recipeList");
 
   const search =
-    document
-      .getElementById(
-        "recipeSearch"
-      )
+    document.getElementById("recipeSearch")
       .value
       .toLowerCase();
 
   const filtered =
     recipes.filter(
       recipe =>
-        recipe.name
-          .toLowerCase()
-          .includes(search) ||
-        recipe.category
-          .toLowerCase()
-          .includes(search)
+        recipe.name.toLowerCase().includes(search) ||
+        recipe.category.toLowerCase().includes(search)
     );
 
-  if(
-    !filtered.length
-  ){
+  if(!filtered.length){
 
     holder.innerHTML =
       '<div class="empty">No saved recipes yet.</div>';
@@ -2964,51 +2286,83 @@ function renderRecipes(){
   }
 
   holder.innerHTML =
-    filtered
-      .map(recipe => {
+    filtered.map(recipe => {
 
-        const match =
-          recipeMatch(recipe);
+      const match =
+        recipeMatch(recipe);
 
-        return `
+      return `
 
-        <div class="item">
+      <div class="item">
 
-          <div class="itemName">
-            ${escapeHTML(recipe.name)}
+        <div class="itemName">
+          ${escapeHTML(recipe.name)}
+        </div>
+
+        <span class="badge">
+          ${escapeHTML(recipe.category)}
+        </span>
+
+        <div class="matchBar">
+          <div
+            class="matchFill"
+            style="width:${match.percent}%">
           </div>
+        </div>
 
-          <span class="badge">
-            ${escapeHTML(recipe.category)}
-          </span>
+        <div class="muted">
+          You have ${match.have.length} of
+          ${match.ingredients.length} ingredients
+          (${match.percent}%)
+        </div>
 
-          <div class="matchBar">
-
-            <div
-              class="matchFill"
-              style="width:${match.percent}%">
-            </div>
-
+        ${
+          match.have.length
+          ? `
+          <div class="recipeGood">
+            <strong>✓ You have:</strong><br>
+            ${match.have.map(escapeHTML).join("<br>")}
           </div>
+          `
+          : ''
+        }
 
-          <div class="muted">
-            You have ${match.have.length} of
-            ${match.ingredients.length} ingredients
-            (${match.percent}%)
+        ${
+          match.missing.length
+          ? `
+          <div class="recipeMissing">
+            <strong>🛒 Missing:</strong><br>
+            ${match.missing.map(escapeHTML).join("<br>")}
           </div>
+          `
+          : `
+          <div class="recipeGood">
+            🎉 You appear to have everything!
+          </div>
+          `
+        }
+
+        ${
+          recipe.directions
+          ? `
+          <p>
+            <strong>Directions:</strong><br>
+            ${escapeHTML(recipe.directions).replace(/\n/g,"<br>")}
+          </p>
+          `
+          : ''
+        }
+
+        <div class="actions">
 
           ${
-            match.have.length
+            !match.missing.length
             ? `
-            <div class="recipeGood">
-
-              <strong>✓ You have:</strong><br>
-
-              ${match.have
-                .map(escapeHTML)
-                .join("<br>")}
-
-            </div>
+            <button
+              class="cookBtn"
+              onclick="cookRecipe(${recipe.id})">
+              🍳 Cook This Meal
+            </button>
             `
             : ''
           }
@@ -3016,104 +2370,42 @@ function renderRecipes(){
           ${
             match.missing.length
             ? `
-            <div class="recipeMissing">
-
-              <strong>🛒 Missing:</strong><br>
-
-              ${match.missing
-                .map(escapeHTML)
-                .join("<br>")}
-
-            </div>
-            `
-            : `
-            <div class="recipeGood">
-              🎉 You appear to have everything!
-            </div>
-            `
-          }
-
-          ${
-            recipe.directions
-            ? `
-            <p>
-
-              <strong>Directions:</strong><br>
-
-              ${escapeHTML(
-                recipe.directions
-              )
-              .replace(
-                /\n/g,
-                "<br>"
-              )}
-
-            </p>
+            <button
+              class="secondary"
+              onclick="addRecipeMissingToShopping(${recipe.id})">
+              🛒 Add Missing Items
+            </button>
             `
             : ''
           }
 
-          <div class="actions">
-
-            ${
-              !match.missing.length
-              ? `
-              <button
-                class="cookBtn"
-                onclick="cookRecipe(${recipe.id})">
-                🍳 Cook This Meal
-              </button>
-              `
-              : ''
-            }
-
-            ${
-              match.missing.length
-              ? `
-              <button
-                class="secondary"
-                onclick="addRecipeMissingToShopping(${recipe.id})">
-                🛒 Add Missing Items
-              </button>
-              `
-              : ''
-            }
-
-            <button
-              class="danger"
-              onclick="deleteRecipe(${recipe.id})">
-              Delete Recipe
-            </button>
-
-          </div>
+          <button
+            class="danger"
+            onclick="deleteRecipe(${recipe.id})">
+            Delete Recipe
+          </button>
 
         </div>
 
-        `;
+      </div>
 
-      })
-      .join("");
+      `;
+
+    }).join("");
 
 }
 
 
-function addRecipeMissingToShopping(
-  recipeId
-){
+function addRecipeMissingToShopping(recipeId){
 
   const recipe =
     recipes.find(
-      r =>
-        Number(r.id) ===
-        Number(recipeId)
+      r => Number(r.id) === Number(recipeId)
     );
 
   if(!recipe){
 
-    alert(
-      "I couldn't find that recipe."
-    );
-
+    alert("I couldn't find that recipe.");
     return;
 
   }
@@ -3121,9 +2413,7 @@ function addRecipeMissingToShopping(
   const match =
     recipeMatch(recipe);
 
-  if(
-    !match.missing.length
-  ){
+  if(!match.missing.length){
 
     alert(
       "You already have everything for this recipe!"
@@ -3135,40 +2425,30 @@ function addRecipeMissingToShopping(
 
   let addedCount = 0;
 
-  match.missing.forEach(
-    ingredient => {
+  match.missing.forEach(ingredient => {
 
-      if(
-        addItemToShopping(
-          ingredient,
-          false
-        )
-      ){
-
-        addedCount++;
-
-      }
-
+    if(
+      addItemToShopping(
+        ingredient,
+        false
+      )
+    ){
+      addedCount++;
     }
-  );
+
+  });
 
   saveShopping();
-
   renderShopping();
-
   openShoppingTab();
 
-  if(
-    addedCount === 0
-  ){
+  if(addedCount === 0){
 
     alert(
       "Those missing ingredients are already on your shopping list."
     );
 
-  }else if(
-    addedCount === 1
-  ){
+  }else if(addedCount === 1){
 
     alert(
       "1 missing ingredient added to your shopping list!"
@@ -3189,26 +2469,19 @@ function addRecipeMissingToShopping(
 function renderMealSuggestions(){
 
   const holder =
-    document
-      .getElementById(
-        "mealSuggestions"
-      );
+    document.getElementById("mealSuggestions");
 
   if(!holder){
     return;
   }
 
-  if(
-    !recipes.length
-  ){
+  if(!recipes.length){
 
     holder.innerHTML = `
-
       <div class="empty">
         Save some recipes first and I'll compare
         them to your inventory.
       </div>
-
     `;
 
     return;
@@ -3218,11 +2491,8 @@ function renderMealSuggestions(){
   const sorted =
     recipes
       .map(recipe => ({
-
         recipe,
-        match:
-          recipeMatch(recipe)
-
+        match:recipeMatch(recipe)
       }))
       .sort(
         (a,b) =>
@@ -3237,134 +2507,111 @@ function renderMealSuggestions(){
     </h3>
 
     ${
-      sorted
-        .map(entry => {
+      sorted.map(entry => {
 
-          const recipe =
-            entry.recipe;
+        const recipe =
+          entry.recipe;
 
-          const match =
-            entry.match;
+        const match =
+          entry.match;
 
-          let message = "";
+        let message = "";
 
-          if(
-            match.percent === 100
-          ){
+        if(match.percent === 100){
+          message =
+            "🎉 You can make this now!";
+        }else if(match.percent >= 75){
+          message =
+            "👏 You're almost there!";
+        }else if(match.percent >= 50){
+          message =
+            "👍 You already have a good start.";
+        }else{
+          message =
+            "You'll need a few more ingredients.";
+        }
 
-            message =
-              "🎉 You can make this now!";
+        return `
 
-          }else if(
-            match.percent >= 75
-          ){
+        <div class="mealSuggestion">
 
-            message =
-              "👏 You're almost there!";
+          <div class="itemName">
+            ${escapeHTML(recipe.name)}
+          </div>
 
-          }else if(
-            match.percent >= 50
-          ){
+          <span class="badge">
+            ${escapeHTML(recipe.category)}
+          </span>
 
-            message =
-              "👍 You already have a good start.";
+          <div class="matchBar">
+            <div
+              class="matchFill"
+              style="width:${match.percent}%">
+            </div>
+          </div>
 
-          }else{
+          <strong>
+            ${match.percent}% ready
+          </strong>
 
-            message =
-              "You'll need a few more ingredients.";
+          <div class="muted">
+            ${message}
+          </div>
 
+          ${
+            match.missing.length
+            ? `
+            <div class="recipeMissing">
+              <strong>Still need:</strong><br>
+              ${match.missing.map(escapeHTML).join("<br>")}
+            </div>
+            `
+            : `
+            <div class="recipeGood">
+              ✓ No missing ingredients found
+            </div>
+            `
           }
 
-          return `
+          <div class="actions">
 
-          <div class="mealSuggestion">
+            <button
+              class="secondary"
+              onclick="putRecipeOnNextOpenDay('${escapeJS(recipe.name)}')">
+              📅 Add to Meal Plan
+            </button>
 
-            <div class="itemName">
-              ${escapeHTML(recipe.name)}
-            </div>
-
-            <span class="badge">
-              ${escapeHTML(recipe.category)}
-            </span>
-
-            <div class="matchBar">
-
-              <div
-                class="matchFill"
-                style="width:${match.percent}%">
-              </div>
-
-            </div>
-
-            <strong>
-              ${match.percent}% ready
-            </strong>
-
-            <div class="muted">
-              ${message}
-            </div>
+            ${
+              !match.missing.length
+              ? `
+              <button
+                class="cookBtn"
+                onclick="cookRecipe(${recipe.id})">
+                🍳 Cook This Meal
+              </button>
+              `
+              : ''
+            }
 
             ${
               match.missing.length
               ? `
-              <div class="recipeMissing">
-
-                <strong>Still need:</strong><br>
-
-                ${match.missing
-                  .map(escapeHTML)
-                  .join("<br>")}
-
-              </div>
-              `
-              : `
-              <div class="recipeGood">
-                ✓ No missing ingredients found
-              </div>
-              `
-            }
-
-            <div class="actions">
-
               <button
                 class="secondary"
-                onclick="putRecipeOnNextOpenDay('${escapeJS(recipe.name)}')">
-                📅 Add to Meal Plan
+                onclick="addRecipeMissingToShopping(${recipe.id})">
+                🛒 Add Missing
               </button>
-
-              ${
-                !match.missing.length
-                ? `
-                <button
-                  class="cookBtn"
-                  onclick="cookRecipe(${recipe.id})">
-                  🍳 Cook This Meal
-                </button>
-                `
-                : ''
-              }
-
-              ${
-                match.missing.length
-                ? `
-                <button
-                  class="secondary"
-                  onclick="addRecipeMissingToShopping(${recipe.id})">
-                  🛒 Add Missing
-                </button>
-                `
-                : ''
-              }
-
-            </div>
+              `
+              : ''
+            }
 
           </div>
 
-          `;
+        </div>
 
-        })
-        .join("")
+        `;
+
+      }).join("")
     }
 
   `;
@@ -3372,12 +2619,9 @@ function renderMealSuggestions(){
 }
 
 
-function putRecipeOnNextOpenDay(
-  name
-){
+function putRecipeOnNextOpenDay(name){
 
   const days = [
-
     "Monday",
     "Tuesday",
     "Wednesday",
@@ -3385,27 +2629,21 @@ function putRecipeOnNextOpenDay(
     "Friday",
     "Saturday",
     "Sunday"
-
   ];
 
-  for(
-    const day
-    of days
-  ){
+  for(const day of days){
 
     const input =
-      document
-        .getElementById(
-          "meal" + day
-        );
+      document.getElementById(
+        "meal" + day
+      );
 
     if(
       input &&
       !input.value.trim()
     ){
 
-      input.value =
-        name;
+      input.value = name;
 
       saveMeals();
 
@@ -3434,60 +2672,28 @@ function saveMeals(){
   mealPlan = {
 
     Monday:
-      document
-        .getElementById(
-          "mealMonday"
-        )
-        .value,
+      document.getElementById("mealMonday").value,
 
     Tuesday:
-      document
-        .getElementById(
-          "mealTuesday"
-        )
-        .value,
+      document.getElementById("mealTuesday").value,
 
     Wednesday:
-      document
-        .getElementById(
-          "mealWednesday"
-        )
-        .value,
+      document.getElementById("mealWednesday").value,
 
     Thursday:
-      document
-        .getElementById(
-          "mealThursday"
-        )
-        .value,
+      document.getElementById("mealThursday").value,
 
     Friday:
-      document
-        .getElementById(
-          "mealFriday"
-        )
-        .value,
+      document.getElementById("mealFriday").value,
 
     Saturday:
-      document
-        .getElementById(
-          "mealSaturday"
-        )
-        .value,
+      document.getElementById("mealSaturday").value,
 
     Sunday:
-      document
-        .getElementById(
-          "mealSunday"
-        )
-        .value,
+      document.getElementById("mealSunday").value,
 
     Notes:
-      document
-        .getElementById(
-          "mealNotes"
-        )
-        .value
+      document.getElementById("mealNotes").value
 
   };
 
@@ -3497,22 +2703,14 @@ function saveMeals(){
   );
 
   const message =
-    document
-      .getElementById(
-        "mealSaveMessage"
-      );
+    document.getElementById("mealSaveMessage");
 
   message.textContent =
     "✓ Meal plan saved";
 
-  setTimeout(
-    () => {
-
-      message.textContent="";
-
-    },
-    2000
-  );
+  setTimeout(() => {
+    message.textContent="";
+  },2000);
 
 }
 
@@ -3520,7 +2718,6 @@ function saveMeals(){
 function loadMeals(){
 
   const days = [
-
     "Monday",
     "Tuesday",
     "Wednesday",
@@ -3528,32 +2725,24 @@ function loadMeals(){
     "Friday",
     "Saturday",
     "Sunday"
-
   ];
 
   days.forEach(day => {
 
     const input =
-      document
-        .getElementById(
-          "meal" + day
-        );
+      document.getElementById(
+        "meal" + day
+      );
 
     if(input){
-
       input.value =
         mealPlan[day] || "";
-
     }
 
   });
 
-  document
-    .getElementById(
-      "mealNotes"
-    )
-    .value =
-      mealPlan.Notes || "";
+  document.getElementById("mealNotes").value =
+    mealPlan.Notes || "";
 
 }
 
@@ -3562,11 +2751,7 @@ function saveBudget(){
 
   monthlyBudget =
     Number(
-      document
-        .getElementById(
-          "monthlyBudget"
-        )
-        .value
+      document.getElementById("monthlyBudget").value
     ) || 0;
 
   localStorage.setItem(
@@ -3582,26 +2767,16 @@ function saveBudget(){
 function addExpense(){
 
   const name =
-    document
-      .getElementById(
-        "expenseName"
-      )
+    document.getElementById("expenseName")
       .value
       .trim();
 
   const amount =
     Number(
-      document
-        .getElementById(
-          "expenseAmount"
-        )
-        .value
+      document.getElementById("expenseAmount").value
     );
 
-  if(
-    !name ||
-    !amount
-  ){
+  if(!name || !amount){
 
     alert(
       "Enter an expense and amount."
@@ -3620,24 +2795,14 @@ function addExpense(){
     amount:amount,
 
     date:
-      new Date()
-        .toLocaleDateString()
+      new Date().toLocaleDateString()
 
   });
 
   saveExpenses();
 
-  document
-    .getElementById(
-      "expenseName"
-    )
-    .value="";
-
-  document
-    .getElementById(
-      "expenseAmount"
-    )
-    .value="";
+  document.getElementById("expenseName").value="";
+  document.getElementById("expenseAmount").value="";
 
   renderBudget();
 
@@ -3648,12 +2813,10 @@ function deleteExpense(id){
 
   expenses =
     expenses.filter(
-      expense =>
-        expense.id !== id
+      expense => expense.id !== id
     );
 
   saveExpenses();
-
   renderBudget();
 
 }
@@ -3661,20 +2824,14 @@ function deleteExpense(id){
 
 function renderBudget(){
 
-  document
-    .getElementById(
-      "monthlyBudget"
-    )
-    .value =
-      monthlyBudget || "";
+  document.getElementById("monthlyBudget").value =
+    monthlyBudget || "";
 
   const spent =
     expenses.reduce(
       (total,item) =>
         total +
-        Number(
-          item.amount || 0
-        ),
+        Number(item.amount || 0),
       0
     );
 
@@ -3682,57 +2839,30 @@ function renderBudget(){
     pantry.reduce(
       (total,item) =>
         total +
-        Number(
-          item.quantity || 0
-        ) *
-        Number(
-          item.cost || 0
-        ),
+        Number(item.quantity || 0) *
+        Number(item.cost || 0),
       0
     );
 
-  document
-    .getElementById(
-      "budgetDisplay"
-    )
-    .textContent =
-      money(monthlyBudget);
+  document.getElementById("budgetDisplay").textContent =
+    money(monthlyBudget);
 
-  document
-    .getElementById(
-      "spentDisplay"
-    )
-    .textContent =
-      money(spent);
+  document.getElementById("spentDisplay").textContent =
+    money(spent);
 
-  document
-    .getElementById(
-      "remainingDisplay"
-    )
-    .textContent =
-      money(
-        monthlyBudget -
-        spent
-      );
+  document.getElementById("remainingDisplay").textContent =
+    money(
+      monthlyBudget -
+      spent
+    );
 
-  document
-    .getElementById(
-      "inventoryValueDisplay"
-    )
-    .textContent =
-      money(
-        inventoryValue
-      );
+  document.getElementById("inventoryValueDisplay").textContent =
+    money(inventoryValue);
 
   const holder =
-    document
-      .getElementById(
-        "expenseList"
-      );
+    document.getElementById("expenseList");
 
-  if(
-    !expenses.length
-  ){
+  if(!expenses.length){
 
     holder.innerHTML =
       '<div class="empty">No grocery expenses yet.</div>';
@@ -3742,45 +2872,43 @@ function renderBudget(){
   }
 
   holder.innerHTML =
-    expenses
-      .map(item => `
+    expenses.map(item => `
 
-        <div class="item">
+      <div class="item">
 
-          <div class="itemTop">
+        <div class="itemTop">
 
-            <div>
+          <div>
 
-              <div class="itemName">
-                ${escapeHTML(item.name)}
-              </div>
-
-              <div class="muted">
-                ${escapeHTML(item.date || "")}
-              </div>
-
+            <div class="itemName">
+              ${escapeHTML(item.name)}
             </div>
 
-            <strong>
-              ${money(item.amount)}
-            </strong>
+            <div class="muted">
+              ${escapeHTML(item.date || "")}
+            </div>
 
           </div>
 
-          <div class="actions">
-
-            <button
-              class="danger"
-              onclick="deleteExpense(${item.id})">
-              Delete
-            </button>
-
-          </div>
+          <strong>
+            ${money(item.amount)}
+          </strong>
 
         </div>
 
-      `)
-      .join("");
+        <div class="actions">
+
+          <button
+            class="danger"
+            onclick="deleteExpense(${item.id})">
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    `).join("");
 
 }
 
@@ -3788,26 +2916,16 @@ function renderBudget(){
 function addSaving(){
 
   const name =
-    document
-      .getElementById(
-        "savingName"
-      )
+    document.getElementById("savingName")
       .value
       .trim();
 
   const amount =
     Number(
-      document
-        .getElementById(
-          "savingAmount"
-        )
-        .value
+      document.getElementById("savingAmount").value
     );
 
-  if(
-    !name ||
-    !amount
-  ){
+  if(!name || !amount){
 
     alert(
       "Enter an item and savings amount."
@@ -3829,17 +2947,8 @@ function addSaving(){
 
   saveSavings();
 
-  document
-    .getElementById(
-      "savingName"
-    )
-    .value="";
-
-  document
-    .getElementById(
-      "savingAmount"
-    )
-    .value="";
+  document.getElementById("savingName").value="";
+  document.getElementById("savingAmount").value="";
 
   renderSavings();
 
@@ -3850,12 +2959,10 @@ function deleteSaving(id){
 
   savings =
     savings.filter(
-      item =>
-        item.id !== id
+      item => item.id !== id
     );
 
   saveSavings();
-
   renderSavings();
 
 }
@@ -3867,28 +2974,17 @@ function renderSavings(){
     savings.reduce(
       (sum,item) =>
         sum +
-        Number(
-          item.amount || 0
-        ),
+        Number(item.amount || 0),
       0
     );
 
-  document
-    .getElementById(
-      "savingsTotal"
-    )
-    .textContent =
-      money(total);
+  document.getElementById("savingsTotal").textContent =
+    money(total);
 
   const holder =
-    document
-      .getElementById(
-        "savingsList"
-      );
+    document.getElementById("savingsList");
 
-  if(
-    !savings.length
-  ){
+  if(!savings.length){
 
     holder.innerHTML =
       '<div class="empty">No farm savings recorded yet.</div>';
@@ -3898,90 +2994,101 @@ function renderSavings(){
   }
 
   holder.innerHTML =
-    savings
-      .map(item => `
+    savings.map(item => `
 
-        <div class="item">
+      <div class="item">
 
-          <div class="itemTop">
+        <div class="itemTop">
 
-            <div class="itemName">
-              ${escapeHTML(item.name)}
-            </div>
-
-            <strong>
-              ${money(item.amount)}
-            </strong>
-
+          <div class="itemName">
+            ${escapeHTML(item.name)}
           </div>
 
-          <div class="actions">
-
-            <button
-              class="danger"
-              onclick="deleteSaving(${item.id})">
-              Delete
-            </button>
-
-          </div>
+          <strong>
+            ${money(item.amount)}
+          </strong>
 
         </div>
 
-      `)
-      .join("");
+        <div class="actions">
+
+          <button
+            class="danger"
+            onclick="deleteSaving(${item.id})">
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    `).join("");
 
 }
 
 
+/* ================================
+   BARCODE SCANNER
+================================ */
+
 let html5QrCode = null;
-
 let scannerRunning = false;
-
 let scanLocked = false;
-
 let scannerMode = "normal";
 
+let scanCandidate = "";
+let scanCandidateCount = 0;
+let lastScanTime = 0;
 
-async function startScanner(
-  mode="normal"
-){
+
+function resetScanConfirmation(){
+
+  scanCandidate = "";
+  scanCandidateCount = 0;
+  lastScanTime = 0;
+
+}
+
+
+function scansRequired(){
+
+  return (
+    scannerMode === "hard"
+    ? 2
+    : 3
+  );
+
+}
+
+
+async function startScanner(mode="normal"){
 
   scannerMode = mode;
 
   await stopScannerOnly();
 
+  resetScanConfirmation();
+
   const box =
-    document
-      .getElementById(
-        "scannerBox"
-      );
+    document.getElementById("scannerBox");
 
   const status =
-    document
-      .getElementById(
-        "scanStatus"
-      );
+    document.getElementById("scanStatus");
 
   const tip =
-    document
-      .getElementById(
-        "scanTip"
-      );
+    document.getElementById("scanTip");
 
-  box.style.display =
-    "block";
+  box.style.display="block";
 
-  scanLocked = false;
+  scanLocked=false;
 
-  if(
-    scannerMode === "hard"
-  ){
+  if(scannerMode === "hard"){
 
     status.textContent =
-      "🧴 Hard-to-Scan Mode";
+      "🧴 Hard-to-Scan Mode — waiting for a steady read...";
 
     tip.textContent =
-      "Hold the bottle a little farther away so the entire barcode is visible. This mode searches the whole camera image.";
+      "Hold the whole barcode in view. I will confirm the same barcode twice before accepting it.";
 
   }else{
 
@@ -3989,44 +3096,35 @@ async function startScanner(
       "Point the camera at the barcode...";
 
     tip.textContent =
-      "Normal mode works best for flat packages.";
+      "I will confirm the same barcode 3 times before accepting it.";
 
   }
 
   html5QrCode =
-    new Html5Qrcode(
-      "reader"
-    );
+    new Html5Qrcode("reader");
 
   try{
 
     const cameras =
-      await Html5Qrcode
-        .getCameras();
+      await Html5Qrcode.getCameras();
 
     if(
       !cameras ||
       !cameras.length
     ){
 
-      throw new Error(
-        "No camera found"
-      );
+      throw new Error("No camera found");
 
     }
 
     let cameraId =
-      cameras[
-        cameras.length - 1
-      ].id;
+      cameras[cameras.length - 1].id;
 
     const backCamera =
       cameras.find(
         camera =>
           /back|rear|environment/i
-            .test(
-              camera.label
-            )
+            .test(camera.label)
       );
 
     if(backCamera){
@@ -4036,16 +3134,13 @@ async function startScanner(
 
     let config;
 
-    if(
-      scannerMode === "hard"
-    ){
+    if(scannerMode === "hard"){
 
       config = {
 
         fps:20,
 
-        aspectRatio:
-          1.777778,
+        aspectRatio:1.777778,
 
         formatsToSupport:[
           Html5QrcodeSupportedFormats.UPC_A,
@@ -4074,16 +3169,14 @@ async function startScanner(
 
           const width =
             Math.floor(
-              viewfinderWidth *
-              .92
+              viewfinderWidth * .92
             );
 
           const height =
             Math.min(
               170,
               Math.floor(
-                viewfinderHeight *
-                .30
+                viewfinderHeight * .30
               )
             );
 
@@ -4094,8 +3187,7 @@ async function startScanner(
 
         },
 
-        aspectRatio:
-          1.777778,
+        aspectRatio:1.777778,
 
         formatsToSupport:[
           Html5QrcodeSupportedFormats.UPC_A,
@@ -4125,21 +3217,19 @@ async function startScanner(
 
     );
 
-    scannerRunning = true;
+    scannerRunning=true;
 
     try{
 
-      await html5QrCode
-        .applyVideoConstraints({
+      await html5QrCode.applyVideoConstraints({
 
-          advanced:[
-            {
-              focusMode:
-                "continuous"
-            }
-          ]
+        advanced:[
+          {
+            focusMode:"continuous"
+          }
+        ]
 
-        });
+      });
 
     }
     catch(error){
@@ -4165,78 +3255,95 @@ async function startScanner(
 
 async function switchScannerMode(){
 
-  if(
-    scannerMode === "normal"
-  ){
+  if(scannerMode === "normal"){
 
-    await startScanner(
-      "hard"
-    );
+    await startScanner("hard");
 
   }else{
 
-    await startScanner(
-      "normal"
-    );
+    await startScanner("normal");
 
   }
 
 }
 
 
-async function onScanSuccess(
-  decodedText
-){
+async function onScanSuccess(decodedText){
 
   if(scanLocked){
     return;
   }
 
   const code =
-    String(
-      decodedText || ""
-    )
-    .replace(
-      /\D/g,
-      ""
-    );
+    String(decodedText || "")
+      .replace(/\D/g,"");
 
-  if(
-    code.length < 6
-  ){
+  if(code.length < 6){
     return;
   }
 
-  scanLocked = true;
+  const now = Date.now();
 
-  document
-    .getElementById(
-      "barcode"
-    )
-    .value =
-      code;
-
-  document
-    .getElementById(
-      "scanStatus"
-    )
-    .textContent =
-      "✓ Barcode read! Looking up product...";
-
+  /*
+    If we go too long without another matching read,
+    start the confirmation over.
+  */
   if(
-    navigator.vibrate
+    lastScanTime &&
+    now - lastScanTime > 1800
   ){
 
-    navigator.vibrate(
-      80
-    );
+    resetScanConfirmation();
 
   }
 
+  lastScanTime = now;
+
+  if(code === scanCandidate){
+
+    scanCandidateCount++;
+
+  }else{
+
+    scanCandidate = code;
+    scanCandidateCount = 1;
+
+  }
+
+  const needed =
+    scansRequired();
+
+  document.getElementById("scanStatus").textContent =
+    "Checking barcode... Read " +
+    scanCandidateCount +
+    " of " +
+    needed;
+
+  if(scanCandidateCount < needed){
+    return;
+  }
+
+  scanLocked=true;
+
+  document.getElementById("barcode").value =
+    scanCandidate;
+
+  document.getElementById("scanStatus").textContent =
+    "✓ Barcode confirmed! Looking up product...";
+
+  if(navigator.vibrate){
+    navigator.vibrate(80);
+  }
+
+  const confirmedCode =
+    scanCandidate;
+
   await stopScannerOnly();
 
+  resetScanConfirmation();
+
   await lookupBarcode(
-    code
+    confirmedCode
   );
 
 }
@@ -4253,22 +3360,18 @@ async function stopScannerOnly(){
   ){
 
     try{
-
       await html5QrCode.stop();
-
     }
     catch(e){}
 
     try{
-
       html5QrCode.clear();
-
     }
     catch(e){}
 
   }
 
-  scannerRunning = false;
+  scannerRunning=false;
 
 }
 
@@ -4277,27 +3380,16 @@ async function closeScanner(){
 
   await stopScannerOnly();
 
-  document
-    .getElementById(
-      "scannerBox"
-    )
-    .style
-    .display =
-      "none";
+  resetScanConfirmation();
 
-  document
-    .getElementById(
-      "scanStatus"
-    )
-    .textContent =
-      "";
+  document.getElementById("scannerBox").style.display =
+    "none";
 
-  document
-    .getElementById(
-      "scanTip"
-    )
-    .textContent =
-      "";
+  document.getElementById("scanStatus").textContent =
+    "";
+
+  document.getElementById("scanTip").textContent =
+    "";
 
 }
 
@@ -4306,21 +3398,11 @@ async function lookupTypedBarcode(){
 
   const code =
     String(
-      document
-        .getElementById(
-          "barcode"
-        )
-        .value ||
-      ""
+      document.getElementById("barcode").value || ""
     )
-    .replace(
-      /\D/g,
-      ""
-    );
+    .replace(/\D/g,"");
 
-  if(
-    code.length < 6
-  ){
+  if(code.length < 6){
 
     alert(
       "Type the numbers printed under the barcode first."
@@ -4330,69 +3412,37 @@ async function lookupTypedBarcode(){
 
   }
 
-  document
-    .getElementById(
-      "barcode"
-    )
-    .value =
-      code;
+  document.getElementById("barcode").value =
+    code;
 
-  document
-    .getElementById(
-      "scannerBox"
-    )
-    .style
-    .display =
-      "block";
+  document.getElementById("scannerBox").style.display =
+    "block";
 
-  document
-    .getElementById(
-      "scanStatus"
-    )
-    .textContent =
-      "Looking up typed barcode...";
+  document.getElementById("scanStatus").textContent =
+    "Looking up typed barcode...";
 
-  document
-    .getElementById(
-      "scanTip"
-    )
-    .textContent =
-      "";
+  document.getElementById("scanTip").textContent =
+    "";
 
-  await lookupBarcode(
-    code
-  );
+  await lookupBarcode(code);
 
 }
 
 
-async function lookupBarcode(
-  code
-){
+async function lookupBarcode(code){
 
   const status =
-    document
-      .getElementById(
-        "scanStatus"
-      );
+    document.getElementById("scanStatus");
 
-  if(
-    barcodeMemory[code]
-  ){
+  if(barcodeMemory[code]){
 
     const saved =
       barcodeMemory[code];
 
-    document
-      .getElementById(
-        "itemName"
-      )
-      .value =
-        saved.name || "";
+    document.getElementById("itemName").value =
+      saved.name || "";
 
-    if(
-      saved.category
-    ){
+    if(saved.category){
 
       setSelectValue(
         "category",
@@ -4417,9 +3467,7 @@ async function lookupBarcode(
         ".json"
       );
 
-    if(
-      !response.ok
-    ){
+    if(!response.ok){
 
       throw new Error(
         "Lookup failed"
@@ -4447,9 +3495,7 @@ async function lookupBarcode(
         product.brands || "";
 
       productName =
-        cleanProductName(
-          productName
-        );
+        cleanProductName(productName);
 
       if(
         brand &&
@@ -4468,23 +3514,15 @@ async function lookupBarcode(
 
       }
 
-      if(
-        productName
-      ){
+      if(productName){
 
-        document
-          .getElementById(
-            "itemName"
-          )
-          .value =
-            productName;
+        document.getElementById("itemName").value =
+          productName;
 
       }
 
       const guessed =
-        guessCategory(
-          product
-        );
+        guessCategory(product);
 
       setSelectValue(
         "category",
@@ -4516,126 +3554,75 @@ async function lookupBarcode(
 }
 
 
-function cleanProductName(
-  name
-){
+function cleanProductName(name){
 
   if(!name){
     return "";
   }
 
   return name
-    .replace(
-      /\s+/g,
-      " "
-    )
-    .replace(
-      /\s*-\s*$/,
-      ""
-    )
+    .replace(/\s+/g," ")
+    .replace(/\s*-\s*$/,"")
     .trim();
 
 }
 
 
-function guessCategory(
-  product
-){
+function guessCategory(product){
 
   const text = [
-
     product.categories || "",
-
-    product.categories_tags
-      ?.join(" ") || "",
-
+    product.categories_tags?.join(" ") || "",
     product.product_name || ""
-
   ]
   .join(" ")
   .toLowerCase();
 
-  if(
-    /beef|pork|chicken|turkey|meat|sausage|bacon|ham|steak/
-      .test(text)
-  ){
+  if(/beef|pork|chicken|turkey|meat|sausage|bacon|ham|steak/.test(text)){
     return "Meat";
   }
 
-  if(
-    /milk|cheese|yogurt|cream|butter|egg/
-      .test(text)
-  ){
+  if(/milk|cheese|yogurt|cream|butter|egg/.test(text)){
     return "Eggs & Dairy";
   }
 
-  if(
-    /fruit|apple|orange|berry|grape|banana|melon/
-      .test(text)
-  ){
+  if(/fruit|apple|orange|berry|grape|banana|melon/.test(text)){
     return "Fruit";
   }
 
-  if(
-    /vegetable|lettuce|carrot|potato|onion|pepper|broccoli/
-      .test(text)
-  ){
+  if(/vegetable|lettuce|carrot|potato|onion|pepper|broccoli/.test(text)){
     return "Vegetables";
   }
 
-  if(
-    /bread|pasta|rice|cereal|grain|tortilla/
-      .test(text)
-  ){
+  if(/bread|pasta|rice|cereal|grain|tortilla/.test(text)){
     return "Grains & Bread";
   }
 
-  if(
-    /flour|sugar|baking|cake mix|brownie/
-      .test(text)
-  ){
+  if(/flour|sugar|baking|cake mix|brownie/.test(text)){
     return "Baking";
   }
 
-  if(
-    /canned|canned food/
-      .test(text)
-  ){
+  if(/canned|canned food/.test(text)){
     return "Canned Goods";
   }
 
-  if(
-    /chips|cracker|cookie|snack|popcorn|candy/
-      .test(text)
-  ){
+  if(/chips|cracker|cookie|snack|popcorn|candy/.test(text)){
     return "Snacks";
   }
 
-  if(
-    /soda|drink|juice|water|beverage|coffee|tea/
-      .test(text)
-  ){
+  if(/soda|drink|juice|water|beverage|coffee|tea/.test(text)){
     return "Drinks";
   }
 
-  if(
-    /sauce|ketchup|mustard|mayonnaise|dressing|condiment/
-      .test(text)
-  ){
+  if(/sauce|ketchup|mustard|mayonnaise|dressing|condiment/.test(text)){
     return "Condiments & Sauces";
   }
 
-  if(
-    /oil|vinegar|shortening|lard/
-      .test(text)
-  ){
+  if(/oil|vinegar|shortening|lard/.test(text)){
     return "Oils, Fats & Vinegars";
   }
 
-  if(
-    /frozen|ice cream/
-      .test(text)
-  ){
+  if(/frozen|ice cream/.test(text)){
     return "Frozen Foods";
   }
 
@@ -4644,100 +3631,53 @@ function guessCategory(
 }
 
 
-function setSelectValue(
-  id,
-  value
-){
+function setSelectValue(id,value){
 
   const select =
-    document
-      .getElementById(id);
+    document.getElementById(id);
 
   const option =
     [...select.options]
       .find(
         opt =>
-          opt.value
-            .toLowerCase() ===
-          String(value)
-            .toLowerCase()
+          opt.value.toLowerCase() ===
+          String(value).toLowerCase()
       );
 
   if(option){
-
     select.value =
       option.value;
-
   }
 
 }
 
 
-function money(
-  number
-){
+function money(number){
 
-  return (
-    "$" +
-    Number(
-      number || 0
-    )
-    .toFixed(2)
-  );
+  return "$" +
+    Number(number || 0).toFixed(2);
 
 }
 
 
-function escapeHTML(
-  value
-){
+function escapeHTML(value){
 
-  return String(
-    value ?? ""
-  )
-  .replace(
-    /&/g,
-    "&amp;"
-  )
-  .replace(
-    /</g,
-    "&lt;"
-  )
-  .replace(
-    />/g,
-    "&gt;"
-  )
-  .replace(
-    /"/g,
-    "&quot;"
-  )
-  .replace(
-    /'/g,
-    "&#039;"
-  );
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
 
-function escapeJS(
-  value
-){
+function escapeJS(value){
 
-  return String(
-    value ?? ""
-  )
-  .replace(
-    /\\/g,
-    "\\\\"
-  )
-  .replace(
-    /'/g,
-    "\\'"
-  )
-  .replace(
-    /\n/g,
-    " "
-  );
+  return String(value ?? "")
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'")
+    .replace(/\n/g," ");
 
 }
 
@@ -4745,22 +3685,16 @@ function escapeJS(
 function renderAll(){
 
   renderInventory();
-
   renderShopping();
-
   renderRecipes();
-
   renderBudget();
-
   renderSavings();
-
   renderMealSuggestions();
 
 }
 
 
 loadMeals();
-
 renderAll();
 
 </script>
