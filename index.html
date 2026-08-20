@@ -147,6 +147,15 @@ button{
   font-weight:bold;
 }
 
+.cookBtn{
+  padding:8px 11px;
+  border:none;
+  border-radius:8px;
+  background:#74866a;
+  color:white;
+  font-weight:bold;
+}
+
 .smallBtn{
   border:none;
   border-radius:8px;
@@ -317,6 +326,15 @@ button{
   margin-bottom:11px;
 }
 
+.measureHelp{
+  background:#f1eee7;
+  border-radius:10px;
+  padding:10px;
+  margin-top:8px;
+  font-size:13px;
+  line-height:1.5;
+}
+
 @media(max-width:600px){
   .row,
   .summary{
@@ -395,7 +413,7 @@ button{
 <div class="row">
 <div>
 <label>Quantity</label>
-<input id="quantity" type="number" min="0" step="0.1" value="1">
+<input id="quantity" type="text" inputmode="decimal" value="1" placeholder="1 or 1/2">
 </div>
 
 <div>
@@ -405,6 +423,13 @@ button{
   <option>pack</option>
   <option>lb</option>
   <option>oz</option>
+  <option>tsp</option>
+  <option>tbsp</option>
+  <option>cup</option>
+  <option>fl oz</option>
+  <option>pint</option>
+  <option>quart</option>
+  <option>gallon</option>
   <option>bag</option>
   <option>box</option>
   <option>can</option>
@@ -415,6 +440,11 @@ button{
 </div>
 </div>
 
+<div class="measureHelp">
+  💡 Fractions work! You can enter things like
+  <strong>1/2</strong>, <strong>1 1/2</strong>, or <strong>3/4</strong>.
+</div>
+
 <div class="row">
 <div>
 <label>Cost Per Unit</label>
@@ -423,7 +453,7 @@ button{
 
 <div>
 <label>Low Stock At</label>
-<input id="lowStock" type="number" min="0" step="0.1" value="1">
+<input id="lowStock" type="text" inputmode="decimal" value="1" placeholder="1 or 1/2">
 </div>
 </div>
 
@@ -495,10 +525,20 @@ button{
 <label>Ingredients</label>
 <textarea id="recipeIngredients"
 placeholder="Enter one ingredient per line:
-ground beef
-tortillas
-cheese
-lettuce"></textarea>
+1 lb ground beef
+8 tortillas
+1 cup cheese
+1/2 cup lettuce"></textarea>
+
+<div class="measureHelp">
+  💡 You can use recipe measurements like
+  <strong>1/2 cup</strong>,
+  <strong>1 1/2 cups</strong>,
+  <strong>2 tbsp</strong>,
+  <strong>1 tsp</strong>,
+  <strong>8 oz</strong>,
+  or <strong>2 eggs</strong>.
+</div>
 
 <label>Directions</label>
 <textarea id="recipeDirections" placeholder="How do you make it?"></textarea>
@@ -749,6 +789,335 @@ function saveSavings(){
 }
 
 
+function parseAmount(value){
+
+  let text =
+    String(value ?? "")
+      .trim()
+      .replace(/(\d)-(\d)/g,"$1 $2");
+
+  if(!text){
+    return 0;
+  }
+
+  const unicodeFractions = {
+    "½":1/2,
+    "⅓":1/3,
+    "⅔":2/3,
+    "¼":1/4,
+    "¾":3/4,
+    "⅕":1/5,
+    "⅖":2/5,
+    "⅗":3/5,
+    "⅘":4/5,
+    "⅙":1/6,
+    "⅚":5/6,
+    "⅛":1/8,
+    "⅜":3/8,
+    "⅝":5/8,
+    "⅞":7/8
+  };
+
+  for(const symbol in unicodeFractions){
+
+    if(text.includes(symbol)){
+
+      const wholeText =
+        text.replace(symbol,"").trim();
+
+      const whole =
+        wholeText ? Number(wholeText) || 0 : 0;
+
+      return whole + unicodeFractions[symbol];
+
+    }
+
+  }
+
+  if(/^\d+\s+\d+\/\d+$/.test(text)){
+
+    const parts =
+      text.split(/\s+/);
+
+    const whole =
+      Number(parts[0]) || 0;
+
+    const fraction =
+      parts[1].split("/");
+
+    const top =
+      Number(fraction[0]) || 0;
+
+    const bottom =
+      Number(fraction[1]) || 1;
+
+    return whole + top / bottom;
+
+  }
+
+  if(/^\d+\/\d+$/.test(text)){
+
+    const parts =
+      text.split("/");
+
+    const top =
+      Number(parts[0]) || 0;
+
+    const bottom =
+      Number(parts[1]) || 1;
+
+    return top / bottom;
+
+  }
+
+  const number =
+    Number(text);
+
+  return Number.isFinite(number) ? number : 0;
+
+}
+
+
+function formatQuantity(number){
+
+  const value =
+    Number(number || 0);
+
+  const rounded =
+    Math.round(value * 1000) / 1000;
+
+  const whole =
+    Math.floor(rounded);
+
+  const fraction =
+    rounded - whole;
+
+  const fractions = [
+    [0.125,"1/8"],
+    [0.25,"1/4"],
+    [0.333,"1/3"],
+    [0.375,"3/8"],
+    [0.5,"1/2"],
+    [0.625,"5/8"],
+    [0.667,"2/3"],
+    [0.75,"3/4"],
+    [0.875,"7/8"]
+  ];
+
+  let closest = null;
+
+  fractions.forEach(entry => {
+
+    if(Math.abs(fraction - entry[0]) < 0.02){
+      closest = entry[1];
+    }
+
+  });
+
+  if(closest){
+
+    if(whole > 0){
+      return whole + " " + closest;
+    }
+
+    return closest;
+
+  }
+
+  return String(rounded);
+
+}
+
+
+function normalizeUnit(unit){
+
+  const text =
+    String(unit || "")
+      .toLowerCase()
+      .trim()
+      .replace(/\./g,"");
+
+  const map = {
+
+    "teaspoon":"tsp",
+    "teaspoons":"tsp",
+    "tsp":"tsp",
+
+    "tablespoon":"tbsp",
+    "tablespoons":"tbsp",
+    "tbsp":"tbsp",
+    "tbs":"tbsp",
+
+    "cup":"cup",
+    "cups":"cup",
+
+    "fluid ounce":"fl oz",
+    "fluid ounces":"fl oz",
+    "fl ounce":"fl oz",
+    "fl ounces":"fl oz",
+    "fl oz":"fl oz",
+
+    "pint":"pint",
+    "pints":"pint",
+    "pt":"pint",
+
+    "quart":"quart",
+    "quarts":"quart",
+    "qt":"quart",
+
+    "gallon":"gallon",
+    "gallons":"gallon",
+    "gal":"gallon",
+
+    "pound":"lb",
+    "pounds":"lb",
+    "lbs":"lb",
+    "lb":"lb",
+
+    "ounce":"oz",
+    "ounces":"oz",
+    "oz":"oz",
+
+    "item":"item",
+    "items":"item",
+    "piece":"item",
+    "pieces":"item",
+
+    "dozen":"dozen",
+    "dozens":"dozen",
+
+    "pack":"pack",
+    "packs":"pack",
+    "package":"pack",
+    "packages":"pack",
+
+    "bag":"bag",
+    "bags":"bag",
+
+    "box":"box",
+    "boxes":"box",
+
+    "can":"can",
+    "cans":"can",
+
+    "jar":"jar",
+    "jars":"jar",
+
+    "bottle":"bottle",
+    "bottles":"bottle"
+
+  };
+
+  return map[text] || text;
+
+}
+
+
+function unitInfo(unit){
+
+  const u =
+    normalizeUnit(unit);
+
+  const info = {
+
+    "tsp":{
+      dimension:"volume",
+      factor:1
+    },
+
+    "tbsp":{
+      dimension:"volume",
+      factor:3
+    },
+
+    "fl oz":{
+      dimension:"volume",
+      factor:6
+    },
+
+    "cup":{
+      dimension:"volume",
+      factor:48
+    },
+
+    "pint":{
+      dimension:"volume",
+      factor:96
+    },
+
+    "quart":{
+      dimension:"volume",
+      factor:192
+    },
+
+    "gallon":{
+      dimension:"volume",
+      factor:768
+    },
+
+    "oz":{
+      dimension:"weight",
+      factor:1
+    },
+
+    "lb":{
+      dimension:"weight",
+      factor:16
+    },
+
+    "item":{
+      dimension:"count",
+      factor:1
+    },
+
+    "dozen":{
+      dimension:"count",
+      factor:12
+    }
+
+  };
+
+  return info[u] || null;
+
+}
+
+
+function convertAmount(amount,fromUnit,toUnit){
+
+  const from =
+    normalizeUnit(fromUnit);
+
+  const to =
+    normalizeUnit(toUnit);
+
+  if(from === to){
+    return amount;
+  }
+
+  const fromInfo =
+    unitInfo(from);
+
+  const toInfo =
+    unitInfo(to);
+
+  if(
+    fromInfo &&
+    toInfo &&
+    fromInfo.dimension === toInfo.dimension
+  ){
+
+    const base =
+      amount * fromInfo.factor;
+
+    return base / toInfo.factor;
+
+  }
+
+  return null;
+
+}
+
+
 function addInventory(){
 
   const name =
@@ -758,6 +1127,16 @@ function addInventory(){
     alert("Please enter an item name.");
     return;
   }
+
+  const quantity =
+    parseAmount(
+      document.getElementById("quantity").value
+    );
+
+  const lowStock =
+    parseAmount(
+      document.getElementById("lowStock").value
+    );
 
   let newId =
     Date.now() + Math.floor(Math.random() * 1000000);
@@ -781,8 +1160,7 @@ function addInventory(){
     category:
       document.getElementById("category").value,
 
-    quantity:
-      Number(document.getElementById("quantity").value) || 0,
+    quantity:quantity,
 
     unit:
       document.getElementById("unit").value,
@@ -790,8 +1168,7 @@ function addInventory(){
     cost:
       Number(document.getElementById("cost").value) || 0,
 
-    lowStock:
-      Number(document.getElementById("lowStock").value) || 0,
+    lowStock:lowStock,
 
     farmMade:
       document.getElementById("farmMade").checked
@@ -843,7 +1220,10 @@ function changeQuantity(id, amount){
   if(!item) return;
 
   item.quantity =
-    Math.max(0, Number(item.quantity) + amount);
+    Math.max(
+      0,
+      Number(item.quantity || 0) + amount
+    );
 
   savePantry();
 
@@ -882,8 +1262,27 @@ function cleanIngredient(text){
 
   return String(text || "")
     .toLowerCase()
-    .replace(/\b\d+([./]\d+)?\b/g," ")
-    .replace(/\b(cups?|cup|tbsp|tablespoons?|tsp|teaspoons?|lbs?|pounds?|oz|ounces?|cans?|packages?|packs?|jars?|bottles?|cloves?|slices?)\b/g," ")
+
+    .replace(
+      /\b\d+\s+\d+\/\d+\b/g,
+      " "
+    )
+
+    .replace(
+      /\b\d+([./]\d+)?\b/g,
+      " "
+    )
+
+    .replace(
+      /[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]/g,
+      " "
+    )
+
+    .replace(
+      /\b(cups?|cup|tbsp|tablespoons?|tablespoon|tbs|tsp|teaspoons?|teaspoon|lbs?|pounds?|pound|oz|ounces?|ounce|fluid ounces?|fl oz|pints?|pt|quarts?|qt|gallons?|gal|cans?|packages?|packs?|bags?|boxes?|jars?|bottles?|dozens?|items?|pieces?|cloves?|slices?)\b/g,
+      " "
+    )
+
     .replace(/[^\w\s]/g," ")
     .replace(/\s+/g," ")
     .trim();
@@ -1010,7 +1409,8 @@ function renderInventory(){
           </div>
 
           <span class="badge">
-            ${item.quantity} ${escapeHTML(item.unit || "item")}
+            ${formatQuantity(item.quantity)}
+            ${escapeHTML(item.unit || "item")}
           </span>
 
           ${
@@ -1205,7 +1605,7 @@ function deleteRecipe(id){
   if(!confirm("Delete this recipe?")) return;
 
   recipes =
-    recipes.filter(recipe => recipe.id !== id);
+    recipes.filter(recipe => Number(recipe.id) !== Number(id));
 
   saveRecipes();
 
@@ -1225,24 +1625,32 @@ function ingredientLines(recipe){
 }
 
 
-function pantryHasIngredient(ingredient){
+function pantryMatchesIngredient(ingredient){
 
   const cleaned =
     cleanIngredient(ingredient);
 
-  if(!cleaned) return false;
+  if(!cleaned){
+    return [];
+  }
 
   const words =
     cleaned
       .split(" ")
       .filter(word => word.length > 2);
 
-  return pantry.some(item => {
+  return pantry.filter(item => {
 
-    if(Number(item.quantity) <= 0) return false;
+    if(Number(item.quantity) <= 0){
+      return false;
+    }
 
     const itemName =
       cleanIngredient(item.name);
+
+    if(!itemName){
+      return false;
+    }
 
     if(
       itemName.includes(cleaned) ||
@@ -1251,7 +1659,9 @@ function pantryHasIngredient(ingredient){
       return true;
     }
 
-    if(!words.length) return false;
+    if(!words.length){
+      return false;
+    }
 
     const matches =
       words.filter(word =>
@@ -1261,6 +1671,13 @@ function pantryHasIngredient(ingredient){
     return matches >= Math.min(2, words.length);
 
   });
+
+}
+
+
+function pantryHasIngredient(ingredient){
+
+  return pantryMatchesIngredient(ingredient).length > 0;
 
 }
 
@@ -1296,6 +1713,398 @@ function recipeMatch(recipe){
     missing,
     percent
   };
+
+}
+
+
+function parseRecipeIngredient(line){
+
+  const original =
+    String(line || "").trim();
+
+  let text =
+    original.trim();
+
+  const unicodePattern =
+    "[½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]";
+
+  const amountMatch =
+    text.match(
+      new RegExp(
+        "^((?:\\d+\\s+\\d+\\/\\d+)|(?:\\d+-\\d+\\/\\d+)|(?:\\d+\\/\\d+)|(?:\\d+(?:\\.\\d+)?)|(?:\\d*" +
+        unicodePattern +
+        "))\\s*"
+      )
+    );
+
+  let hasAmount = false;
+  let amount = null;
+
+  if(amountMatch){
+
+    hasAmount = true;
+
+    amount =
+      parseAmount(amountMatch[1]);
+
+    text =
+      text.slice(amountMatch[0].length).trim();
+
+  }
+
+  const unitOptions = [
+    "fluid ounces",
+    "fluid ounce",
+    "tablespoons",
+    "tablespoon",
+    "teaspoons",
+    "teaspoon",
+    "packages",
+    "package",
+    "bottles",
+    "bottle",
+    "gallons",
+    "gallon",
+    "quarts",
+    "quart",
+    "pints",
+    "pint",
+    "pounds",
+    "pound",
+    "ounces",
+    "ounce",
+    "dozens",
+    "dozen",
+    "pieces",
+    "piece",
+    "items",
+    "item",
+    "cups",
+    "cup",
+    "packs",
+    "pack",
+    "bags",
+    "bag",
+    "boxes",
+    "box",
+    "cans",
+    "can",
+    "jars",
+    "jar",
+    "fl oz",
+    "tbsp",
+    "tbs",
+    "tsp",
+    "lbs",
+    "lb",
+    "oz",
+    "pt",
+    "qt",
+    "gal"
+  ];
+
+  let unit = "";
+
+  for(const option of unitOptions){
+
+    const regex =
+      new RegExp(
+        "^" +
+        option.replace(/[.*+?^${}()|[\]\\]/g,"\\$&") +
+        "\\b",
+        "i"
+      );
+
+    if(regex.test(text)){
+
+      unit =
+        normalizeUnit(option);
+
+      text =
+        text.replace(regex,"").trim();
+
+      break;
+
+    }
+
+  }
+
+  if(hasAmount && !unit){
+    unit = "item";
+  }
+
+  return {
+    original:original,
+    amount:amount,
+    unit:unit,
+    name:text || cleanIngredient(original),
+    hasAmount:hasAmount
+  };
+
+}
+
+
+function buildCookPlan(recipe){
+
+  const lines =
+    ingredientLines(recipe);
+
+  const deductions = [];
+  const problems = [];
+
+  lines.forEach(line => {
+
+    const parsed =
+      parseRecipeIngredient(line);
+
+    const matches =
+      pantryMatchesIngredient(parsed.name);
+
+    if(!matches.length){
+
+      problems.push(
+        "Missing: " + line
+      );
+
+      return;
+
+    }
+
+    if(!parsed.hasAmount){
+
+      const item =
+        matches[0];
+
+      if(Number(item.quantity) < 1){
+
+        problems.push(
+          "Not enough " + item.name
+        );
+
+        return;
+
+      }
+
+      deductions.push({
+        item:item,
+        amount:1,
+        recipeLine:line
+      });
+
+      return;
+
+    }
+
+    let amountStillNeeded =
+      Number(parsed.amount || 0);
+
+    if(amountStillNeeded <= 0){
+      return;
+    }
+
+    for(const item of matches){
+
+      if(amountStillNeeded <= 0){
+        break;
+      }
+
+      const pantryUnit =
+        normalizeUnit(item.unit || "item");
+
+      const recipeUnit =
+        normalizeUnit(parsed.unit || "item");
+
+      const recipeAmountAvailable =
+        convertAmount(
+          Number(item.quantity || 0),
+          pantryUnit,
+          recipeUnit
+        );
+
+      if(recipeAmountAvailable === null){
+        continue;
+      }
+
+      const useRecipeAmount =
+        Math.min(
+          amountStillNeeded,
+          recipeAmountAvailable
+        );
+
+      const pantryAmountToUse =
+        convertAmount(
+          useRecipeAmount,
+          recipeUnit,
+          pantryUnit
+        );
+
+      if(
+        pantryAmountToUse === null ||
+        pantryAmountToUse <= 0
+      ){
+        continue;
+      }
+
+      deductions.push({
+        item:item,
+        amount:pantryAmountToUse,
+        recipeLine:line
+      });
+
+      amountStillNeeded -=
+        useRecipeAmount;
+
+    }
+
+    if(amountStillNeeded > 0.0001){
+
+      const matchingUnits =
+        matches
+          .map(item => item.unit || "item")
+          .join(", ");
+
+      if(matches.length){
+
+        problems.push(
+          "Can't safely subtract " +
+          line +
+          ". Your matching pantry item is tracked as " +
+          matchingUnits +
+          "."
+        );
+
+      }else{
+
+        problems.push(
+          "Not enough: " + line
+        );
+
+      }
+
+    }
+
+  });
+
+  return {
+    deductions:deductions,
+    problems:problems
+  };
+
+}
+
+
+function cookRecipe(recipeId){
+
+  const recipe =
+    recipes.find(
+      r => Number(r.id) === Number(recipeId)
+    );
+
+  if(!recipe){
+
+    alert("I couldn't find that recipe.");
+    return;
+
+  }
+
+  const match =
+    recipeMatch(recipe);
+
+  if(match.missing.length){
+
+    alert(
+      "You are still missing:\n\n" +
+      match.missing.join("\n")
+    );
+
+    return;
+
+  }
+
+  const plan =
+    buildCookPlan(recipe);
+
+  if(plan.problems.length){
+
+    alert(
+      "I found the food, but I don't want to subtract the wrong amount.\n\n" +
+      plan.problems.join("\n\n") +
+      "\n\nTip: Track that pantry item using the same kind of measurement as the recipe."
+    );
+
+    return;
+
+  }
+
+  const previewMap = {};
+
+  plan.deductions.forEach(entry => {
+
+    const key =
+      String(entry.item.id);
+
+    if(!previewMap[key]){
+
+      previewMap[key] = {
+        name:entry.item.name,
+        amount:0,
+        unit:entry.item.unit || "item"
+      };
+
+    }
+
+    previewMap[key].amount +=
+      Number(entry.amount || 0);
+
+  });
+
+  const preview =
+    Object.values(previewMap)
+      .map(entry =>
+        "• " +
+        formatQuantity(entry.amount) +
+        " " +
+        entry.unit +
+        " " +
+        entry.name
+      )
+      .join("\n");
+
+  const okay =
+    confirm(
+      "Cook " +
+      recipe.name +
+      "?\n\nThis will subtract:\n\n" +
+      preview +
+      "\n\nfrom your pantry."
+    );
+
+  if(!okay){
+    return;
+  }
+
+  plan.deductions.forEach(entry => {
+
+    entry.item.quantity =
+      Math.max(
+        0,
+        Number(entry.item.quantity || 0) -
+        Number(entry.amount || 0)
+      );
+
+  });
+
+  savePantry();
+
+  addLowStockToShopping();
+
+  renderAll();
+
+  alert(
+    "🍳 " +
+    recipe.name +
+    " cooked!\n\nYour pantry quantities were updated."
+  );
 
 }
 
@@ -1394,6 +2203,18 @@ function renderRecipes(){
         }
 
         <div class="actions">
+
+          ${
+            !match.missing.length
+            ? `
+            <button
+              class="cookBtn"
+              onclick="cookRecipe(${recipe.id})">
+              🍳 Cook This Meal
+            </button>
+            `
+            : ''
+          }
 
           ${
             match.missing.length
@@ -1592,6 +2413,18 @@ function renderMealSuggestions(){
             onclick="putRecipeOnNextOpenDay('${escapeJS(recipe.name)}')">
             📅 Add to Meal Plan
           </button>
+
+          ${
+            !match.missing.length
+            ? `
+            <button
+              class="cookBtn"
+              onclick="cookRecipe(${recipe.id})">
+              🍳 Cook This Meal
+            </button>
+            `
+            : ''
+          }
 
           ${
             match.missing.length
@@ -2009,6 +2842,7 @@ async function toggleScanner(){
 
       {
         fps:15,
+
         qrbox:function(viewfinderWidth,viewfinderHeight){
 
           const width =
