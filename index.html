@@ -344,8 +344,6 @@ button{
 
 <main>
 
-<!-- INVENTORY -->
-
 <section id="inventory" class="section active">
 
 <div class="card">
@@ -461,9 +459,6 @@ button{
 
 </section>
 
-
-<!-- SHOPPING -->
-
 <section id="shopping" class="section">
 
 <div class="card">
@@ -478,9 +473,6 @@ button{
 </div>
 
 </section>
-
-
-<!-- RECIPES -->
 
 <section id="recipes" class="section">
 
@@ -526,9 +518,6 @@ oninput="renderRecipes()">
 
 </section>
 
-
-<!-- MEALS -->
-
 <section id="meals" class="section">
 
 <div class="card">
@@ -544,7 +533,6 @@ This compares your saved recipes with what is currently in your pantry, fridge a
 
 <div id="mealSuggestions"></div>
 </div>
-
 
 <div class="card">
 <h2>Weekly Meal Plan</h2>
@@ -594,9 +582,6 @@ This compares your saved recipes with what is currently in your pantry, fridge a
 
 </section>
 
-
-<!-- BUDGET -->
-
 <section id="budget" class="section">
 
 <div class="card">
@@ -607,7 +592,6 @@ This compares your saved recipes with what is currently in your pantry, fridge a
 
 <button class="primary" onclick="saveBudget()">Save Budget</button>
 </div>
-
 
 <div class="card">
 
@@ -622,7 +606,6 @@ This compares your saved recipes with what is currently in your pantry, fridge a
 <button class="primary" onclick="addExpense()">Add Expense</button>
 
 </div>
-
 
 <div class="card">
 
@@ -660,9 +643,6 @@ Inventory Value
 
 </section>
 
-
-<!-- SAVINGS -->
-
 <section id="savings" class="section">
 
 <div class="card">
@@ -679,7 +659,6 @@ Inventory Value
 
 </div>
 
-
 <div class="card">
 
 <div class="summaryBox">
@@ -695,12 +674,7 @@ Total Farm & Homemade Savings
 
 </main>
 
-
 <script>
-
-/* -----------------------------
-   DATA
------------------------------ */
 
 let pantry = JSON.parse(localStorage.getItem("sawyerPantry") || "[]");
 let shopping = JSON.parse(localStorage.getItem("sawyerShopping") || "[]");
@@ -717,10 +691,6 @@ let mealPlan =
 let barcodeMemory =
   JSON.parse(localStorage.getItem("sawyerBarcodeMemory") || "{}");
 
-
-/* -----------------------------
-   NAVIGATION
------------------------------ */
 
 function showSection(id, button){
 
@@ -743,9 +713,25 @@ function showSection(id, button){
 }
 
 
-/* -----------------------------
-   SAVE
------------------------------ */
+function openShoppingTab(){
+
+  const shoppingButton =
+    [...document.querySelectorAll(".nav button")]
+      .find(button =>
+        button.textContent.includes("Shopping")
+      );
+
+  showSection("shopping", shoppingButton);
+
+  renderShopping();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
 
 function savePantry(){
   localStorage.setItem("sawyerPantry", JSON.stringify(pantry));
@@ -768,10 +754,6 @@ function saveSavings(){
 }
 
 
-/* -----------------------------
-   INVENTORY
------------------------------ */
-
 function addInventory(){
 
   const name =
@@ -784,7 +766,7 @@ function addInventory(){
 
   const item = {
 
-    id: Date.now(),
+    id:Date.now(),
 
     name:name,
 
@@ -882,32 +864,75 @@ function deleteInventory(id){
 }
 
 
+function shoppingName(item){
+
+  if(typeof item === "string"){
+    return item;
+  }
+
+  return String(item?.name || "");
+}
+
+
+function shoppingAlreadyHas(name){
+
+  const cleaned =
+    cleanIngredient(name);
+
+  if(!cleaned){
+    return false;
+  }
+
+  return shopping.some(item =>
+    cleanIngredient(shoppingName(item)) === cleaned
+  );
+
+}
+
+
+function addItemToShopping(name, auto=false){
+
+  const cleanName =
+    String(name || "").trim();
+
+  if(!cleanName){
+    return false;
+  }
+
+  if(shoppingAlreadyHas(cleanName)){
+    return false;
+  }
+
+  shopping.push({
+    id:Date.now() + Math.floor(Math.random() * 100000),
+    name:cleanName,
+    auto:auto
+  });
+
+  return true;
+
+}
+
+
 function addLowStockToShopping(){
+
+  let changed = false;
 
   pantry.forEach(item => {
 
     if(Number(item.quantity) <= Number(item.lowStock)){
 
-      const exists =
-        shopping.some(
-          s => s.name.toLowerCase() === item.name.toLowerCase()
-        );
-
-      if(!exists){
-
-        shopping.push({
-          id:Date.now() + Math.random(),
-          name:item.name,
-          auto:true
-        });
-
+      if(addItemToShopping(item.name, true)){
+        changed = true;
       }
 
     }
 
   });
 
-  saveShopping();
+  if(changed){
+    saveShopping();
+  }
 
 }
 
@@ -1023,10 +1048,6 @@ function renderInventory(){
 }
 
 
-/* -----------------------------
-   SHOPPING
------------------------------ */
-
 function addShopping(){
 
   const input =
@@ -1037,15 +1058,14 @@ function addShopping(){
 
   if(!name) return;
 
-  shopping.push({
-    id:Date.now(),
-    name:name,
-    auto:false
-  });
+  const added =
+    addItemToShopping(name, false);
 
   input.value="";
 
-  saveShopping();
+  if(added){
+    saveShopping();
+  }
 
   renderShopping();
 
@@ -1078,7 +1098,12 @@ function renderShopping(){
   }
 
   holder.innerHTML =
-    shopping.map(item => `
+    shopping.map(item => {
+
+      const name =
+        shoppingName(item);
+
+      return `
 
       <div class="item">
 
@@ -1087,7 +1112,7 @@ function renderShopping(){
           <div>
 
             <div class="itemName">
-              ${escapeHTML(item.name)}
+              ${escapeHTML(name)}
             </div>
 
             ${
@@ -1108,14 +1133,12 @@ function renderShopping(){
 
       </div>
 
-    `).join("");
+    `;
+
+    }).join("");
 
 }
 
-
-/* -----------------------------
-   RECIPES
------------------------------ */
 
 function saveRecipe(){
 
@@ -1188,7 +1211,7 @@ function ingredientLines(recipe){
 
 function cleanIngredient(text){
 
-  return text
+  return String(text || "")
     .toLowerCase()
 
     .replace(
@@ -1412,31 +1435,29 @@ function renderRecipes(){
 function addRecipeMissingToShopping(recipeId){
 
   const recipe =
-    recipes.find(r => r.id === recipeId);
+    recipes.find(r => Number(r.id) === Number(recipeId));
 
-  if(!recipe) return;
+  if(!recipe){
+    alert("I couldn't find that recipe.");
+    return;
+  }
 
   const match =
     recipeMatch(recipe);
 
+  if(!match.missing.length){
+
+    alert("You already have everything for this recipe!");
+
+    return;
+  }
+
+  let addedCount = 0;
+
   match.missing.forEach(ingredient => {
 
-    const cleaned =
-      cleanIngredient(ingredient);
-
-    const exists =
-      shopping.some(item =>
-        cleanIngredient(item.name) === cleaned
-      );
-
-    if(!exists){
-
-      shopping.push({
-        id:Date.now() + Math.random(),
-        name:ingredient,
-        auto:false
-      });
-
+    if(addItemToShopping(ingredient, false)){
+      addedCount++;
     }
 
   });
@@ -1445,14 +1466,31 @@ function addRecipeMissingToShopping(recipeId){
 
   renderShopping();
 
-  alert("Missing ingredients added to your shopping list!");
+  openShoppingTab();
+
+  if(addedCount === 0){
+
+    alert(
+      "Those missing ingredients are already on your shopping list."
+    );
+
+  }else if(addedCount === 1){
+
+    alert(
+      "1 missing ingredient added to your shopping list!"
+    );
+
+  }else{
+
+    alert(
+      addedCount +
+      " missing ingredients added to your shopping list!"
+    );
+
+  }
 
 }
 
-
-/* -----------------------------
-   MEAL SUGGESTIONS
------------------------------ */
 
 function renderMealSuggestions(){
 
@@ -1626,10 +1664,6 @@ function putRecipeOnNextOpenDay(name){
 }
 
 
-/* -----------------------------
-   WEEKLY MEALS
------------------------------ */
-
 function saveMeals(){
 
   mealPlan = {
@@ -1706,10 +1740,6 @@ function loadMeals(){
 
 }
 
-
-/* -----------------------------
-   BUDGET
------------------------------ */
 
 function saveBudget(){
 
@@ -1853,10 +1883,6 @@ function renderBudget(){
 }
 
 
-/* -----------------------------
-   SAVINGS
------------------------------ */
-
 function addSaving(){
 
   const name =
@@ -1953,10 +1979,6 @@ function renderSavings(){
 
 }
 
-
-/* -----------------------------
-   BARCODE SCANNER
------------------------------ */
 
 let html5QrCode = null;
 let scannerRunning = false;
@@ -2361,10 +2383,6 @@ function setSelectValue(id,value){
 }
 
 
-/* -----------------------------
-   HELPERS
------------------------------ */
-
 function money(number){
 
   return "$" +
@@ -2394,10 +2412,6 @@ function escapeJS(value){
 
 }
 
-
-/* -----------------------------
-   RENDER EVERYTHING
------------------------------ */
 
 function renderAll(){
 
