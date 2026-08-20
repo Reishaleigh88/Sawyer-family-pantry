@@ -537,40 +537,13 @@ This compares your saved recipes with what is currently in your pantry, fridge a
 <div class="card">
 <h2>Weekly Meal Plan</h2>
 
-<div class="day">
-<label>Monday</label>
-<input id="mealMonday">
-</div>
-
-<div class="day">
-<label>Tuesday</label>
-<input id="mealTuesday">
-</div>
-
-<div class="day">
-<label>Wednesday</label>
-<input id="mealWednesday">
-</div>
-
-<div class="day">
-<label>Thursday</label>
-<input id="mealThursday">
-</div>
-
-<div class="day">
-<label>Friday</label>
-<input id="mealFriday">
-</div>
-
-<div class="day">
-<label>Saturday</label>
-<input id="mealSaturday">
-</div>
-
-<div class="day">
-<label>Sunday</label>
-<input id="mealSunday">
-</div>
+<div class="day"><label>Monday</label><input id="mealMonday"></div>
+<div class="day"><label>Tuesday</label><input id="mealTuesday"></div>
+<div class="day"><label>Wednesday</label><input id="mealWednesday"></div>
+<div class="day"><label>Thursday</label><input id="mealThursday"></div>
+<div class="day"><label>Friday</label><input id="mealFriday"></div>
+<div class="day"><label>Saturday</label><input id="mealSaturday"></div>
+<div class="day"><label>Sunday</label><input id="mealSunday"></div>
 
 <label>Notes</label>
 <textarea id="mealNotes"></textarea>
@@ -594,7 +567,6 @@ This compares your saved recipes with what is currently in your pantry, fridge a
 </div>
 
 <div class="card">
-
 <h2>Add Grocery Expense</h2>
 
 <label>Description</label>
@@ -604,41 +576,21 @@ This compares your saved recipes with what is currently in your pantry, fridge a
 <input id="expenseAmount" type="number" min="0" step="0.01">
 
 <button class="primary" onclick="addExpense()">Add Expense</button>
-
 </div>
 
 <div class="card">
-
 <h2>Budget Summary</h2>
 
 <div class="summary">
-
-<div class="summaryBox">
-Budget
-<strong id="budgetDisplay">$0.00</strong>
-</div>
-
-<div class="summaryBox">
-Spent
-<strong id="spentDisplay">$0.00</strong>
-</div>
-
-<div class="summaryBox">
-Remaining
-<strong id="remainingDisplay">$0.00</strong>
-</div>
-
-<div class="summaryBox">
-Inventory Value
-<strong id="inventoryValueDisplay">$0.00</strong>
-</div>
-
+<div class="summaryBox">Budget<strong id="budgetDisplay">$0.00</strong></div>
+<div class="summaryBox">Spent<strong id="spentDisplay">$0.00</strong></div>
+<div class="summaryBox">Remaining<strong id="remainingDisplay">$0.00</strong></div>
+<div class="summaryBox">Inventory Value<strong id="inventoryValueDisplay">$0.00</strong></div>
 </div>
 
 <h3 style="margin-top:18px">Expenses</h3>
 
 <div id="expenseList"></div>
-
 </div>
 
 </section>
@@ -646,7 +598,6 @@ Inventory Value
 <section id="savings" class="section">
 
 <div class="card">
-
 <h2>Farm & Homemade Savings</h2>
 
 <label>Item</label>
@@ -656,7 +607,6 @@ Inventory Value
 <input id="savingAmount" type="number" min="0" step="0.01">
 
 <button class="primary" onclick="addSaving()">Add Savings</button>
-
 </div>
 
 <div class="card">
@@ -667,7 +617,6 @@ Total Farm & Homemade Savings
 </div>
 
 <div id="savingsList"></div>
-
 </div>
 
 </section>
@@ -690,6 +639,52 @@ let mealPlan =
 
 let barcodeMemory =
   JSON.parse(localStorage.getItem("sawyerBarcodeMemory") || "{}");
+
+
+function repairPantryIds(){
+
+  const usedIds = new Set();
+  let changed = false;
+
+  pantry.forEach((item,index) => {
+
+    let currentId = Number(item.id);
+
+    if(
+      !Number.isFinite(currentId) ||
+      currentId <= 0 ||
+      usedIds.has(currentId)
+    ){
+
+      currentId =
+        Date.now() +
+        index +
+        Math.floor(Math.random() * 1000000);
+
+      while(usedIds.has(currentId)){
+        currentId++;
+      }
+
+      item.id = currentId;
+      changed = true;
+
+    }
+
+    usedIds.add(currentId);
+
+  });
+
+  if(changed){
+    localStorage.setItem(
+      "sawyerPantry",
+      JSON.stringify(pantry)
+    );
+  }
+
+}
+
+
+repairPantryIds();
 
 
 function showSection(id, button){
@@ -764,9 +759,16 @@ function addInventory(){
     return;
   }
 
+  let newId =
+    Date.now() + Math.floor(Math.random() * 1000000);
+
+  while(pantry.some(item => Number(item.id) === newId)){
+    newId++;
+  }
+
   const item = {
 
-    id:Date.now(),
+    id:newId,
 
     name:name,
 
@@ -835,7 +837,8 @@ function clearInventoryForm(){
 
 function changeQuantity(id, amount){
 
-  const item = pantry.find(i => i.id === id);
+  const item =
+    pantry.find(i => Number(i.id) === Number(id));
 
   if(!item) return;
 
@@ -855,7 +858,8 @@ function deleteInventory(id){
 
   if(!confirm("Delete this item?")) return;
 
-  pantry = pantry.filter(i => i.id !== id);
+  pantry =
+    pantry.filter(i => Number(i.id) !== Number(id));
 
   savePantry();
 
@@ -871,6 +875,19 @@ function shoppingName(item){
   }
 
   return String(item?.name || "");
+}
+
+
+function cleanIngredient(text){
+
+  return String(text || "")
+    .toLowerCase()
+    .replace(/\b\d+([./]\d+)?\b/g," ")
+    .replace(/\b(cups?|cup|tbsp|tablespoons?|tsp|teaspoons?|lbs?|pounds?|oz|ounces?|cans?|packages?|packs?|jars?|bottles?|cloves?|slices?)\b/g," ")
+    .replace(/[^\w\s]/g," ")
+    .replace(/\s+/g," ")
+    .trim();
+
 }
 
 
@@ -953,7 +970,7 @@ function renderInventory(){
   let items = pantry.filter(item => {
 
     const matchesSearch =
-      item.name.toLowerCase().includes(search);
+      String(item.name || "").toLowerCase().includes(search);
 
     const matchesLocation =
       !location || item.location === location;
@@ -1022,19 +1039,19 @@ function renderInventory(){
 
         <button
           class="smallBtn minus"
-          onclick="changeQuantity(${item.id},-1)">
+          onclick="changeQuantity(${Number(item.id)},-1)">
           −
         </button>
 
         <button
           class="smallBtn plus"
-          onclick="changeQuantity(${item.id},1)">
+          onclick="changeQuantity(${Number(item.id)},1)">
           +
         </button>
 
         <button
           class="danger"
-          onclick="deleteInventory(${item.id})">
+          onclick="deleteInventory(${Number(item.id)})">
           Delete
         </button>
 
@@ -1075,7 +1092,7 @@ function addShopping(){
 function deleteShopping(id){
 
   shopping =
-    shopping.filter(item => item.id !== id);
+    shopping.filter(item => Number(item.id) !== Number(id));
 
   saveShopping();
 
@@ -1125,7 +1142,7 @@ function renderShopping(){
 
           <button
             class="danger"
-            onclick="deleteShopping(${item.id})">
+            onclick="deleteShopping(${Number(item.id)})">
             ✓
           </button>
 
@@ -1151,7 +1168,6 @@ function saveRecipe(){
   if(!name || !ingredients){
 
     alert("Add a recipe name and ingredients.");
-
     return;
 
   }
@@ -1205,30 +1221,6 @@ function ingredientLines(recipe){
     .split(/\n|,/)
     .map(x => x.trim())
     .filter(Boolean);
-
-}
-
-
-function cleanIngredient(text){
-
-  return String(text || "")
-    .toLowerCase()
-
-    .replace(
-      /\b\d+([./]\d+)?\b/g,
-      " "
-    )
-
-    .replace(
-      /\b(cups?|cup|tbsp|tablespoons?|tsp|teaspoons?|lbs?|pounds?|oz|ounces?|cans?|packages?|packs?|jars?|bottles?|cloves?|slices?)\b/g,
-      " "
-    )
-
-    .replace(/[^\w\s]/g," ")
-
-    .replace(/\s+/g," ")
-
-    .trim();
 
 }
 
@@ -1448,8 +1440,8 @@ function addRecipeMissingToShopping(recipeId){
   if(!match.missing.length){
 
     alert("You already have everything for this recipe!");
-
     return;
+
   }
 
   let addedCount = 0;
@@ -1668,29 +1660,14 @@ function saveMeals(){
 
   mealPlan = {
 
-    Monday:
-      document.getElementById("mealMonday").value,
-
-    Tuesday:
-      document.getElementById("mealTuesday").value,
-
-    Wednesday:
-      document.getElementById("mealWednesday").value,
-
-    Thursday:
-      document.getElementById("mealThursday").value,
-
-    Friday:
-      document.getElementById("mealFriday").value,
-
-    Saturday:
-      document.getElementById("mealSaturday").value,
-
-    Sunday:
-      document.getElementById("mealSunday").value,
-
-    Notes:
-      document.getElementById("mealNotes").value
+    Monday:document.getElementById("mealMonday").value,
+    Tuesday:document.getElementById("mealTuesday").value,
+    Wednesday:document.getElementById("mealWednesday").value,
+    Thursday:document.getElementById("mealThursday").value,
+    Friday:document.getElementById("mealFriday").value,
+    Saturday:document.getElementById("mealSaturday").value,
+    Sunday:document.getElementById("mealSunday").value,
+    Notes:document.getElementById("mealNotes").value
 
   };
 
@@ -2163,12 +2140,7 @@ async function lookupBarcode(code){
       saved.name || "";
 
     if(saved.category){
-
-      setSelectValue(
-        "category",
-        saved.category
-      );
-
+      setSelectValue("category",saved.category);
     }
 
     status.textContent =
@@ -2286,75 +2258,51 @@ function guessCategory(product){
   .join(" ")
   .toLowerCase();
 
-  if(
-    /beef|pork|chicken|turkey|meat|sausage|bacon|ham|steak/.test(text)
-  ){
+  if(/beef|pork|chicken|turkey|meat|sausage|bacon|ham|steak/.test(text)){
     return "Meat";
   }
 
-  if(
-    /milk|cheese|yogurt|cream|butter|egg/.test(text)
-  ){
+  if(/milk|cheese|yogurt|cream|butter|egg/.test(text)){
     return "Eggs & Dairy";
   }
 
-  if(
-    /fruit|apple|orange|berry|grape|banana|melon/.test(text)
-  ){
+  if(/fruit|apple|orange|berry|grape|banana|melon/.test(text)){
     return "Fruit";
   }
 
-  if(
-    /vegetable|lettuce|carrot|potato|onion|pepper|broccoli/.test(text)
-  ){
+  if(/vegetable|lettuce|carrot|potato|onion|pepper|broccoli/.test(text)){
     return "Vegetables";
   }
 
-  if(
-    /bread|pasta|rice|cereal|grain|tortilla/.test(text)
-  ){
+  if(/bread|pasta|rice|cereal|grain|tortilla/.test(text)){
     return "Grains & Bread";
   }
 
-  if(
-    /flour|sugar|baking|cake mix|brownie/.test(text)
-  ){
+  if(/flour|sugar|baking|cake mix|brownie/.test(text)){
     return "Baking";
   }
 
-  if(
-    /canned|canned food/.test(text)
-  ){
+  if(/canned|canned food/.test(text)){
     return "Canned Goods";
   }
 
-  if(
-    /chips|cracker|cookie|snack|popcorn|candy/.test(text)
-  ){
+  if(/chips|cracker|cookie|snack|popcorn|candy/.test(text)){
     return "Snacks";
   }
 
-  if(
-    /soda|drink|juice|water|beverage|coffee|tea/.test(text)
-  ){
+  if(/soda|drink|juice|water|beverage|coffee|tea/.test(text)){
     return "Drinks";
   }
 
-  if(
-    /sauce|ketchup|mustard|mayonnaise|dressing|condiment/.test(text)
-  ){
+  if(/sauce|ketchup|mustard|mayonnaise|dressing|condiment/.test(text)){
     return "Condiments & Sauces";
   }
 
-  if(
-    /oil|vinegar|shortening|lard/.test(text)
-  ){
+  if(/oil|vinegar|shortening|lard/.test(text)){
     return "Oils, Fats & Vinegars";
   }
 
-  if(
-    /frozen|ice cream/.test(text)
-  ){
+  if(/frozen|ice cream/.test(text)){
     return "Frozen Foods";
   }
 
